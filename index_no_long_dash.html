@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QHSE Control — Priorités HSE en quelques minutes</title>
+  <title>QHSE Control, Priorités HSE en quelques minutes</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,13 +27,13 @@
     body{min-height:100vh}
     [hidden]{display:none!important}
 
-    /* ——— Topbar ——— */
+    /*,,, Topbar,,, */
     .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
     .topbar-inner{max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
     .brand-title{font-size:18px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
     .brand-sub{font-size:12px;color:var(--text-soft);margin-top:4px}
 
-    /* ——— Stepper ——— */
+    /*,,, Stepper,,, */
     .stepper-wrap{max-width:1120px;margin:0 auto;padding:20px 20px 0}
     .stepper{display:flex;align-items:stretch;justify-content:space-between;gap:8px;max-width:640px;margin:0 auto;padding:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;box-shadow:var(--shadow)}
     .stepper-item{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);cursor:default;transition:color .25s ease,background .25s ease,box-shadow .25s ease}
@@ -45,7 +45,7 @@
     .stepper-label{display:none}
     @media (min-width:520px){.stepper-label{display:inline}}
 
-    /* ——— Shell & sections ——— */
+    /*,,, Shell & sections,,, */
     .shell{max-width:1120px;margin:0 auto;padding:var(--space-section) 20px calc(var(--space-section) + 24px)}
     .flow-section{scroll-margin-top:100px;margin-bottom:var(--space-section)}
     .flow-section:last-child{margin-bottom:0}
@@ -85,7 +85,7 @@
     .section-sub{color:var(--text-soft);font-size:14px;line-height:1.5;margin-top:8px;max-width:42em}
     .section-cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:4px}
 
-    /* ——— Buttons ——— */
+    /*,,, Buttons,,, */
     .btn{border:none;cursor:pointer;border-radius:14px;font-weight:700;padding:12px 18px;font-size:14px;transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;white-space:nowrap}
     .btn:active{transform:scale(.98)}
     .btn-primary{background:linear-gradient(135deg,var(--teal),#0b8f86);color:#fff;box-shadow:0 8px 24px rgba(18,165,148,.28)}
@@ -119,7 +119,7 @@
     .sugg-btn{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
     .sugg-btn:hover{background:var(--surface-2);border-color:#c5ceda}
 
-    /* ——— Risk table / cards ——— */
+    /*,,, Risk table / cards,,, */
     .risk-table-wrap{overflow:auto;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface-2);margin-top:8px;-webkit-overflow-scrolling:touch}
     .risk-table-wrap table{width:100%;border-collapse:separate;border-spacing:0;min-width:0}
     .risk-table-wrap thead th{padding:14px 16px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
@@ -167,7 +167,7 @@
 
     .chart-wrap{position:relative;min-height:280px;border:1px solid var(--border);border-radius:var(--radius-md);background:linear-gradient(180deg,#fbfdff,#f3f7fb);padding:20px}
 
-    /* ——— Plan deliverable ——— */
+    /*,,, Plan deliverable,,, */
     .plan-deliverable{margin-top:var(--space-block);border-radius:var(--radius-lg);border:1px solid #c5e8e2;background:linear-gradient(145deg,#f6fdfc 0%,#eef8ff 100%);box-shadow:0 16px 48px rgba(18,165,148,.12);padding:clamp(22px,4vw,36px);position:relative;overflow:hidden}
     .plan-deliverable:before{content:"";position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle,rgba(18,165,148,.15) 0%,transparent 70%);pointer-events:none}
     .plan-deliverable h3{margin:0 0 6px;font-size:clamp(18px,3vw,22px);font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
@@ -280,7 +280,7 @@
     .dev-banner code{font-size:12px;background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-family:ui-monospace,monospace}
     .dev-banner a{color:inherit;font-weight:600;text-decoration:underline}
 
-    /* ——— Mobile polish ——— */
+    /*,,, Mobile polish,,, */
     @media (max-width: 768px){
       .topbar-inner{padding:12px 16px;align-items:flex-start}
       .topbar-inner > .btn,.topbar-inner > button{width:100%}
@@ -357,7 +357,7 @@
         <div>
           <div class="eyebrow">Priorités HSE</div>
           <h1>Identifiez vos priorités HSE en quelques minutes</h1>
-          <p class="hero-lead">Cochez le contexte, listez les risques tels que vous les voyez sur le terrain, puis obtenez une synthèse d’actions priorisée — sans vous imposer un logiciel lourd.</p>
+          <p class="hero-lead">Cochez le contexte, listez les risques tels que vous les voyez sur le terrain, puis obtenez une synthèse d’actions priorisée, sans vous imposer un logiciel lourd.</p>
           <div class="hero-meta">
             <span class="pill-ai">Quota IA · <span id="aiRemainingFull">4 analyses restantes cette session</span></span>
           </div>
@@ -381,7 +381,7 @@
         <div class="card">
           <div class="section-head">
             <div>
-              <div class="section-kicker">Étape 1 — Contexte</div>
+              <div class="section-kicker">Étape 1, Contexte</div>
               <div class="section-title">Cadrer l’intervention</div>
               <div class="section-sub">Indiquez qui intervient, où, et sur quoi. Les zones ou postes permettent de refléter votre découpage terrain.</div>
             </div>
@@ -389,7 +389,7 @@
           <div class="form-grid">
             <div class="field"><label>Entreprise ou site juridique</label><input id="companyName" type="text" placeholder="Ex. Les Carrières du Nord SA" /></div>
             <div class="field"><label>Secteur</label><select id="sectorSelect"><option value="mine">Mine / carrière</option><option value="btp">BTP / chantier</option><option value="industrie">Industrie / production</option><option value="maintenance">Maintenance industrielle</option><option value="logistique">Logistique / entrepôt</option></select></div>
-            <div class="field"><label>Site ou unité d’exploitation</label><input id="siteName" type="text" placeholder="Ex. Carrière Nord — fosse A" /></div>
+            <div class="field"><label>Site ou unité d’exploitation</label><input id="siteName" type="text" placeholder="Ex. Carrière Nord, fosse A" /></div>
             <div class="field"><label>Activité principale sur site</label><input id="activityName" type="text" placeholder="Ex. Forage, levage, maintenance convoyeur" /></div>
             <div class="field full">
               <label>Zones ou postes de travail</label>
@@ -425,7 +425,7 @@
       <div class="card">
         <div class="section-head">
           <div>
-            <div class="section-kicker">Étape 2 — Risques</div>
+            <div class="section-kicker">Étape 2, Risques</div>
             <div class="section-title">Les risques tels que vous les voyez</div>
             <div class="section-sub">Listez chaque situation dangereuse. Cause et mesure restent pliables pour aller vite ; l’IA peut proposer un affinement, une ligne à la fois.</div>
           </div>
@@ -449,7 +449,7 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody id="riskTableBody"><tr><td colspan="5" class="empty">Aucun risque pour l’instant — ajoutez une zone en haut de page si besoin, puis saisissez ou importez des idées.</td></tr></tbody>
+            <tbody id="riskTableBody"><tr><td colspan="5" class="empty">Aucun risque pour l’instant, ajoutez une zone en haut de page si besoin, puis saisissez ou importez des idées.</td></tr></tbody>
           </table>
         </div>
         <div class="section-cta-row" style="margin-top:var(--space-block);padding-top:var(--space-block);border-top:1px solid var(--border)">
@@ -464,7 +464,7 @@
       <div class="card">
         <div class="section-head">
           <div>
-            <div class="section-kicker">Étape 3 — Synthèse</div>
+            <div class="section-kicker">Étape 3, Synthèse</div>
             <div class="section-title">Plan d’action et lecture globale</div>
             <div class="section-sub">Le graphique résume la répartition par gravité ; le texte structuré apparaît sous ce bloc après génération.</div>
           </div>
@@ -568,11 +568,11 @@
         <div class="compare-grid compare-grid--2">
           <div class="compare-box">
             <h4>Votre saisie initiale</h4>
-            <p id="aiOriginalLabel">—</p>
+            <p id="aiOriginalLabel">,</p>
           </div>
           <div class="compare-box" style="border-color:#b9e9e2;background:linear-gradient(180deg,#fbfffe,#f6fdfc)">
             <h4>Proposition IA</h4>
-            <p id="aiProposalSummary">—</p>
+            <p id="aiProposalSummary">,</p>
           </div>
         </div>
         <div class="form-grid">
@@ -738,7 +738,7 @@
       const sel=document.getElementById('sectorSelect');
       const label=sel&&sel.selectedOptions[0]?sel.selectedOptions[0].text:'votre secteur';
       const el=document.getElementById('suggestionsHint');
-      if(el) el.textContent=`Exemples cohérents avec votre secteur (${label}) — un clic ajoute la ligne dans le tableau.`;
+      if(el) el.textContent=`Exemples cohérents avec votre secteur (${label}), un clic ajoute la ligne dans le tableau.`;
     }
     function loadSuggestions(){
       const sector=document.getElementById('sectorSelect').value;
@@ -761,7 +761,7 @@
     function openAiValidateModal(){document.getElementById('aiValidateModal').classList.add('open')}
     function closeAiValidateModal(){document.getElementById('aiValidateModal').classList.remove('open');pendingEnhanceRiskId=null;pendingProposal=null}
     function fillAiValidationModal(originalRisk,proposal){
-      document.getElementById('aiOriginalLabel').textContent=originalRisk.label||'—';
+      document.getElementById('aiOriginalLabel').textContent=originalRisk.label||',';
       const summary=(proposal.label||'')+' · G'+proposal.gravity+' × P'+proposal.probability;
       document.getElementById('aiProposalSummary').textContent=summary;
       document.getElementById('aiEditLabel').value=proposal.label||'';
@@ -786,7 +786,7 @@
         aiRemaining=Number(data.remaining);updateAICounter();
         fillAiValidationModal(risk,pendingProposal);
         openAiValidateModal();
-        showToast('Proposition prête — ouvrez la fenêtre pour la valider ou l’ajuster.');
+        showToast('Proposition prête, ouvrez la fenêtre pour la valider ou l’ajuster.');
       }catch(e){console.error(e);showToast('Service IA indisponible. Réessayez dans un instant.');}
       finally{const refreshed=document.getElementById(`ai-btn-${id}`);if(refreshed){refreshed.disabled=false;refreshed.textContent='Affiner avec l’IA';}}
     }
@@ -806,18 +806,18 @@
     }
     function rejectAiProposal(){
       closeAiValidateModal();
-      showToast('Proposition écartée — le risque reste tel quel.');
+      showToast('Proposition écartée, le risque reste tel quel.');
     }
-    async function generateGlobalPlan(){if(risks.length===0){showToast('Ajoutez au moins un risque pour lancer la synthèse.');return;}if(aiRemaining<=0){showToast('Quota IA épuisé pour cette session.');return;}showToast('Synthèse en cours…');try{const response=await fetch(apiUrl('/api/global-plan'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({sessionId,sector:document.getElementById('sectorSelect').value,activity:document.getElementById('activityName').value,risks:risks.map(r=>({label:r.label,gravity:r.gravity,probability:r.probability}))})});const data=await response.json();if(response.status===429){aiRemaining=0;updateAICounter();showToast('Limite serveur atteinte — réessayez plus tard.');return;}if(!response.ok)throw new Error(data.error||'Erreur plan');aiRemaining=Number(data.remaining);updateAICounter();renderGlobalPlan(data);{const q=aiRemaining;showToast(q===0?'Synthèse prête — quota IA atteint pour cette session.':`Synthèse prête — il vous reste ${q} analyse${q>1?'s':''} IA sur cette session.`);}document.getElementById('step-plan').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){console.error(e);showToast('La synthèse n’a pas pu être générée. Vérifiez la connexion ou réessayez.');}}
+    async function generateGlobalPlan(){if(risks.length===0){showToast('Ajoutez au moins un risque pour lancer la synthèse.');return;}if(aiRemaining<=0){showToast('Quota IA épuisé pour cette session.');return;}showToast('Synthèse en cours…');try{const response=await fetch(apiUrl('/api/global-plan'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({sessionId,sector:document.getElementById('sectorSelect').value,activity:document.getElementById('activityName').value,risks:risks.map(r=>({label:r.label,gravity:r.gravity,probability:r.probability}))})});const data=await response.json();if(response.status===429){aiRemaining=0;updateAICounter();showToast('Limite serveur atteinte, réessayez plus tard.');return;}if(!response.ok)throw new Error(data.error||'Erreur plan');aiRemaining=Number(data.remaining);updateAICounter();renderGlobalPlan(data);{const q=aiRemaining;showToast(q===0?'Synthèse prête, quota IA atteint pour cette session.':`Synthèse prête, il vous reste ${q} analyse${q>1?'s':''} IA sur cette session.`);}document.getElementById('step-plan').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){console.error(e);showToast('La synthèse n’a pas pu être générée. Vérifiez la connexion ou réessayez.');}}
     function formatPlanLinesForUi(text){
       const raw=String(text||'').trim();
-      if(!raw)return '<p class="plan-block-empty">—</p>';
+      if(!raw)return '<p class="plan-block-empty">,</p>';
       const parts=[];
       for(const line of raw.split(/\n+/)){
         const t=line.replace(/^[-–•·]\s*/,'').trim();
         if(t)parts.push(`<div class="plan-action-line">${escapeHtml(t)}</div>`);
       }
-      return parts.length?parts.join(''):'<p class="plan-block-empty">—</p>';
+      return parts.length?parts.join(''):'<p class="plan-block-empty">,</p>';
     }
     function renderGlobalPlan(data){
       const structured=data.planStructured||null;
@@ -830,7 +830,7 @@
         structured.vigilance||'',
         structured.recommendation||''
       ].join('\n\n')):legacyText;
-      const urgencyBanner='<p class="plan-urgency-banner">Ce plan reflète vos saisies du moment : les priorités peuvent évoluer — revoyez-le après tout changement notable sur site.</p>';
+      const urgencyBanner='<p class="plan-urgency-banner">Ce plan reflète vos saisies du moment : les priorités peuvent évoluer, revoyez-le après tout changement notable sur site.</p>';
       let bodyHtml='';
       if(structured){
         bodyHtml=`${urgencyBanner}<div class="plan-blocks">
@@ -917,7 +917,7 @@
     }
     function renderRiskTable(){
       const tbody=document.getElementById('riskTableBody');
-      if(!risks.length){tbody.innerHTML='<tr><td colspan="5" class="empty">Aucun risque pour l’instant — ajoutez une zone en haut de page si besoin, puis saisissez ou importez des idées.</td></tr>';updatePlanButtonState();return;}
+      if(!risks.length){tbody.innerHTML='<tr><td colspan="5" class="empty">Aucun risque pour l’instant, ajoutez une zone en haut de page si besoin, puis saisissez ou importez des idées.</td></tr>';updatePlanButtonState();return;}
       tbody.innerHTML=risks.map(r=>{
         const score=Number(r.gravity)*Number(r.probability);const level=getLevel(score);
         const open=!!riskDetailOpen[r.id];
@@ -927,7 +927,7 @@
           <td data-label="Risque"><input type="text" value="${escapeAttr(r.label)}" placeholder="Intitulé court et concret" oninput="updateRisk('${r.id}','label',this.value)" /></td>
           <td data-label="Gravité × proba."><div class="gp-cell"><select aria-label="Gravité" onchange="updateRisk('${r.id}','gravity',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${Number(r.gravity)===v?'selected':''}>${v}</option>`).join('')}</select><select aria-label="Probabilité" onchange="updateRisk('${r.id}','probability',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${Number(r.probability)===v?'selected':''}>${v}</option>`).join('')}</select></div></td>
           <td data-label="Évaluation"><div class="score-stack"><span class="score-pill ${level}">${score}</span><span class="risk-badge ${level}">${levelLabel(level)}</span><span class="source-muted">${escapeHtml(sourceLabel(r.source))}</span></div></td>
-          <td data-label="Actions"><div class="row-actions"><button type="button" class="btn-toggle-detail" id="risk-toggle-${r.id}" onclick="toggleRiskDetail('${r.id}')">${open?'Masquer cause et mesure':'Cause et mesure'}</button><button class="btn btn-secondary btn-small" id="ai-btn-${r.id}" type="button" onclick="requestAiProposal('${r.id}')" title="Proposer un affinement (IA) — à valider ensuite">Affiner avec l’IA</button><button class="btn btn-danger btn-small" type="button" onclick="deleteRisk('${r.id}')">Retirer</button></div></td>
+          <td data-label="Actions"><div class="row-actions"><button type="button" class="btn-toggle-detail" id="risk-toggle-${r.id}" onclick="toggleRiskDetail('${r.id}')">${open?'Masquer cause et mesure':'Cause et mesure'}</button><button class="btn btn-secondary btn-small" id="ai-btn-${r.id}" type="button" onclick="requestAiProposal('${r.id}')" title="Proposer un affinement (IA), à valider ensuite">Affiner avec l’IA</button><button class="btn btn-danger btn-small" type="button" onclick="deleteRisk('${r.id}')">Retirer</button></div></td>
         </tr><tr class="risk-detail-row" id="risk-detail-${r.id}" ${open?'':'hidden'}><td colspan="5">
           <div class="form-grid" style="margin-top:4px">
             <div class="field full"><label>Cause probable</label><input type="text" value="${escapeAttr(r.cause||'')}" placeholder="Ex. circulation non balisée, manque d’exclusion…" oninput="updateRisk('${r.id}','cause',this.value)" /></div>
@@ -938,13 +938,13 @@
       updatePlanButtonState();
     }
     function recalc(){const validRisks=risks.filter(r=>(r.label||'').trim()!=='');let critical=0,medium=0,low=0;validRisks.forEach(r=>{const score=Number(r.gravity)*Number(r.probability);const level=getLevel(score);if(level==='critique')critical++;else if(level==='moyen')medium++;else low++;});const score=Math.max(0,100-(critical*20)-(medium*8)-(low*2));document.getElementById('kpiCritical').textContent=critical;document.getElementById('kpiMedium').textContent=medium;document.getElementById('kpiLow').textContent=low;document.getElementById('kpiScore').textContent=score;renderInsights(critical,medium,low,score);renderActions(critical,medium,low);renderChart(critical,medium,low);refreshModalFilters();updatePlanButtonState();}
-    function renderInsights(critical,medium,low,score){const el=document.getElementById('insightList');const items=[];if(!critical&&!medium&&!low){items.push('<div class="insight">Ajoutez des risques pour alimenter le diagnostic.</div>');}else{if(critical>0)items.push(`<div class="insight red"><strong>${critical} critique(s)</strong> — traiter en priorité avec un responsable identifié.</div>`);if(medium>0)items.push(`<div class="insight amber"><strong>${medium} modéré(s)</strong> — planifier une action sous 30 jours.</div>`);if(low>0)items.push(`<div class="insight green"><strong>${low} faible(s)</strong> — maintenir la vigilance et le contrôle.</div>`);items.push(`<div class="insight teal"><strong>Indice global :</strong> ${score} / 100</div>`);}el.innerHTML=items.join('')}
+    function renderInsights(critical,medium,low,score){const el=document.getElementById('insightList');const items=[];if(!critical&&!medium&&!low){items.push('<div class="insight">Ajoutez des risques pour alimenter le diagnostic.</div>');}else{if(critical>0)items.push(`<div class="insight red"><strong>${critical} critique(s)</strong>, traiter en priorité avec un responsable identifié.</div>`);if(medium>0)items.push(`<div class="insight amber"><strong>${medium} modéré(s)</strong>, planifier une action sous 30 jours.</div>`);if(low>0)items.push(`<div class="insight green"><strong>${low} faible(s)</strong>, maintenir la vigilance et le contrôle.</div>`);items.push(`<div class="insight teal"><strong>Indice global :</strong> ${score} / 100</div>`);}el.innerHTML=items.join('')}
     function renderActions(critical,medium,low){const el=document.getElementById('actionList');const actions=[];if(critical>0)actions.push('<div class="insight red"><strong>Priorité :</strong> sécuriser les situations critiques et nommer un pilote terrain.</div>');if(medium>0)actions.push('<div class="insight amber"><strong>À planifier :</strong> réunir les moyens sur les risques modérés (délai cible : 30 jours).</div>');if(low>0)actions.push('<div class="insight green"><strong>À entretenir :</strong> conserver les bons gestes et rappeler les consignes aux équipes.</div>');if(!actions.length)actions.push('<div class="insight green">Les messages d’action s’affichent dès que des risques sont saisis.</div>');el.innerHTML=actions.join('')}
     function renderChart(critical,medium,low){const ctx=document.getElementById('riskChart').getContext('2d');if(chartInstance)chartInstance.destroy();chartInstance=new Chart(ctx,{type:'doughnut',data:{labels:['Critiques','Modérés','Faibles'],datasets:[{data:[critical,medium,low],backgroundColor:['#d84c4c','#efab52','#37b58a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:14,color:'#556174',padding:18,font:{size:13,weight:'700'}}}},cutout:'68%'}})}
     function openRiskModal(filter=''){document.getElementById('filterLevel').value=filter||'';const labels={critique:'critiques',moyen:'modérés',faible:'faibles'};document.getElementById('modalTitle').textContent=filter?`Vue : risques ${labels[filter]||filter}`:'Tous les risques saisis';document.getElementById('riskModal').classList.add('open');renderModalList()}
     function closeRiskModal(){document.getElementById('riskModal').classList.remove('open')}
     function refreshModalFilters(){const select=document.getElementById('filterZone');const current=select.value;select.innerHTML=`<option value="">Toutes</option>`+zones.map(z=>`<option value="${escapeAttr(z)}">${escapeHtml(z)}</option>`).join('');if([...select.options].some(o=>o.value===current))select.value=current;renderModalList()}
-    function renderModalList(){const tbody=document.getElementById('modalRiskTableBody');const zone=document.getElementById('filterZone').value;const level=document.getElementById('filterLevel').value;const text=document.getElementById('filterText').value.trim().toLowerCase();const filtered=risks.filter(r=>{const score=Number(r.gravity)*Number(r.probability);const currentLevel=getLevel(score);const matchesZone=!zone||r.zone===zone;const matchesLevel=!level||currentLevel===level;const matchesText=!text||(r.label||'').toLowerCase().includes(text)||(r.zone||'').toLowerCase().includes(text);return matchesZone&&matchesLevel&&matchesText&&(r.label||'').trim()!==''});if(!filtered.length){tbody.innerHTML='<tr><td colspan="4" class="empty">Aucun risque ne correspond à ces critères.</td></tr>';return;}tbody.innerHTML=filtered.map(r=>{const score=Number(r.gravity)*Number(r.probability);const currentLevel=getLevel(score);return `<tr><td>${escapeHtml(r.zone||'—')}</td><td>${escapeHtml(r.label||'—')}</td><td><span class="score-pill ${currentLevel}">${score}</span></td><td><span class="risk-badge ${currentLevel}">${levelLabel(currentLevel)}</span></td></tr>`}).join('')}
+    function renderModalList(){const tbody=document.getElementById('modalRiskTableBody');const zone=document.getElementById('filterZone').value;const level=document.getElementById('filterLevel').value;const text=document.getElementById('filterText').value.trim().toLowerCase();const filtered=risks.filter(r=>{const score=Number(r.gravity)*Number(r.probability);const currentLevel=getLevel(score);const matchesZone=!zone||r.zone===zone;const matchesLevel=!level||currentLevel===level;const matchesText=!text||(r.label||'').toLowerCase().includes(text)||(r.zone||'').toLowerCase().includes(text);return matchesZone&&matchesLevel&&matchesText&&(r.label||'').trim()!==''});if(!filtered.length){tbody.innerHTML='<tr><td colspan="4" class="empty">Aucun risque ne correspond à ces critères.</td></tr>';return;}tbody.innerHTML=filtered.map(r=>{const score=Number(r.gravity)*Number(r.probability);const currentLevel=getLevel(score);return `<tr><td>${escapeHtml(r.zone||',')}</td><td>${escapeHtml(r.label||',')}</td><td><span class="score-pill ${currentLevel}">${score}</span></td><td><span class="risk-badge ${currentLevel}">${levelLabel(currentLevel)}</span></td></tr>`}).join('')}
     function scrollToRisks(){document.getElementById('step-risks')?.scrollIntoView({behavior:'smooth',block:'start'})}
     function getLeadFormValues(){
       const modal=document.getElementById('leadModal');
@@ -1115,7 +1115,7 @@
           let mailData={};
           try{mailData=await mailRes.json()}catch(_){}
           if(mailData.clientEmailSent===false){
-            console.warn('[exportWithLead] Email prospect non confirmé — vérifiez SMTP (.env).');
+            console.warn('[exportWithLead] Email prospect non confirmé, vérifiez SMTP (.env).');
           }
         }catch(mailErr){
           console.error('[exportWithLead] Email prospect:',mailErr);
@@ -1157,9 +1157,9 @@
       }
       return out.join('\n');
     }
-    /** Met en forme un corps de section (puces, retours ligne) pour le PDF — phrases courtes, terrain */
+    /** Met en forme un corps de section (puces, retours ligne) pour le PDF, phrases courtes, terrain */
     function formatPlanBody(body){
-      if(body==null||String(body).trim()==='') return '<span style="color:#94a3b8;font-size:12px;font-style:italic">—</span>';
+      if(body==null||String(body).trim()==='') return '<span style="color:#94a3b8;font-size:12px;font-style:italic">,</span>';
       const raw=preprocessPlanBodyForPdf(body).trim().split(/\r?\n/);
       let html='';
       let inList=false;
@@ -1178,7 +1178,7 @@
         }
       }
       flushList();
-      return html||'<span style="color:#94a3b8">—</span>';
+      return html||'<span style="color:#94a3b8">,</span>';
     }
     function pdfPlanBlock(title,bodyHtml,opts){
       opts=opts||{};
@@ -1240,10 +1240,10 @@
         return '<p style="margin:0;padding:16px 18px;font-size:12px;color:#64748b;line-height:1.55;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px">Générez le plan depuis l’outil pour compléter cette section.</p>';
       }
       const sections=[
-        {k:'immediate',title:'1. Priorité immédiate — statuer et agir sans délai'},
-        {k:'shortTerm',title:'2. Court terme — organisation et responsabilités'},
-        {k:'prevention',title:'3. Prévention — stabiliser les pratiques'},
-        {k:'vigilance',title:'4. Point critique — vigilance et encadrement',afterNote:'Ce point nécessite une attention immédiate de l’encadrement.'},
+        {k:'immediate',title:'1. Priorité immédiate, statuer et agir sans délai'},
+        {k:'shortTerm',title:'2. Court terme, organisation et responsabilités'},
+        {k:'prevention',title:'3. Prévention, stabiliser les pratiques'},
+        {k:'vigilance',title:'4. Point critique, vigilance et encadrement',afterNote:'Ce point nécessite une attention immédiate de l’encadrement.'},
         {k:'recommendation',title:'5. Arbitrage et décision'}
       ];
       let html='<div style="margin-top:6px;padding:4px 0 8px 0">';
@@ -1272,8 +1272,8 @@
           }
 
           const company=String(companyName||document.getElementById('companyName')?.value||'Entreprise').trim()||'Entreprise';
-          const site=String(document.getElementById('siteName')?.value||'—').trim()||'—';
-          const activity=String(document.getElementById('activityName')?.value||'—').trim()||'—';
+          const site=String(document.getElementById('siteName')?.value||',').trim()||',';
+          const activity=String(document.getElementById('activityName')?.value||',').trim()||',';
           const date=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
           const score=String(document.getElementById('kpiScore')?.textContent||'0').trim();
           const criticalCount=String(document.getElementById('kpiCritical')?.textContent||'0').trim();
@@ -1334,7 +1334,7 @@
             doc.setFont('helvetica','normal');
             doc.setFontSize(11);
             doc.setTextColor(15,23,42);
-            const lines = doc.splitTextToSize(String(value||'—'), contentW-48);
+            const lines = doc.splitTextToSize(String(value||','), contentW-48);
             doc.text(lines, margin+46, y);
             y += Math.max(rowH, lines.length*5 + 2);
           };
@@ -1451,7 +1451,7 @@
             const cause = pdfRiskCauseField(risk.cause);
             const measure = pdfRiskMeasureField(risk.measure);
             const consequence = PDF_FALLBACK_CONSEQUENCE;
-            const labelLines = doc.splitTextToSize(String(risk.label||'—'), contentW-12);
+            const labelLines = doc.splitTextToSize(String(risk.label||','), contentW-12);
             const causeLines = doc.splitTextToSize(cause, contentW-12);
             const consLines = doc.splitTextToSize(consequence, contentW-12);
             const measureLines = doc.splitTextToSize(measure, contentW-12);
@@ -1490,7 +1490,7 @@
             y += h + 8;
           };
 
-          drawSectionTitle('Document de synthèse — HSE', 'Plan d’action HSE',
+          drawSectionTitle('Document de synthèse, HSE', 'Plan d’action HSE',
             "Cette synthèse présente les principaux risques identifiés ainsi que les actions prioritaires à engager à court terme. Elle vise à orienter la prise de décision et à structurer le pilotage HSE sur le périmètre analysé.");
 
           doc.setFont('helvetica','bold');
@@ -1499,7 +1499,7 @@
           doc.text('RÉFÉRENTIEL ET PÉRIMÈTRE ANALYSÉ', margin, y);
           y += 4;
           drawDivider(0,6);
-          addWrapped(`Périmètre analysé : ${site} — ${activity}`, margin, contentW, 5.2, [71,85,105], 'normal', 11);
+          addWrapped(`Périmètre analysé : ${site}, ${activity}`, margin, contentW, 5.2, [71,85,105], 'normal', 11);
           y += 2;
           addWrapped("L’analyse repose sur une identification rapide des situations à risque terrain.", margin, contentW, 4.8, [100,116,139], 'italic', 10);
           y += 4;
@@ -1537,10 +1537,10 @@
           doc.text('DÉCISIONS ATTENDUES SANS DÉLAI', margin, y);
           y += 7;
 
-          drawBulletCard('1. Priorité immédiate — statuer et agir sans délai', structured.immediate, 'red');
-          drawBulletCard('2. Court terme — organisation et responsabilités', structured.shortTerm, 'amber');
-          drawBulletCard('3. Prévention — stabiliser les pratiques', structured.prevention, 'green');
-          drawBulletCard('4. Point critique — vigilance et encadrement', structured.vigilance, 'amber', "Ce point nécessite une attention immédiate de l’encadrement.");
+          drawBulletCard('1. Priorité immédiate, statuer et agir sans délai', structured.immediate, 'red');
+          drawBulletCard('2. Court terme, organisation et responsabilités', structured.shortTerm, 'amber');
+          drawBulletCard('3. Prévention, stabiliser les pratiques', structured.prevention, 'green');
+          drawBulletCard('4. Point critique, vigilance et encadrement', structured.vigilance, 'amber', "Ce point nécessite une attention immédiate de l’encadrement.");
           drawBulletCard('5. Arbitrage et décision', structured.recommendation, 'violet');
 
           ensureSpace(40);
