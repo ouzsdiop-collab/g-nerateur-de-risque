@@ -270,7 +270,7 @@
 
     .modal-card--wide{width:min(720px,100%)}
     .compare-grid{display:grid;gap:16px;margin-bottom:20px}
-    @media (min-width:720px){.compare-grid--2{grid-template-columns:1fr 1fr}}}
+    @media (min-width:720px){.compare-grid--2{grid-template-columns:1fr 1fr}}
     .compare-box{border-radius:var(--radius-md);border:1px solid var(--border);padding:14px 16px;background:var(--surface-2)}
     .compare-box h4{margin:0 0 8px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
     .compare-box p{margin:0;font-size:14px;line-height:1.5;color:var(--text)}
@@ -279,6 +279,55 @@
     .dev-banner{font-size:13px;line-height:1.45;padding:10px 16px;background:rgba(251,191,36,0.12);border-bottom:1px solid rgba(251,191,36,0.35);color:var(--text)}
     .dev-banner code{font-size:12px;background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-family:ui-monospace,monospace}
     .dev-banner a{color:inherit;font-weight:600;text-decoration:underline}
+
+    /* ——— Mobile polish ——— */
+    @media (max-width: 768px){
+      .topbar-inner{padding:12px 16px;align-items:flex-start}
+      .topbar-inner > .btn,.topbar-inner > button{width:100%}
+      .shell{padding:24px 14px 40px}
+      .stepper-wrap{padding:14px 14px 0}
+      .hero{padding:20px}
+      .hero h1{font-size:clamp(32px,10vw,46px);line-height:1.04}
+      .hero-lead{font-size:15px}
+      .hero-aside{padding:18px}
+      .card{padding:18px}
+      .section-head{margin-bottom:20px}
+      .section-title{font-size:18px}
+      .section-sub{font-size:13px}
+      .cta-cluster,.section-cta-row,.inline-actions,.plan-actions,.conversion-followup__cta,.modal-actions-footer{display:flex;flex-direction:column;align-items:stretch}
+      .cta-cluster .btn,.section-cta-row .btn,.inline-actions .btn,.plan-actions .btn,.conversion-followup__cta .btn,.modal-actions-footer .btn,.footer-cta .btn{width:100%}
+      .footer-cta{padding:20px}
+      .footer-cta h3{font-size:22px}
+      .footer-cta .inline-actions{width:100%}
+      .modal{padding:12px}
+      .modal-head,.modal-body{padding:16px}
+      .modal-card{max-height:92vh}
+      .chart-wrap{min-height:240px;padding:14px}
+      .plan-deliverable{padding:22px}
+      .plan-block{padding:14px 14px 16px}
+      .conversion-box,.conversion-alert,.conversion-lead,.conversion-followup,.conversion-benefits{padding:18px}
+      .conversion-lead__sub,.conversion-followup__text,.conversion-box__text,.conversion-alert__text{font-size:13px}
+      .demo-note{text-align:left}
+    }
+
+    @media (max-width: 520px){
+      .brand-title{font-size:16px}
+      .brand-sub{font-size:11px}
+      .hero h1{font-size:clamp(28px,11vw,38px)}
+      .kpis{grid-template-columns:1fr 1fr;gap:10px}
+      .kpi{padding:14px 12px}
+      .kpi .value{font-size:26px}
+      .btn{width:100%;white-space:normal;word-break:break-word;text-align:center;line-height:1.4;padding:14px 16px}
+      .stepper{padding:5px;gap:6px}
+      .stepper-item{padding:10px 8px;font-size:11px}
+      .stepper-num{width:24px;height:24px}
+      .field input,.field select,.field textarea{padding:13px 14px;font-size:14px}
+      .zone-chip{width:100%;justify-content:space-between}
+      .pill-ai{width:100%;justify-content:center;text-align:center}
+      .conversion-cta{flex-direction:column;align-items:stretch}
+      .conversion-cta .btn{width:100%;justify-content:center}
+    }
+
   </style>
 </head>
 <body>
@@ -559,7 +608,7 @@
           </div>
           <div class="modal-actions-footer">
             <button type="button" class="btn btn-secondary" onclick="closeDemoModal()">Annuler</button>
-            <button type="button" class="btn btn-primary" onclick="submitDemoRequest()" id="demoSubmitBtn">Demander ma démo</button>
+            <button type="button" class="btn btn-primary" onclick="submitDemoRequest()">Demander ma démo</button>
           </div>
         </div>
         <div id="demoSuccess" class="demo-success" hidden>
@@ -971,7 +1020,7 @@
     function closeDemoModal(){
       document.getElementById('demoModal').classList.remove('open');
     }
-    async function submitDemoRequest(){
+    function submitDemoRequest(){
       const name=document.getElementById('demoName')?.value.trim()||'';
       const company=document.getElementById('demoCompany')?.value.trim()||'';
       const email=document.getElementById('demoEmail')?.value.trim()||'';
@@ -979,38 +1028,11 @@
       const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if(!company||!email){showToast('Renseignez au minimum l’entreprise et l’email pour la démo.');return;}
       if(!emailOk.test(email)){showToast('Vérifiez le format de l’adresse email.');return;}
-      const btn=document.getElementById('demoSubmitBtn');
-      const payload={
-        name,
-        company,
-        email,
-        phone,
-        sector:document.getElementById('sectorSelect')?.value||'',
-        site:document.getElementById('siteName')?.value.trim()||'',
-        activity:document.getElementById('activityName')?.value.trim()||'',
-        score:Number(document.getElementById('kpiScore').textContent)||0,
-        criticalCount:Number(document.getElementById('kpiCritical').textContent)||0,
-        riskCount:risks.length,
-        planGenerated:Boolean(window.__exportPlanStructured||window.__exportPlanText),
-        sessionId
-      };
-      console.log("lead_demo_payload",payload);
-      try{
-        if(btn){btn.disabled=true;btn.textContent='Envoi...';}
-        const response=await fetch(apiUrl('/api/demo-request'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify(payload)});
-        const data=await response.json().catch(()=>({}));
-        if(!response.ok||data.success!==true){throw new Error(data.error||'Enregistrement impossible pour le moment.');}
-        const form=document.getElementById('demoFormWrap');
-        const success=document.getElementById('demoSuccess');
-        if(form) form.hidden=true;
-        if(success) success.hidden=false;
-        showToast('Demande de démo enregistrée.');
-      }catch(err){
-        console.error('[submitDemoRequest]',err);
-        showToast(err.message||'La demande de démo n’a pas pu être envoyée.');
-      }finally{
-        if(btn){btn.disabled=false;btn.textContent='Demander ma démo';}
-      }
+      console.log("lead_demo_payload",{name,company,email,phone,score:Number(document.getElementById('kpiScore').textContent)||0,criticalCount:Number(document.getElementById('kpiCritical').textContent)||0,riskCount:risks.length});
+      const form=document.getElementById('demoFormWrap');
+      const success=document.getElementById('demoSuccess');
+      if(form) form.hidden=true;
+      if(success) success.hidden=false;
     }
 
     function openLeadModal(){
@@ -1241,185 +1263,347 @@
     function pdfRiskCauseField(c){const t=String(c||'').trim();return t||PDF_FALLBACK_CAUSE;}
     function pdfRiskMeasureField(m){const t=String(m||'').trim();return t||PDF_FALLBACK_MEASURE;}
     function generateProPDF(companyName){
-      const company=companyName||document.getElementById('companyName').value||'Entreprise';
-      const site=document.getElementById('siteName').value||'—';
-      const activity=document.getElementById('activityName').value||'—';
-      const date=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
-      const criticalRisks=risks.filter(r=>(Number(r.gravity)*Number(r.probability))>=12);
-      let risksHtml='';
-      if(!criticalRisks.length){
-        risksHtml=`<div style="padding:20px 22px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;font-size:12.5px;color:#64748b;line-height:1.6">Aucun risque critique identifié (score ≥ 12). Les orientations du plan prioritaire restent néanmoins pertinentes pour la prévention et le pilotage.</div>`;
-      }else{
-        risksHtml=criticalRisks.map(r=>`<div style="margin-bottom:20px;padding:22px 24px;border:1px solid #e2e8f0;border-radius:12px;background:#ffffff;border-left:4px solid #0f766e;box-shadow:0 1px 3px rgba(15,23,42,.06)">
-          <div style="font-size:9px;font-weight:700;letter-spacing:.12em;color:#64748b;text-transform:uppercase;margin-bottom:8px">Synthèse critique</div>
-          <div style="font-size:14px;font-weight:800;color:#0f172a;line-height:1.45;margin-bottom:16px;letter-spacing:-.02em">${escapeHtml(r.label||'—')}</div>
-          <div style="margin-bottom:14px">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:6px">Cause probable</div>
-            <div style="font-size:12.5px;line-height:1.6;color:#334155">${escapeHtml(pdfRiskCauseField(r.cause))}</div>
-          </div>
-          <div style="margin-bottom:14px">
-            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:6px">Conséquence potentielle</div>
-            <div style="font-size:12.5px;line-height:1.6;color:#334155">${escapeHtml(PDF_FALLBACK_CONSEQUENCE)}</div>
-          </div>
-          <div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:#94a3b8;text-transform:uppercase;margin-bottom:6px">Mesure recommandée</div>
-            <div style="font-size:12.5px;line-height:1.6;color:#334155">${escapeHtml(pdfRiskMeasureField(r.measure))}</div>
-          </div>
-        </div>`).join('');
-      }
-      const structured=window.__exportPlanStructured;
-      const rawTextFallback=window.__exportPlanText||'';
-      const planInput=structured!=null?structured:(rawTextFallback.trim()?rawTextFallback:null);
-      const structuredSectionsAllEmpty=st=>st!=null&&typeof st==='object'&&!Array.isArray(st)&&['immediate','shortTerm','prevention','vigilance','recommendation'].every(k=>!String(st[k]??'').trim());
-      const noRaw=!rawTextFallback||!String(rawTextFallback).trim();
-      if(structured==null&&noRaw){
-        console.error('[generateProPDF] Plan global vide : pas de plan structuré ni de texte (__exportPlanStructured / __exportPlanText). Le flux utilisera le message de secours dans le PDF.');
-      }else if(structuredSectionsAllEmpty(structured)){
-        console.error('[generateProPDF] Plan global vide : toutes les sections structurées sont vides.',{hasStructured:!!structured});
-      }
-      const planHtml=renderStructuredPlan(planInput);
-      const score=document.getElementById('kpiScore').textContent;
-      const html=`<div id="qhse-pdf-inner-root" style="font-family:'Segoe UI',Inter,Helvetica,Arial,sans-serif;background:#ffffff;color:#0f172a;padding:36px 40px;max-width:680px;box-sizing:border-box;-webkit-font-smoothing:antialiased">
-        <header style="margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid #e2e8f0">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.16em;color:#64748b;text-transform:uppercase;margin-bottom:12px">Document de synthèse — HSE</div>
-          <div style="width:48px;height:3px;background:linear-gradient(90deg,#0f766e,#14b8a6);border-radius:2px;margin-bottom:18px"></div>
-          <h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-.035em;color:#0f172a;line-height:1.15">Plan d’action HSE</h1>
-          <p style="margin:14px 0 0;font-size:13px;color:#334155;line-height:1.6;max-width:38em">Cette synthèse présente les principaux risques identifiés ainsi que les actions prioritaires à engager à court terme.</p>
-          <p style="margin:10px 0 0;font-size:13px;color:#334155;line-height:1.6;max-width:38em">Elle vise à orienter la prise de décision et à structurer le pilotage HSE sur le périmètre analysé.</p>
-        </header>
-        <section style="margin-bottom:36px">
-          <h2 style="margin:0 0 12px;font-size:11px;font-weight:800;letter-spacing:.14em;color:#0f172a;text-transform:uppercase;padding-bottom:12px;border-bottom:2px solid #0f766e">Référentiel et périmètre analysé</h2>
-          <p style="margin:0 0 14px;font-size:12.5px;line-height:1.55;color:#475569">Périmètre analysé : <strong style="color:#0f172a;font-weight:700">${escapeHtml(site)}</strong> — <strong style="color:#0f172a;font-weight:700">${escapeHtml(activity)}</strong></p>
-          <p style="margin:0 0 18px;font-size:12px;line-height:1.5;color:#64748b;font-style:italic">L’analyse repose sur une identification rapide des situations à risque terrain.</p>
-          <table style="width:100%;border-collapse:collapse;border:1px solid #e8ecf1;border-radius:12px;overflow:hidden;font-size:13px">
-            <tbody>
-              <tr style="background:#f8fafc"><td style="padding:14px 18px;width:32%;color:#64748b;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;border-bottom:1px solid #e8ecf1">Entreprise</td><td style="padding:14px 18px;color:#0f172a;font-weight:700;border-bottom:1px solid #e8ecf1;vertical-align:middle">${escapeHtml(company)}</td></tr>
-              <tr style="background:#ffffff"><td style="padding:14px 18px;color:#64748b;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:top;border-bottom:1px solid #e8ecf1">Site</td><td style="padding:14px 18px;color:#334155;line-height:1.5;border-bottom:1px solid #e8ecf1">${escapeHtml(site)}</td></tr>
-              <tr style="background:#f8fafc"><td style="padding:14px 18px;color:#64748b;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:top;border-bottom:1px solid #e8ecf1">Activité</td><td style="padding:14px 18px;color:#334155;line-height:1.5;border-bottom:1px solid #e8ecf1">${escapeHtml(activity)}</td></tr>
-              <tr style="background:#ffffff"><td style="padding:14px 18px;color:#64748b;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle">Date du document</td><td style="padding:14px 18px;color:#334155">${escapeHtml(date)}</td></tr>
-            </tbody>
-          </table>
-        </section>
-        <section style="margin-bottom:36px">
-          <h2 style="margin:0 0 20px;font-size:11px;font-weight:800;letter-spacing:.14em;color:#0f172a;text-transform:uppercase;padding-bottom:12px;border-bottom:2px solid #0f766e">Situations critiques analysées</h2>
-          ${risksHtml}
-        </section>
-        <section style="margin-bottom:36px">
-          <h2 style="margin:0;font-size:11px;font-weight:800;letter-spacing:.14em;color:#0f172a;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #0f766e">Hiérarchisation des actions prioritaires</h2>
-          <p style="margin:12px 0 8px;font-size:12.5px;line-height:1.55;color:#334155">Les actions ci-dessous sont hiérarchisées selon leur impact immédiat sur la réduction des risques.</p>
-          <p style="margin:0 0 18px;font-size:11px;font-weight:700;letter-spacing:.05em;color:#b45309;text-transform:uppercase">Décisions attendues sans délai</p>
-          ${planHtml}
-        </section>
-        <section style="margin-bottom:28px;padding:28px 30px;background:linear-gradient(165deg,#f8fafc 0%,#ffffff 55%);border:1px solid #e2e8f0;border-radius:14px;border-left:4px solid #0f766e;box-shadow:0 2px 8px rgba(15,23,42,.05)">
-          <div style="font-size:11px;font-weight:800;letter-spacing:.14em;color:#64748b;text-transform:uppercase;margin-bottom:16px">Synthèse</div>
-          <div style="display:table;width:100%;margin-bottom:16px">
-            <div style="display:table-cell;vertical-align:baseline">
-              <span style="font-size:36px;font-weight:800;color:#0f172a;letter-spacing:-.04em;line-height:1">${escapeHtml(score)}</span>
-              <span style="font-size:15px;color:#64748b;font-weight:600;margin-left:6px">/ 100</span>
-            </div>
-          </div>
-          <p style="margin:0 0 12px;font-size:13px;line-height:1.65;color:#475569">Le niveau de maîtrise actuel présente des écarts significatifs au regard des risques identifiés.</p>
-          <p style="margin:0 0 12px;font-size:13px;line-height:1.65;color:#475569">Sans mise en œuvre rapide des actions prioritaires, la probabilité d’un incident opérationnel reste élevée.</p>
-          <p style="margin:0;font-size:13px;line-height:1.65;color:#475569">Un suivi structuré des actions (responsables, échéances, preuves) est nécessaire pour assurer l’efficacité du plan.</p>
-        </section>
-        <footer style="margin-top:8px;padding-top:22px;border-top:1px solid #e2e8f0;text-align:center">
-          <p style="margin:0 auto;max-width:420px;font-size:10px;line-height:1.65;color:#94a3b8;letter-spacing:.015em">Synthèse produite avec l’appui d’un workflow structuré <span style="color:#64748b;font-weight:600">QHSE Control</span>.</p>
-        </footer>
-      </div>`;
-
-      document.getElementById('qhse-pdf-export-mount')?.remove();
-
-      const mount=document.createElement('div');
-      mount.id='qhse-pdf-export-mount';
-      mount.setAttribute('aria-hidden','true');
-      mount.innerHTML=html;
-      Object.assign(mount.style,{
-        position:'fixed',
-        top:'0',
-        left:'0',
-        width:'794px',
-        maxWidth:'794px',
-        margin:'0',
-        padding:'0',
-        background:'#ffffff',
-        color:'#111827',
-        zIndex:'-1',
-        opacity:'1',
-        visibility:'visible',
-        pointerEvents:'none',
-        overflow:'visible'
-      });
-      document.body.appendChild(mount);
-
-      const root=mount.querySelector('#qhse-pdf-inner-root');
-      if(!root){
-        console.error('[generateProPDF] Échec injection DOM : racine #qhse-pdf-inner-root introuvable.');
-        mount.remove();
-        return Promise.reject(new Error('PDF : préparation du document impossible.'));
-      }
-
-      const safeCompany=String(company||'entreprise').toLowerCase().replace(/[^a-z0-9]+/gi,'_');
-      const opt={
-        margin:[14,14,14,14],
-        filename:`plan_action_hse_${safeCompany}.pdf`,
-        image:{type:'jpeg',quality:0.98},
-        html2canvas:{
-          scale:2,
-          useCORS:true,
-          logging:false,
-          backgroundColor:'#ffffff',
-          scrollX:0,
-          scrollY:0,
-          windowWidth:794
-        },
-        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-        pagebreak:{mode:['avoid-all','css','legacy']}
-      };
-
       return new Promise((resolve,reject)=>{
-        requestAnimationFrame(()=>{
-          try{
-            const chain=html2pdf().set(opt).from(root);
-            const runBlob=typeof chain.outputPdf==='function'
-              ?chain.outputPdf('blob')
-              :typeof chain.output==='function'
-                ?chain.output('blob')
-                :null;
-            if(!runBlob){
-              mount.remove();
-              reject(new Error('Export PDF : API html2pdf indisponible.'));
-              return;
-            }
-            Promise.resolve(runBlob)
-              .then(blob=>{
-                try{
-                  const url=URL.createObjectURL(blob);
-                  const a=document.createElement('a');
-                  a.href=url;
-                  a.download=opt.filename||'document.pdf';
-                  document.body.appendChild(a);
-                  a.click();
-                  a.remove();
-                  URL.revokeObjectURL(url);
-                }catch(dlErr){
-                  console.error('[generateProPDF] Téléchargement local:',dlErr);
-                }
-                mount.remove();
-                resolve(blob);
-              })
-              .catch(err=>{
-                console.error('[generateProPDF] Échec export PDF (html2pdf):',err?.message||err);
-                mount.remove();
-                reject(err);
-              });
-          }catch(err){
-            console.error('[generateProPDF] Erreur synchrone html2pdf:',err);
-            mount.remove();
-            reject(err);
+        try{
+          const jsPDFCtor = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : (window.jsPDF || null);
+          if(!jsPDFCtor){
+            reject(new Error('jsPDF indisponible dans html2pdf.'));
+            return;
           }
-        });
+
+          const company=String(companyName||document.getElementById('companyName')?.value||'Entreprise').trim()||'Entreprise';
+          const site=String(document.getElementById('siteName')?.value||'—').trim()||'—';
+          const activity=String(document.getElementById('activityName')?.value||'—').trim()||'—';
+          const date=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+          const score=String(document.getElementById('kpiScore')?.textContent||'0').trim();
+          const criticalCount=String(document.getElementById('kpiCritical')?.textContent||'0').trim();
+          const mediumCount=String(document.getElementById('kpiMedium')?.textContent||'0').trim();
+          const lowCount=String(document.getElementById('kpiLow')?.textContent||'0').trim();
+          const structured=window.__exportPlanStructured || parsePlainTextPlanToObject(window.__exportPlanText||'') || {
+            immediate:'- Boucler la zone critique avant reprise travaux\n- Nommer un pilote terrain pour la journée\n- Contrôler EPI portés par équipe présente',
+            shortTerm:'- Fixer une date de revue sous 30 jours\n- Ajouter point sécurité au briefing quotidien',
+            prevention:'- Photo / croquis du réglage avant/après pour éviter récidive\n- Ré-audit rapide après changement de méthode',
+            vigilance:'- Surveiller en priorité la zone à plus fort score jusqu’à preuve du réglage',
+            recommendation:'- Sans suivi structuré (actions datées, responsables, états), le plan redescend vite.'
+          };
+
+          const criticalRisks=risks.filter(r=>(Number(r.gravity)*Number(r.probability))>=12);
+          const doc = new jsPDFCtor({orientation:'portrait',unit:'mm',format:'a4'});
+          const pageW = doc.internal.pageSize.getWidth();
+          const pageH = doc.internal.pageSize.getHeight();
+          const margin = 16;
+          const contentW = pageW - margin*2;
+          let y = margin;
+
+          const safeSlug=String(company||'entreprise').toLowerCase().replace(/[^a-z0-9]+/gi,'_');
+
+          const ensureSpace=(needed=12)=>{
+            if(y + needed > pageH - margin){
+              doc.addPage();
+              y = margin;
+            }
+          };
+
+          const addWrapped=(text,x,width,lineH=5,color=[51,65,85],style='normal',size=11)=>{
+            const value=String(text||'').trim();
+            if(!value) return 0;
+            doc.setFont('helvetica',style);
+            doc.setFontSize(size);
+            doc.setTextColor(...color);
+            const lines = doc.splitTextToSize(value, width);
+            ensureSpace(lines.length*lineH + 2);
+            doc.text(lines, x, y);
+            const h = lines.length*lineH;
+            y += h;
+            return h;
+          };
+
+          const addLabelValueRow=(label,value,shade=false)=>{
+            const rowH = 10;
+            ensureSpace(rowH+2);
+            if(shade){
+              doc.setFillColor(248,250,252);
+              doc.rect(margin,y-6,contentW,rowH,'F');
+            }
+            doc.setDrawColor(232,236,241);
+            doc.rect(margin,y-6,contentW,rowH);
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(10);
+            doc.setTextColor(100,116,139);
+            doc.text(label.toUpperCase(), margin+4, y);
+            doc.setFont('helvetica','normal');
+            doc.setFontSize(11);
+            doc.setTextColor(15,23,42);
+            const lines = doc.splitTextToSize(String(value||'—'), contentW-48);
+            doc.text(lines, margin+46, y);
+            y += Math.max(rowH, lines.length*5 + 2);
+          };
+
+          const drawDivider=(spaceTop=2,spaceBottom=8)=>{
+            y += spaceTop;
+            ensureSpace(4);
+            doc.setDrawColor(15,118,110);
+            doc.setLineWidth(0.8);
+            doc.line(margin, y, margin+20, y);
+            y += spaceBottom;
+          };
+
+          const drawSectionTitle=(eyebrow,title,subtitle='')=>{
+            ensureSpace(26);
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(10);
+            doc.setTextColor(100,116,139);
+            doc.text(String(eyebrow||'').toUpperCase(), margin, y);
+            y += 6;
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(20);
+            doc.setTextColor(15,23,42);
+            const titleLines = doc.splitTextToSize(title, contentW);
+            doc.text(titleLines, margin, y);
+            y += titleLines.length*8;
+            if(subtitle){
+              y += 2;
+              addWrapped(subtitle, margin, contentW, 5, [71,85,105], 'normal', 11);
+            }
+            drawDivider(2,8);
+          };
+
+          const drawInfoBox=(title,body)=>{
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(11);
+            const titleLines = doc.splitTextToSize(title, contentW-10);
+            doc.setFont('helvetica','normal');
+            doc.setFontSize(11);
+            const bodyLines = doc.splitTextToSize(body, contentW-10);
+            const h = 10 + titleLines.length*5 + bodyLines.length*5 + 6;
+            ensureSpace(h+4);
+            doc.setFillColor(248,250,252);
+            doc.setDrawColor(226,232,240);
+            doc.roundedRect(margin, y, contentW, h, 4, 4, 'FD');
+            doc.setDrawColor(15,118,110);
+            doc.setLineWidth(1.2);
+            doc.line(margin, y, margin, y+h);
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(11);
+            doc.setTextColor(15,23,42);
+            doc.text(titleLines, margin+6, y+8);
+            doc.setFont('helvetica','normal');
+            doc.setTextColor(71,85,105);
+            doc.text(bodyLines, margin+6, y+8+titleLines.length*5+4);
+            y += h + 8;
+          };
+
+          const bulletArray=(text)=>{
+            return String(text||'').split(/\n+/).map(s=>s.replace(/^[-–•·]\s*/,'').trim()).filter(Boolean);
+          };
+
+          const drawBulletCard=(title,items,theme='teal',note='')=>{
+            const paletteMap = {
+              red: {fill:[255,245,245], border:[254,202,202], title:[159,18,57]},
+              amber: {fill:[255,247,237], border:[253,230,138], title:[154,52,18]},
+              green: {fill:[240,253,244], border:[187,247,208], title:[22,101,52]},
+              violet: {fill:[245,243,255], border:[221,214,254], title:[91,33,182]},
+              teal: {fill:[248,250,252], border:[226,232,240], title:[15,23,42]}
+            };
+            const palette = paletteMap[theme] || paletteMap.teal;
+            const bulletItems = Array.isArray(items) ? items : bulletArray(items);
+            const bulletLines = [];
+            bulletItems.forEach(item=>{
+              bulletLines.push(doc.splitTextToSize('• ' + item, contentW-12));
+            });
+            let totalH = 14;
+            bulletLines.forEach(lines=> totalH += lines.length*5 + 2);
+            let noteLines = [];
+            if(note){
+              noteLines = doc.splitTextToSize(note, contentW-16);
+              totalH += noteLines.length*5 + 8 + 4;
+            }
+            ensureSpace(totalH + 6);
+            doc.setFillColor(...palette.fill);
+            doc.setDrawColor(...palette.border);
+            doc.roundedRect(margin, y, contentW, totalH, 4, 4, 'FD');
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(11);
+            doc.setTextColor(...palette.title);
+            doc.text(title, margin+6, y+8);
+            let innerY = y + 16;
+            doc.setFont('helvetica','normal');
+            doc.setFontSize(11);
+            doc.setTextColor(51,65,85);
+            bulletLines.forEach(lines=>{
+              doc.text(lines, margin+6, innerY);
+              innerY += lines.length*5 + 2;
+            });
+            if(noteLines.length){
+              doc.setFillColor(255,251,235);
+              doc.setDrawColor(245,158,11);
+              const noteH = noteLines.length*5 + 8;
+              doc.roundedRect(margin+6, innerY+1, contentW-12, noteH, 3, 3, 'FD');
+              doc.setFont('helvetica','bold');
+              doc.setFontSize(10);
+              doc.setTextColor(146,64,14);
+              doc.text(noteLines, margin+10, innerY+7);
+            }
+            y += totalH + 8;
+          };
+
+          const drawRiskCard=(risk)=>{
+            const cause = pdfRiskCauseField(risk.cause);
+            const measure = pdfRiskMeasureField(risk.measure);
+            const consequence = PDF_FALLBACK_CONSEQUENCE;
+            const labelLines = doc.splitTextToSize(String(risk.label||'—'), contentW-12);
+            const causeLines = doc.splitTextToSize(cause, contentW-12);
+            const consLines = doc.splitTextToSize(consequence, contentW-12);
+            const measureLines = doc.splitTextToSize(measure, contentW-12);
+            const h = 18 + labelLines.length*6 + causeLines.length*5 + consLines.length*5 + measureLines.length*5 + 18;
+            ensureSpace(h+4);
+            doc.setFillColor(255,255,255);
+            doc.setDrawColor(226,232,240);
+            doc.roundedRect(margin, y, contentW, h, 4, 4, 'FD');
+            doc.setDrawColor(15,118,110);
+            doc.setLineWidth(1.2);
+            doc.line(margin, y, margin, y+h);
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(9);
+            doc.setTextColor(100,116,139);
+            doc.text('SYNTHÈSE CRITIQUE', margin+6, y+8);
+            doc.setFont('helvetica','bold');
+            doc.setFontSize(12);
+            doc.setTextColor(15,23,42);
+            doc.text(labelLines, margin+6, y+16);
+            let yy = y+16 + labelLines.length*6 + 2;
+            const subsection=(label,lines)=>{
+              doc.setFont('helvetica','bold');
+              doc.setFontSize(9);
+              doc.setTextColor(148,163,184);
+              doc.text(label.toUpperCase(), margin+6, yy);
+              yy += 5;
+              doc.setFont('helvetica','normal');
+              doc.setFontSize(10.5);
+              doc.setTextColor(51,65,85);
+              doc.text(lines, margin+6, yy);
+              yy += lines.length*5 + 4;
+            };
+            subsection('Cause probable', causeLines);
+            subsection('Conséquence potentielle', consLines);
+            subsection('Mesure recommandée', measureLines);
+            y += h + 8;
+          };
+
+          drawSectionTitle('Document de synthèse — HSE', 'Plan d’action HSE',
+            "Cette synthèse présente les principaux risques identifiés ainsi que les actions prioritaires à engager à court terme. Elle vise à orienter la prise de décision et à structurer le pilotage HSE sur le périmètre analysé.");
+
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(11);
+          doc.setTextColor(15,23,42);
+          doc.text('RÉFÉRENTIEL ET PÉRIMÈTRE ANALYSÉ', margin, y);
+          y += 4;
+          drawDivider(0,6);
+          addWrapped(`Périmètre analysé : ${site} — ${activity}`, margin, contentW, 5.2, [71,85,105], 'normal', 11);
+          y += 2;
+          addWrapped("L’analyse repose sur une identification rapide des situations à risque terrain.", margin, contentW, 4.8, [100,116,139], 'italic', 10);
+          y += 4;
+          addLabelValueRow('Entreprise', company, true);
+          addLabelValueRow('Site', site, false);
+          addLabelValueRow('Activité', activity, true);
+          addLabelValueRow('Date du document', date, false);
+          y += 8;
+
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(11);
+          doc.setTextColor(15,23,42);
+          doc.text('SITUATIONS CRITIQUES ANALYSÉES', margin, y);
+          y += 4;
+          drawDivider(0,6);
+
+          if(!criticalRisks.length){
+            drawInfoBox('Aucun risque critique identifié', 'Aucun risque critique identifié (score ≥ 12). Les orientations du plan prioritaire restent néanmoins pertinentes pour la prévention et le pilotage.');
+          }else{
+            criticalRisks.forEach(drawRiskCard);
+          }
+
+          ensureSpace(18);
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(11);
+          doc.setTextColor(15,23,42);
+          doc.text('HIÉRARCHISATION DES ACTIONS PRIORITAIRES', margin, y);
+          y += 4;
+          drawDivider(0,6);
+          addWrapped('Les actions ci-dessous sont hiérarchisées selon leur impact immédiat sur la réduction des risques.', margin, contentW, 5, [51,65,85], 'normal', 11);
+          y += 1;
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(10);
+          doc.setTextColor(180,83,9);
+          doc.text('DÉCISIONS ATTENDUES SANS DÉLAI', margin, y);
+          y += 7;
+
+          drawBulletCard('1. Priorité immédiate — statuer et agir sans délai', structured.immediate, 'red');
+          drawBulletCard('2. Court terme — organisation et responsabilités', structured.shortTerm, 'amber');
+          drawBulletCard('3. Prévention — stabiliser les pratiques', structured.prevention, 'green');
+          drawBulletCard('4. Point critique — vigilance et encadrement', structured.vigilance, 'amber', "Ce point nécessite une attention immédiate de l’encadrement.");
+          drawBulletCard('5. Arbitrage et décision', structured.recommendation, 'violet');
+
+          ensureSpace(40);
+          const sumH = 46;
+          doc.setFillColor(248,250,252);
+          doc.setDrawColor(226,232,240);
+          doc.roundedRect(margin, y, contentW, sumH, 4, 4, 'FD');
+          doc.setDrawColor(15,118,110);
+          doc.setLineWidth(1.2);
+          doc.line(margin, y, margin, y+sumH);
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(10);
+          doc.setTextColor(100,116,139);
+          doc.text('SYNTHÈSE', margin+6, y+8);
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(28);
+          doc.setTextColor(15,23,42);
+          doc.text(String(score), margin+6, y+22);
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(12);
+          doc.setTextColor(100,116,139);
+          doc.text('/ 100', margin+20, y+22);
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(10.5);
+          doc.setTextColor(71,85,105);
+          const sumText = doc.splitTextToSize(
+            `Le niveau de maîtrise actuel présente des écarts significatifs au regard des risques identifiés. Sans mise en œuvre rapide des actions prioritaires, la probabilité d’un incident opérationnel reste élevée. Un suivi structuré des actions (responsables, échéances, preuves) est nécessaire pour assurer l’efficacité du plan.`,
+            contentW-42
+          );
+          doc.text(sumText, margin+40, y+10);
+          y += sumH + 8;
+
+          ensureSpace(22);
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(10);
+          doc.setTextColor(100,116,139);
+          doc.text(`Critiques : ${criticalCount}   •   Modérés : ${mediumCount}   •   Faibles : ${lowCount}`, margin, y);
+          y += 8;
+          doc.setDrawColor(226,232,240);
+          doc.line(margin, y, pageW-margin, y);
+          y += 8;
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(9.5);
+          doc.setTextColor(148,163,184);
+          doc.text('Synthèse produite avec l’appui d’un workflow structuré QHSE Control.', pageW/2, y, {align:'center'});
+
+          const blob = doc.output('blob');
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `plan_action_hse_${safeSlug}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(()=>URL.revokeObjectURL(url), 1000);
+          resolve(blob);
+        }catch(err){
+          console.error('[generateProPDF][jsPDF]',err);
+          reject(err);
+        }
       });
     }
+
     function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>toast.classList.remove('show'),2400)}
     function escapeHtml(str){return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;')} function escapeAttr(str){return escapeHtml(str)} function escapeJs(str){return String(str).replaceAll('\\','\\\\').replaceAll("'","\\'")}
     document.getElementById('sectorSelect').addEventListener('change',loadSuggestions);document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeRiskModal();closeAddRiskModal();closeLeadModal();closeAiValidateModal();closeDemoModal();}});loadSuggestions();renderZones();renderRiskTable();recalc();updateAICounter();initStepper();
