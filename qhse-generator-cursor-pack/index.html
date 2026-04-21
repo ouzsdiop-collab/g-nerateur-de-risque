@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QHSE Control, Priorités HSE en quelques minutes</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#eef2f6;--surface:#fff;--surface-2:#f8fafc;--text:#162033;--text-soft:#556174;--muted:#7b8798;--border:#d8dee8;
+      --teal:#12a594;--teal-soft:#d9f5f1;--teal-2:#0b7f73;
+      --red:#a52b2b;--red-soft:#f8e3e3;--red-border:#efb1b1;
+      --amber:#ba6a09;--amber-soft:#faecd7;--amber-border:#efcb95;
+      --green:#167b5b;--green-soft:#dff5eb;--green-border:#a7dec6;
+      --purple:#6b52d9;--purple-soft:#ece7ff;--purple-border:#c9bcff;
+      --shadow:0 10px 40px rgba(16,24,40,.06);--shadow-lg:0 24px 64px rgba(15,23,42,.12);
+      --radius-lg:24px;--radius-md:16px;--radius-sm:12px;
+      --space-section:clamp(28px,5vw,48px);--space-block:clamp(20px,3vw,32px);--space-inner:clamp(18px,2.5vw,28px);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    body{min-height:100vh}
+    [hidden]{display:none!important}
+
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+    .topbar-inner{max-width:1120px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .brand-title{font-size:18px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+    .brand-sub{font-size:12px;color:var(--text-soft);margin-top:4px}
+
+    .stepper-wrap{max-width:1120px;margin:0 auto;padding:20px 20px 0}
+    .stepper{display:flex;align-items:stretch;justify-content:space-between;gap:8px;max-width:640px;margin:0 auto;padding:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;box-shadow:var(--shadow)}
+    .stepper-item{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:700;color:var(--muted);cursor:default;transition:color .25s ease,background .25s ease,box-shadow .25s ease}
+    .stepper-num{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:var(--border);color:var(--text-soft);transition:inherit}
+    .stepper-item.active{color:var(--text);background:var(--surface);box-shadow:0 2px 12px rgba(18,165,148,.12)}
+    .stepper-item.active .stepper-num{background:linear-gradient(135deg,var(--teal),#0b8f86);color:#fff}
+    .stepper-item.done{color:var(--teal-2)}
+    .stepper-item.done .stepper-num{background:var(--teal-soft);color:var(--teal-2)}
+    .stepper-label{display:none}
+    @media (min-width:520px){.stepper-label{display:inline}}
+
+    .shell{max-width:1120px;margin:0 auto;padding:var(--space-section) 20px calc(var(--space-section) + 24px)}
+    .flow-section{scroll-margin-top:100px;margin-bottom:var(--space-section)}
+    .flow-section:last-child{margin-bottom:0}
+
+    .hero{background:linear-gradient(165deg,#f8fcfd 0%,#eef4f8 100%);border:1px solid #d0dbe8;border-radius:var(--radius-lg);padding:var(--space-inner);box-shadow:var(--shadow);display:grid;grid-template-columns:1fr;gap:var(--space-block)}
+    @media (min-width:900px){.hero{grid-template-columns:1.15fr .85fr;align-items:start}}
+    .eyebrow{color:var(--teal-2);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+    .hero h1{margin:0;font-size:clamp(28px,5vw,40px);line-height:1.08;letter-spacing:-.04em;font-weight:800}
+    .hero-lead{margin:14px 0 0;color:var(--text-soft);font-size:16px;line-height:1.55;max-width:36em}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:center}
+    .pill-ai{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--teal-soft);border:1px solid #b9e9e2;font-size:13px;font-weight:600;color:var(--teal-2)}
+    .pill-ai span{font-weight:800}
+
+    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
+    @media (min-width:640px){.kpis{grid-template-columns:repeat(4,1fr);gap:14px}}
+    .kpi{border-radius:var(--radius-md);border:1px solid var(--border);padding:16px 14px;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;border-color:transparent;background:var(--surface);box-shadow:0 1px 0 rgba(15,23,42,.04)}
+    .kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+    .kpi .label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+    .kpi .value{font-size:clamp(28px,6vw,36px);font-weight:900;letter-spacing:-.04em;line-height:1;margin-top:8px}
+    .kpi .desc{color:var(--text-soft);font-size:12px;margin-top:8px;line-height:1.35}
+    .kpi.red{background:var(--red-soft);border-color:var(--red-border)} .kpi.red .value{color:var(--red)}
+    .kpi.amber{background:var(--amber-soft);border-color:var(--amber-border)} .kpi.amber .value{color:var(--amber)}
+    .kpi.green{background:var(--green-soft);border-color:var(--green-border)} .kpi.green .value{color:var(--green)}
+    .kpi.purple{background:var(--purple-soft);border-color:var(--purple-border)} .kpi.purple .value{color:var(--purple)}
+
+    .hero-aside{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-inner);display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow)}
+    .hero-aside-title{font-size:15px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px}
+    .hero-aside p{margin:0;font-size:14px;color:var(--text-soft);line-height:1.5}
+
+    .grid{display:grid;grid-template-columns:1fr;gap:var(--space-block);margin-top:0}
+    @media (min-width:960px){.grid{grid-template-columns:1.35fr 1fr;gap:var(--space-block)}}
+
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:var(--space-inner)}
+    .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:var(--space-block)}
+    .section-kicker{color:var(--teal-2);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+    .section-title{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:6px;line-height:1.2}
+    .section-sub{color:var(--text-soft);font-size:14px;line-height:1.5;margin-top:8px;max-width:42em}
+    .section-cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:4px}
+
+    .btn{border:none;cursor:pointer;border-radius:14px;font-weight:700;padding:12px 18px;font-size:14px;transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;white-space:nowrap}
+    .btn:active{transform:scale(.98)}
+    .btn-primary{background:linear-gradient(135deg,var(--teal),#0b8f86);color:#fff;box-shadow:0 8px 24px rgba(18,165,148,.28)}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(18,165,148,.32)}
+    .btn-primary:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--text)}
+    .btn-secondary:hover{background:var(--surface-2);border-color:#c5ceda}
+    .btn-ghost{background:transparent;border:1px solid transparent;color:var(--text-soft);font-weight:600}
+    .btn-ghost:hover{background:var(--surface-2);color:var(--text)}
+    .btn-danger{background:var(--surface);border:1px solid var(--red-border);color:var(--red)}
+    .btn-danger:hover{background:var(--red-soft)}
+    .btn-small{padding:8px 12px;font-size:13px;border-radius:12px}
+    .btn-icon{width:40px;height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:12px}
+    .cta-cluster{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .cta-cluster .btn-primary{min-height:48px;padding-left:22px;padding-right:22px}
+
+    .form-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media (min-width:640px){.form-grid{grid-template-columns:repeat(2,1fr);gap:18px}}
+    .field{display:flex;flex-direction:column;gap:8px}.field.full{grid-column:1/-1}
+    .field label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .field input,.field select,.field textarea{width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:#fff;color:var(--text);font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#9adfd5;box-shadow:0 0 0 4px rgba(18,165,148,.10)}
+
+    .zones{display:flex;flex-wrap:wrap;gap:10px}
+    .zone-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);padding:8px 14px;border-radius:999px;background:var(--surface-2);font-size:13px;font-weight:600}
+    .zone-chip button{border:none;background:transparent;color:var(--red);cursor:pointer;font-weight:800;font-size:16px;padding:0 0 4px;line-height:1}
+
+    .suggestions-wrap{margin-top:4px}
+    .suggestions-hint{font-size:12px;color:var(--text-soft);margin:0 0 12px;line-height:1.45;max-width:48em;font-weight:600}
+    .suggestions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 6px}
+    .sugg-btn{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
+    .sugg-btn:hover{background:var(--surface-2);border-color:#c5ceda}
+
+    .risk-table-wrap{overflow:auto;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface-2);margin-top:8px;-webkit-overflow-scrolling:touch}
+    .risk-table-wrap table{width:100%;border-collapse:separate;border-spacing:0;min-width:0}
+    .risk-table-wrap thead th{padding:14px 16px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+    .risk-table-wrap tbody td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:14px;background:var(--surface)}
+    .risk-table-wrap tbody tr.risk-main-row td{border-bottom:none}
+    .risk-table-wrap tbody tr.risk-main-row + tr.risk-detail-row td{border-top:none;padding-top:0}
+    .risk-table-wrap tbody tr:last-child.risk-detail-row td{border-bottom:1px solid var(--border)}
+    .risk-table-wrap tbody tr.risk-detail-row td{background:var(--surface-2);padding-bottom:16px}
+    .risk-table-wrap select,.risk-table-wrap input[type="text"]{width:100%;max-width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:14px;background:#fff}
+    .gp-cell{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .gp-cell select{flex:1;min-width:56px}
+    .score-stack{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+    .risk-badge{display:inline-flex;align-items:center;justify-content:center;min-width:88px;padding:6px 12px;border-radius:999px;font-weight:800;font-size:11px}
+    .risk-badge.critique{background:var(--red-soft);color:var(--red);border:1px solid var(--red-border)}
+    .risk-badge.moyen{background:var(--amber-soft);color:var(--amber);border:1px solid var(--amber-border)}
+    .risk-badge.faible{background:var(--green-soft);color:var(--green);border:1px solid var(--green-border)}
+    .score-pill{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:36px;padding:0 10px;border-radius:12px;font-weight:900;font-size:14px}
+    .score-pill.critique{background:var(--red-soft);color:var(--red)}.score-pill.moyen{background:var(--amber-soft);color:var(--amber)}.score-pill.faible{background:var(--green-soft);color:var(--green)}
+    .source-muted{font-size:12px;color:var(--muted);font-weight:600}
+    .row-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .btn-toggle-detail{font-size:12px;font-weight:700;color:var(--teal-2);background:transparent;border:none;cursor:pointer;padding:6px 0;text-decoration:underline;text-underline-offset:3px}
+    .btn-toggle-detail:hover{color:var(--teal)}
+
+    @media (max-width:900px){
+      .risk-table-wrap{border:none;background:transparent;overflow:visible}
+      .risk-table-wrap table,.risk-table-wrap thead,.risk-table-wrap tbody,.risk-table-wrap th,.risk-table-wrap td,.risk-table-wrap tr{display:block}
+      .risk-table-wrap thead{position:absolute;left:-9999px}
+      .risk-table-wrap tbody tr.risk-main-row{margin-bottom:16px;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow);background:var(--surface)}
+      .risk-table-wrap tbody tr.risk-main-row td{border:none;padding:12px 16px}
+      .risk-table-wrap tbody tr.risk-main-row td:before{content:attr(data-label);display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+      .risk-table-wrap tbody tr.risk-detail-row{margin-top:-12px;margin-bottom:16px;border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-md) var(--radius-md);background:var(--surface-2)}
+      .risk-table-wrap tbody tr.risk-detail-row td{padding:16px;border:none}
+      .risk-table-wrap tbody tr.risk-detail-row td:before{display:none}
+    }
+
+    .inline-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .side-stack{display:grid;gap:var(--space-block)}
+    .insight-list{display:grid;gap:12px}
+    .insight{padding:16px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--surface);font-size:14px;color:var(--text-soft);line-height:1.5}
+    .insight strong{color:var(--text)}
+    .insight.red{background:var(--red-soft);border-color:var(--red-border)}
+    .insight.amber{background:var(--amber-soft);border-color:var(--amber-border)}
+    .insight.green{background:var(--green-soft);border-color:var(--green-border)}
+    .insight.teal{background:var(--teal-soft);border-color:#b9e9e2}
+
+    .chart-wrap{position:relative;min-height:280px;border:1px solid var(--border);border-radius:var(--radius-md);background:linear-gradient(180deg,#fbfdff,#f3f7fb);padding:20px}
+
+    .plan-deliverable{margin-top:var(--space-block);border-radius:var(--radius-lg);border:1px solid #c5e8e2;background:linear-gradient(145deg,#f6fdfc 0%,#eef8ff 100%);box-shadow:0 16px 48px rgba(18,165,148,.12);padding:clamp(22px,4vw,36px);position:relative;overflow:hidden}
+    .plan-deliverable:before{content:"";position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle,rgba(18,165,148,.15) 0%,transparent 70%);pointer-events:none}
+    .plan-deliverable h3{margin:0 0 6px;font-size:clamp(18px,3vw,22px);font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+    .plan-deliverable .plan-kicker{font-size:12px;font-weight:700;color:var(--teal-2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+    .plan-text{white-space:pre-line;color:var(--text-soft);line-height:1.75;font-size:15px;margin:0}
+    .plan-actions{margin-top:22px;padding-top:20px;border-top:1px solid rgba(18,165,148,.2)}
+
+    .conversion-stack{margin-top:clamp(24px,4vw,40px);display:grid;gap:clamp(16px,2.5vw,22px);max-width:100%}
+    .conversion-box{border-radius:var(--radius-lg);border:1px solid #f5e0b8;background:linear-gradient(165deg,#fffbeb 0%,#fff 55%);padding:clamp(22px,3vw,30px);box-shadow:0 6px 32px rgba(146,64,14,.07)}
+    .conversion-box__title{margin:0 0 14px;font-size:clamp(17px,2.5vw,20px);font-weight:800;letter-spacing:-.03em;color:var(--text);line-height:1.25;max-width:38em}
+    .conversion-box__text{margin:0;font-size:14px;line-height:1.65;color:var(--text-soft);max-width:46em}
+    .conversion-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:clamp(18px,2.5vw,26px);border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,#ffffff,#f8fafc);box-shadow:0 8px 28px rgba(15,23,42,.06)}
+    .conversion-cta .btn-primary{min-height:48px;padding-left:24px;padding-right:24px;font-weight:700;transition:transform .2s ease,box-shadow .2s ease}
+    .conversion-cta .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(18,165,148,.32)}
+    .conversion-cta .btn-secondary{font-weight:600;transition:transform .2s ease,background .2s ease,border-color .2s ease}
+    .conversion-cta .btn-secondary:hover{transform:translateY(-1px);background:var(--surface-2);border-color:#c5ceda}
+    .conversion-benefits{border-radius:var(--radius-md);border:1px solid #e2e8f0;background:linear-gradient(180deg,#f8fafc,#f1f5f9);padding:18px 20px 20px}
+    .conversion-benefits__lead{margin:0 0 12px;font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--text)}
+    .conversion-benefits ul{margin:0;padding-left:1.2em;color:var(--text-soft);font-size:14px;line-height:1.6}
+    .conversion-benefits li{margin:8px 0;padding-left:2px}
+    @media (max-width:520px){
+      .conversion-cta{flex-direction:column;align-items:stretch}
+      .conversion-cta .btn{width:100%;justify-content:center}
+    }
+
+    .conversion-lead{border-radius:var(--radius-lg);border:1px solid var(--border);background:linear-gradient(180deg,#ffffff,#f8fafc);padding:clamp(22px,3vw,30px);box-shadow:0 8px 32px rgba(15,23,42,.06)}
+    .conversion-lead__title{margin:0 0 8px;font-size:clamp(17px,2.5vw,19px);font-weight:800;letter-spacing:-.02em;color:var(--text)}
+    .conversion-lead__sub{margin:0 0 20px;font-size:14px;line-height:1.55;color:var(--text-soft);max-width:42em}
+    .conversion-lead__fields{margin-bottom:18px}
+    .conversion-lead__hint{margin:14px 0 0;font-size:12px;color:var(--muted);line-height:1.45}
+    .conversion-lead__actions{margin-top:8px}
+    .conversion-success{padding:20px 22px;border-radius:var(--radius-md);border:1px solid #bbf7d0;background:linear-gradient(180deg,#f0fdf4,#fff);margin-top:4px}
+    .conversion-success__title{margin:0 0 12px;font-size:clamp(17px,2.2vw,19px);font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.25}
+    .conversion-success__msg{margin:0;font-size:14px;font-weight:500;color:var(--text-soft);line-height:1.55;max-width:42em}
+    .conversion-followup{margin-top:8px;padding:22px 24px;border-radius:var(--radius-lg);border:1px solid #e2e8f0;background:#f8fafc}
+    .conversion-followup__title{margin:0 0 10px;font-size:16px;font-weight:800;color:var(--text)}
+    .conversion-followup__text{margin:0 0 18px;font-size:14px;line-height:1.6;color:var(--text-soft);max-width:44em}
+    .conversion-followup__cta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+
+    .conversion-alert{border-radius:var(--radius-lg);border:1px solid #fecaca;background:linear-gradient(165deg,#fff5f5 0%,#fff 55%);padding:clamp(22px,3vw,30px);box-shadow:0 10px 32px rgba(185,28,28,.08)}
+    .conversion-alert__title{margin:0 0 14px;font-size:clamp(17px,2.5vw,20px);font-weight:800;letter-spacing:-.03em;color:#b91c1c;line-height:1.25;max-width:38em}
+    .conversion-alert__text{margin:0;font-size:14px;line-height:1.65;color:#7f1d1d;max-width:46em}
+    .conversion-alert__list{margin:12px 0 0;padding-left:1.2em;color:#7f1d1d;font-size:14px;line-height:1.6}
+    .conversion-alert__list li{margin:8px 0;padding-left:2px}
+    .conversion-alert__proof{margin:14px 0 0;font-size:14px;line-height:1.55;font-weight:700;color:#991b1b}
+    .fade-hidden{opacity:0;transform:translateY(12px);pointer-events:none}
+    .fade-visible{opacity:1;transform:translateY(0);transition:opacity .55s ease,transform .55s ease;pointer-events:auto}
+    .urgency-banner{display:flex;align-items:flex-start;gap:10px;padding:16px 18px;border-radius:var(--radius-md);border:1px solid #fecaca;background:linear-gradient(180deg,#fff5f5,#fff);color:#991b1b;font-size:14px;font-weight:700;line-height:1.5;box-shadow:0 6px 22px rgba(185,28,28,.06)}
+    .urgency-banner__icon{font-size:18px;line-height:1}
+    .demo-note{font-size:12px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+    .demo-success{padding:20px 22px;border-radius:var(--radius-md);border:1px solid #bbf7d0;background:linear-gradient(180deg,#f0fdf4,#fff);margin-top:6px}
+    .demo-success__title{margin:0 0 10px;font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.02em}
+    .demo-success__msg{margin:0;font-size:14px;line-height:1.55;color:var(--text-soft)}
+
+    .footer-cta{background:linear-gradient(135deg,#f4fbfa,#eef4ff);border:1px solid #dbe3ee;border-radius:var(--radius-lg);padding:clamp(22px,4vw,32px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:var(--space-block)}
+    .footer-cta h3{margin:0;font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:-.02em}
+    .footer-cta p{margin:10px 0 0;color:var(--text-soft);font-size:15px;line-height:1.55;max-width:40em}
+
+    .modal{position:fixed;inset:0;background:rgba(14,20,30,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+    .modal.open{display:flex}
+    .modal-card{width:min(920px,100%);background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);overflow:hidden;max-height:90vh;overflow-y:auto}
+    .modal-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:sticky;top:0;background:#fff;z-index:1}
+    .modal-body{padding:22px}
+    .modal-close{border:none;background:var(--surface-2);width:42px;height:42px;border-radius:12px;cursor:pointer;font-size:22px;color:var(--text-soft);transition:background .2s}
+    .modal-close:hover{background:#e8ecf2}
+    .filter-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:18px}
+    @media (min-width:720px){.filter-row{grid-template-columns:repeat(3,1fr)}}
+
+    .toast{position:fixed;right:20px;bottom:20px;z-index:120;background:#162033;color:#fff;padding:16px 18px;border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.2);display:none;max-width:min(360px,calc(100% - 40px));font-size:14px;line-height:1.45}
+    .toast.show{display:block;animation:toastIn .35s ease}
+    @keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .empty{padding:40px 20px;text-align:center;color:var(--text-soft);font-size:15px}
+
+    .skip-hint{font-size:13px;color:var(--muted);margin-top:12px}
+    .plan-placeholder{margin-top:var(--space-block);padding:22px;border-radius:var(--radius-md);border:1px dashed #c5ceda;background:var(--surface-2);color:var(--text-soft);font-size:14px;line-height:1.55;text-align:center}
+
+    .plan-urgency-banner{margin:0 0 18px;padding:14px 18px;border-radius:var(--radius-md);border-left:4px solid var(--teal);background:linear-gradient(90deg,rgba(18,165,148,.08),transparent);font-size:14px;font-weight:600;color:var(--text);line-height:1.5}
+    .plan-blocks{display:grid;gap:16px;margin-top:8px}
+    .plan-block{border-radius:var(--radius-md);border:1px solid var(--border);padding:16px 18px 18px;box-shadow:0 2px 16px rgba(15,23,42,.04)}
+    .plan-block h4{margin:0 0 14px;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:none;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .plan-block .plan-block-sub{font-size:12px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+    .plan-block-icon{font-size:1.1em;line-height:1}
+    .plan-block--immediate{background:linear-gradient(180deg,#fff5f5 0%,#fff 100%);border-color:#fecaca}
+    .plan-block--immediate h4{color:#9f1239}
+    .plan-block--short{background:linear-gradient(180deg,#fff7ed 0%,#fff 100%);border-color:#fed7aa}
+    .plan-block--short h4{color:#9a3412}
+    .plan-block--prevention{background:linear-gradient(180deg,#f0fdf4 0%,#fff 100%);border-color:#bbf7d0}
+    .plan-block--prevention h4{color:#166534}
+    .plan-block--vigilance{background:linear-gradient(180deg,#fffbeb 0%,#fff 100%);border-color:#fde68a}
+    .plan-block--vigilance h4{color:#92400e}
+    .plan-block--reco{background:linear-gradient(180deg,#f5f3ff 0%,#fff 100%);border-color:#ddd6fe}
+    .plan-block--reco h4{color:#5b21b6}
+    .plan-block .plan-block-body{margin:0}
+    .plan-action-line{font-size:14px;line-height:1.55;color:var(--text);padding:8px 0;border-bottom:1px solid rgba(15,23,42,.06)}
+    .plan-action-line:last-child{border-bottom:none;padding-bottom:0}
+    .plan-block-empty{color:var(--muted);font-size:14px;margin:0}
+    .plan-text .plan-action-line{color:var(--text-soft)}
+
+    .modal-card--wide{width:min(720px,100%)}
+    .compare-grid{display:grid;gap:16px;margin-bottom:20px}
+    @media (min-width:720px){.compare-grid--2{grid-template-columns:1fr 1fr}}
+    .compare-box{border-radius:var(--radius-md);border:1px solid var(--border);padding:14px 16px;background:var(--surface-2)}
+    .compare-box h4{margin:0 0 8px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .compare-box p{margin:0;font-size:14px;line-height:1.5;color:var(--text)}
+    .hint-human{font-size:13px;color:var(--text-soft);margin:0 0 16px;line-height:1.5}
+    .modal-actions-footer{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+    .dev-banner{font-size:13px;line-height:1.45;padding:10px 16px;background:rgba(251,191,36,0.12);border-bottom:1px solid rgba(251,191,36,0.35);color:var(--text)}
+    .dev-banner code{font-size:12px;background:rgba(0,0,0,0.06);padding:2px 6px;border-radius:4px;font-family:ui-monospace,monospace}
+    .dev-banner a{color:inherit;font-weight:600;text-decoration:underline}
+
+    @media (max-width: 768px){
+      .topbar-inner{padding:12px 16px;align-items:flex-start}
+      .topbar-inner > .btn,.topbar-inner > button{width:100%}
+      .shell{padding:24px 14px 40px}
+      .stepper-wrap{padding:14px 14px 0}
+      .hero{padding:20px}
+      .hero h1{font-size:clamp(32px,10vw,46px);line-height:1.04}
+      .hero-lead{font-size:15px}
+      .hero-aside{padding:18px}
+      .card{padding:18px}
+      .section-head{margin-bottom:20px}
+      .section-title{font-size:18px}
+      .section-sub{font-size:13px}
+      .cta-cluster,.section-cta-row,.inline-actions,.plan-actions,.conversion-followup__cta,.modal-actions-footer{display:flex;flex-direction:column;align-items:stretch}
+      .cta-cluster .btn,.section-cta-row .btn,.inline-actions .btn,.plan-actions .btn,.conversion-followup__cta .btn,.modal-actions-footer .btn,.footer-cta .btn{width:100%}
+      .footer-cta{padding:20px}
+      .footer-cta h3{font-size:22px}
+      .footer-cta .inline-actions{width:100%}
+      .modal{padding:12px}
+      .modal-head,.modal-body{padding:16px}
+      .modal-card{max-height:92vh}
+      .chart-wrap{min-height:240px;padding:14px}
+      .plan-deliverable{padding:22px}
+      .plan-block{padding:14px 14px 16px}
+      .conversion-box,.conversion-alert,.conversion-lead,.conversion-followup,.conversion-benefits{padding:18px}
+      .conversion-lead__sub,.conversion-followup__text,.conversion-box__text,.conversion-alert__text{font-size:13px}
+      .demo-note{text-align:left}
+    }
+
+    @media (max-width: 520px){
+      .brand-title{font-size:16px}
+      .brand-sub{font-size:11px}
+      .hero h1{font-size:clamp(28px,11vw,38px)}
+      .kpis{grid-template-columns:1fr 1fr;gap:10px}
+      .kpi{padding:14px 12px}
+      .kpi .value{font-size:26px}
+      .btn{width:100%;white-space:normal;word-break:break-word;text-align:center;line-height:1.4;padding:14px 16px}
+      .stepper{padding:5px;gap:6px}
+      .stepper-item{padding:10px 8px;font-size:11px}
+      .stepper-num{width:24px;height:24px}
+      .field input,.field select,.field textarea{padding:13px 14px;font-size:14px}
+      .zone-chip{width:100%;justify-content:space-between}
+      .pill-ai{width:100%;justify-content:center;text-align:center}
+      .conversion-cta{flex-direction:column;align-items:stretch}
+      .conversion-cta .btn{width:100%;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+  <div id="offlineFileBanner" class="dev-banner" role="status" hidden></div>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <div class="brand-title">Priorités HSE express</div>
+        <div class="brand-sub">QHSE Control · gratuit, pensé terrain</div>
+      </div>
+      <button class="btn btn-ghost" type="button" onclick="scrollToPlanLeadCapture()">Télécharger la synthèse PDF</button>
+    </div>
+  </div>
+
+  <nav class="stepper-wrap" aria-label="Étapes du diagnostic">
+    <div class="stepper" id="stepper">
+      <div class="stepper-item active" data-step="0" id="stepper-0"><span class="stepper-num">1</span><span class="stepper-label">Contexte</span></div>
+      <div class="stepper-item" data-step="1" id="stepper-1"><span class="stepper-num">2</span><span class="stepper-label">Risques</span></div>
+      <div class="stepper-item" data-step="2" id="stepper-2"><span class="stepper-num">3</span><span class="stepper-label">Synthèse</span></div>
+    </div>
+  </nav>
+
+  <main class="shell" id="pdfExportArea">
+    <!-- Étape 1 -->
+    <section class="flow-section" id="step-context" data-flow-step="0">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">Priorités HSE</div>
+          <h1>Identifiez vos priorités HSE en quelques minutes</h1>
+          <p class="hero-lead">Cochez le contexte, listez les risques tels que vous les voyez sur le terrain, puis obtenez une synthèse d'actions priorisée, sans vous imposer un logiciel lourd.</p>
+          <div class="hero-meta">
+            <span class="pill-ai">Quota IA · <span id="aiRemainingFull">4 analyses restantes cette session</span></span>
+          </div>
+          <div class="kpis">
+            <div class="kpi red" onclick="openRiskModal('critique')"><div class="label">Critiques</div><div class="value" id="kpiCritical">0</div><div class="desc">À traiter en urgence</div></div>
+            <div class="kpi amber" onclick="openRiskModal('moyen')"><div class="label">Modérés</div><div class="value" id="kpiMedium">0</div><div class="desc">À planifier vite</div></div>
+            <div class="kpi green" onclick="openRiskModal('faible')"><div class="label">Faibles</div><div class="value" id="kpiLow">0</div><div class="desc">À surveiller</div></div>
+            <div class="kpi purple"><div class="label">Indice global</div><div class="value" id="kpiScore">100</div><div class="desc">Lecture simplifiée</div></div>
+          </div>
+        </div>
+        <aside class="hero-aside">
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px">Pourquoi ce format</div>
+            <h2 class="hero-aside-title">Pensé pour le terrain</h2>
+            <p>Peu de champs, peu de friction : vous obtenez une synthèse partageable avec la direction et les équipes, alignée sur ce que vous observez réellement.</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="grid" style="margin-top:var(--space-block)">
+        <div class="card">
+          <div class="section-head">
+            <div>
+              <div class="section-kicker">Étape 1, Contexte</div>
+              <div class="section-title">Cadrer l'intervention</div>
+              <div class="section-sub">Indiquez qui intervient, où, et sur quoi. Les zones ou postes permettent de refléter votre découpage terrain.</div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="field"><label>Entreprise ou site juridique</label><input id="companyName" type="text" placeholder="Ex. Les Carrières du Nord SA" /></div>
+            <div class="field"><label>Secteur</label><select id="sectorSelect"><option value="mine">Mine / carrière</option><option value="btp">BTP / chantier</option><option value="industrie">Industrie / production</option><option value="maintenance">Maintenance industrielle</option><option value="logistique">Logistique / entrepôt</option></select></div>
+            <div class="field"><label>Site ou unité d'exploitation</label><input id="siteName" type="text" placeholder="Ex. Carrière Nord, fosse A" /></div>
+            <div class="field"><label>Activité principale sur site</label><input id="activityName" type="text" placeholder="Ex. Forage, levage, maintenance convoyeur" /></div>
+            <div class="field full">
+              <label>Zones ou postes de travail</label>
+              <div class="inline-actions">
+                <input id="zoneInput" type="text" placeholder="Ex. Zone extraction, quai, atelier maintenance…" style="flex:1;min-width:200px" />
+                <button class="btn btn-secondary" type="button" onclick="addZone()">Ajouter</button>
+              </div>
+            </div>
+            <div class="field full"><div class="zones" id="zonesContainer"></div></div>
+          </div>
+          <div class="section-cta-row" style="margin-top:var(--space-block);padding-top:var(--space-block);border-top:1px solid var(--border)">
+            <button class="btn btn-primary" type="button" onclick="document.getElementById('step-risks').scrollIntoView({behavior:'smooth',block:'start'})">Passer aux risques terrain</button>
+            <span class="skip-hint">Choisissez un secteur : des exemples de risques adaptés apparaissent à l'étape suivante.</span>
+          </div>
+        </div>
+        <aside class="side-stack">
+          <div class="card">
+            <div class="section-kicker">En direct</div>
+            <div class="section-title" style="margin-top:8px;font-size:17px">Ce que montre le diagnostic</div>
+            <div class="insight-list" id="insightList" style="margin-top:16px"><div class="insight">Ajoutez des risques pour voir les alertes apparaître.</div></div>
+          </div>
+          <div class="card">
+            <div class="section-kicker">Prochain focus</div>
+            <div class="section-title" style="margin-top:8px;font-size:17px">Recommandations terrain</div>
+            <div class="insight-list" id="actionList" style="margin-top:16px"><div class="insight green">Aucune priorité saillante tant que la liste des risques est vide.</div></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Étape 2 -->
+    <section class="flow-section" id="step-risks" data-flow-step="1">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Étape 2, Risques</div>
+            <div class="section-title">Les risques tels que vous les voyez</div>
+            <div class="section-sub">Listez chaque situation dangereuse. Cause et mesure restent pliables pour aller vite ; l'IA peut proposer un affinement, une ligne à la fois.</div>
+          </div>
+          <div class="cta-cluster">
+            <button class="btn btn-secondary" type="button" onclick="loadSuggestions()">Idées selon le secteur</button>
+            <button class="btn btn-primary" type="button" onclick="openAddRiskModal()">Ajouter un risque terrain</button>
+          </div>
+        </div>
+        <div class="suggestions-wrap">
+          <p class="suggestions-hint" id="suggestionsHint" aria-live="polite"></p>
+          <div class="suggestions" id="suggestionsBar"></div>
+        </div>
+        <div class="risk-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Zone</th>
+                <th>Risque</th>
+                <th>Gravité × proba.</th>
+                <th>Évaluation</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="riskTableBody"><tr><td colspan="5" class="empty">Aucun risque pour l'instant, ajoutez une zone en haut de page si besoin, puis saisissez ou importez des idées.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="section-cta-row" style="margin-top:var(--space-block);padding-top:var(--space-block);border-top:1px solid var(--border)">
+          <button class="btn btn-primary" type="button" id="btnGeneratePlan" onclick="generateGlobalPlan()">Générer la synthèse HSE</button>
+          <button class="btn btn-ghost" type="button" onclick="document.getElementById('step-plan').scrollIntoView({behavior:'smooth',block:'start'})">Voir la synthèse</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Étape 3 -->
+    <section class="flow-section" id="step-plan" data-flow-step="2">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Étape 3, Synthèse</div>
+            <div class="section-title">Plan d'action et lecture globale</div>
+            <div class="section-sub">Le graphique résume la répartition par gravité ; le texte structuré apparaît sous ce bloc après génération.</div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="riskChart"></canvas></div>
+        <div id="globalPlanBox"><div class="plan-placeholder">Une fois vos risques saisis, cliquez sur <strong>Générer la synthèse HSE</strong> : le plan priorisé s'affiche ici, prêt à être partagé ou exporté en PDF.</div></div>
+      </div>
+
+      <div class="footer-cta">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px">Aller plus loin</div>
+          <h3>Piloter avec QHSE Control</h3>
+          <p>Audits, incidents, plans d'action et reporting réunis pour suivre vos engagements sur la durée, y compris multi-sites.</p>
+        </div>
+        <div>
+          <div class="inline-actions">
+            <button class="btn btn-secondary" type="button" onclick="scrollToPlanLeadCapture()">Télécharger la synthèse PDF</button>
+            <button class="btn btn-primary" type="button" onclick="openDemoModal()">Voir comment piloter ce plan sur votre site (15 min)</button>
+          </div>
+          <p class="demo-note">🔒 Démo personnalisée non accessible publiquement</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modales -->
+  <div class="modal" id="riskModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div><div class="section-kicker">Vue filtrée</div><div class="section-title" id="modalTitle">Risques enregistrés</div></div>
+        <button class="modal-close" type="button" onclick="closeRiskModal()" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="filter-row">
+          <div class="field"><label>Zone</label><select id="filterZone" onchange="renderModalList()"><option value="">Toutes</option></select></div>
+          <div class="field"><label>Niveau</label><select id="filterLevel" onchange="renderModalList()"><option value="">Tous</option><option value="critique">Critique</option><option value="moyen">Moyen</option><option value="faible">Faible</option></select></div>
+          <div class="field"><label>Recherche</label><input id="filterText" type="text" placeholder="Libellé, zone…" oninput="renderModalList()" /></div>
+        </div>
+        <div class="risk-table-wrap">
+          <table>
+            <thead><tr><th>Zone</th><th>Risque</th><th>Score</th><th>Niveau</th></tr></thead>
+            <tbody id="modalRiskTableBody"><tr><td colspan="4" class="empty">Aucun risque à afficher.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="addRiskModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div><div class="section-kicker">Saisie</div><div class="section-title">Ajouter un risque terrain</div></div>
+        <button class="modal-close" type="button" onclick="closeAddRiskModal()" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field"><label>Zone</label><select id="newRiskZone"></select></div>
+          <div class="field"><label>Origine</label><select id="newRiskSource"><option value="manuel">Saisie terrain</option><option value="suggestion">Idée secteur</option></select></div>
+          <div class="field full"><label>Intitulé du risque</label><input id="newRiskLabel" type="text" placeholder="Ex. Cohabitation engins / piétons sur accès carrière" /></div>
+          <div class="field"><label>Gravité</label><select id="newRiskGravity"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
+          <div class="field"><label>Probabilité</label><select id="newRiskProbability"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></div>
+        </div>
+        <div class="inline-actions" style="margin-top:22px;justify-content:flex-end">
+          <button class="btn btn-secondary" type="button" onclick="closeAddRiskModal()">Annuler</button>
+          <button class="btn btn-primary" type="button" onclick="saveNewRisk()">Ajouter à la liste</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="leadModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div><div class="section-kicker">Export</div><div class="section-title">Télécharger la synthèse PDF</div></div>
+        <button class="modal-close" type="button" onclick="closeLeadModal()" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="field"><label>Entreprise</label><input id="leadCompany" type="text" placeholder="Raison sociale ou nom du site" /></div>
+          <div class="field"><label>Nom et prénom</label><input id="leadName" type="text" placeholder="Facultatif" /></div>
+          <div class="field full"><label>Email professionnel</label><input id="leadEmail" type="email" placeholder="prenom.nom@votredomaine.fr" /></div>
+        </div>
+        <div class="inline-actions" style="margin-top:22px;justify-content:flex-end">
+          <button class="btn btn-secondary" type="button" onclick="closeLeadModal()">Annuler</button>
+          <button class="btn btn-primary" type="button" onclick="saveLeadAndExport()">Enregistrer et télécharger</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="aiValidateModal" aria-modal="true" role="dialog">
+    <div class="modal-card modal-card--wide">
+      <div class="modal-head">
+        <div>
+          <div class="section-kicker">Contrôle terrain</div>
+          <div class="section-title">Proposition IA à valider</div>
+        </div>
+        <button class="modal-close" type="button" onclick="closeAiValidateModal()" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="hint-human">L'IA propose une formulation : vous pouvez l'ajuster ligne par ligne avant de l'intégrer. Aucune modification du risque tant que vous n'avez pas validé.</p>
+        <div class="compare-grid compare-grid--2">
+          <div class="compare-box">
+            <h4>Votre saisie initiale</h4>
+            <p id="aiOriginalLabel">,</p>
+          </div>
+          <div class="compare-box" style="border-color:#b9e9e2;background:linear-gradient(180deg,#fbfffe,#f6fdfc)">
+            <h4>Proposition IA</h4>
+            <p id="aiProposalSummary">,</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field full"><label>Intitulé du risque (modifiable)</label><input id="aiEditLabel" type="text" /></div>
+          <div class="field full"><label>Cause probable</label><input id="aiEditCause" type="text" /></div>
+          <div class="field full"><label>Mesure ou prévention terrain</label><input id="aiEditMeasure" type="text" /></div>
+          <div class="field"><label>Gravité</label><select id="aiEditGravity"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+          <div class="field"><label>Probabilité</label><select id="aiEditProbability"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        </div>
+        <div class="modal-actions-footer">
+          <button type="button" class="btn btn-secondary" onclick="acceptAllAiProposal()">Utiliser la proposition telle quelle</button>
+          <button type="button" class="btn btn-danger" onclick="rejectAiProposal()">Écarter</button>
+          <button type="button" class="btn btn-primary" onclick="validateAiProposal()">Valider et mettre à jour</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="demoModal">
+    <div class="modal-card modal-card--wide">
+      <div class="modal-head">
+        <div><div class="section-kicker">Démo privée</div><div class="section-title">Demander une démo personnalisée</div></div>
+        <button class="modal-close" type="button" onclick="closeDemoModal()" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="hint-human">En 15 minutes, nous vous montrons comment transformer ce plan en actions suivies sur votre site.</p>
+        <div id="demoFormWrap">
+          <div class="form-grid">
+            <div class="field"><label>Nom</label><input id="demoName" type="text" autocomplete="name" placeholder="Votre nom" /></div>
+            <div class="field"><label>Entreprise</label><input id="demoCompany" type="text" autocomplete="organization" placeholder="Votre entreprise ou site" /></div>
+            <div class="field full"><label>Email</label><input id="demoEmail" type="email" autocomplete="email" inputmode="email" placeholder="prenom.nom@entreprise.com" /></div>
+            <div class="field full"><label>Téléphone (optionnel)</label><input id="demoPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+225 ..." /></div>
+          </div>
+          <div class="modal-actions-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeDemoModal()">Annuler</button>
+            <button type="button" class="btn btn-primary" onclick="submitDemoRequest()">Demander ma démo</button>
+          </div>
+        </div>
+        <div id="demoSuccess" class="demo-success" hidden>
+          <h4 class="demo-success__title">Demande envoyée</h4>
+          <p class="demo-success__msg">Vous serez recontacté sous 24h pour organiser une démonstration adaptée à votre activité.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const suggestionsBySector={
+      mine:[
+        {label:"Collision engins / piétons",gravity:4,probability:3},
+        {label:"Chute en fosse",gravity:5,probability:2},
+        {label:"Poussières silice",gravity:4,probability:3},
+        {label:"Explosion / incendie",gravity:5,probability:3},
+        {label:"Consignation énergétique",gravity:4,probability:2}
+      ],
+      btp:[
+        {label:"Travail en hauteur",gravity:5,probability:3},
+        {label:"Chute d'objet",gravity:4,probability:3},
+        {label:"Manutention manuelle",gravity:3,probability:4},
+        {label:"Risque électrique",gravity:4,probability:3},
+        {label:"Engins de chantier",gravity:4,probability:4}
+      ],
+      industrie:[
+        {label:"Coincement machine",gravity:5,probability:3},
+        {label:"Produit chimique",gravity:4,probability:4},
+        {label:"Bruit industriel",gravity:3,probability:4},
+        {label:"Incendie atelier",gravity:5,probability:3},
+        {label:"Consignation machine",gravity:4,probability:3}
+      ],
+      maintenance:[
+        {label:"Consignation LOTO",gravity:4,probability:3},
+        {label:"Travail en hauteur",gravity:5,probability:3},
+        {label:"Pièces chaudes",gravity:4,probability:3},
+        {label:"Outillage portatif",gravity:3,probability:4},
+        {label:"Intervention en zone active",gravity:4,probability:4}
+      ],
+      logistique:[
+        {label:"Collision chariot / piéton",gravity:4,probability:4},
+        {label:"Manutention",gravity:3,probability:4},
+        {label:"Chute de plain-pied",gravity:3,probability:3},
+        {label:"Quai de chargement",gravity:4,probability:4},
+        {label:"Renversement charge",gravity:4,probability:3}
+      ]
+    };
+    let currentSuggestionList=[];
+    let zones = []; let risks = []; let chartInstance = null; let aiRemaining = 4;
+    const API_BASE=(()=>{
+      try{
+        const q=new URLSearchParams(window.location.search).get('api');
+        if(q)return q.replace(/\/$/,'');
+      }catch(e){}
+      if(location.protocol==='http:'||location.protocol==='https:')return '';
+      return 'http://localhost:3008';
+    })();
+    function apiUrl(path){const p=path.startsWith('/')?path:'/'+path;return API_BASE+p;}
+    const sessionId = localStorage.getItem('qhse_risk_session') || (() => { const id = Math.random().toString(36).slice(2)+Date.now(); localStorage.setItem('qhse_risk_session', id); return id; })();
+    (function initFileProtocolHint(){
+      const bar=document.getElementById('offlineFileBanner');
+      if(!bar||location.protocol!=='file:')return;
+      let port='3008';
+      try{if(API_BASE){const u=new URL(API_BASE);if(u.port)port=u.port;}}catch(e){}
+      bar.hidden=false;
+      bar.innerHTML='<strong>Fichier ouvert en local (file://).</strong> Pour éviter les erreurs CORS et les chemins invalides, lancez <code>node server.js</code> dans ce dossier puis ouvrez <a href="http://localhost:'+port+'/" target="_blank" rel="noopener">http://localhost:'+port+'/</a>. Les appels IA utilisent déjà ce serveur si le port correspond à votre <code>.env</code> (sinon ajoutez <code>?api=http://localhost:VOTRE_PORT</code> à l\'URL du fichier).';
+    })();
+    const riskDetailOpen = {};
+    let pendingEnhanceRiskId = null;
+    let pendingProposal = null;
+    window.__exportPlanStructured = null;
+    window.__exportPlanText = '';
+
+    function uid(){return Math.random().toString(36).slice(2,9)}
+    function getLevel(score){if(score>=12)return'critique';if(score>=6)return'moyen';return'faible'}
+    function levelLabel(level){return level.charAt(0).toUpperCase()+level.slice(1)}
+    function sourceLabel(source){return({manuel:'Saisie',suggestion:'Idée secteur',ai:'IA'})[source]||source}
+    function updateAICounter(){
+      const el=document.getElementById('aiRemainingFull');
+      if(!el)return;
+      if(aiRemaining<=0)el.textContent='quota atteint cette session';
+      else if(aiRemaining===1)el.textContent='1 analyse restante cette session';
+      else el.textContent=`${aiRemaining} analyses restantes cette session`;
+    }
+    function updatePlanButtonState(){const btn=document.getElementById('btnGeneratePlan');if(btn){btn.disabled=risks.length===0;}}
+
+    function initStepper(){
+      const sections=document.querySelectorAll('.flow-section[data-flow-step]');
+      const items=[document.getElementById('stepper-0'),document.getElementById('stepper-1'),document.getElementById('stepper-2')].filter(Boolean);
+      if(!sections.length||!items.length)return;
+      const setActive=(idx)=>{
+        items.forEach((el,i)=>{
+          el.classList.remove('active','done');
+          if(i<idx)el.classList.add('done');
+          else if(i===idx)el.classList.add('active');
+        });
+      };
+      const io=new IntersectionObserver((entries)=>{
+        const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
+        if(!visible.length)return;
+        const top=visible[0].target;
+        const step=Number(top.getAttribute('data-flow-step'));
+        if(!Number.isNaN(step))setActive(step);
+      },{rootMargin:'-42% 0px -42% 0px',threshold:[0,0.05,0.1,0.2,0.35,0.5]});
+      sections.forEach(s=>io.observe(s));
+    }
+
+    function toggleRiskDetail(id){
+      riskDetailOpen[id]=!riskDetailOpen[id];
+      const row=document.getElementById('risk-detail-'+id);
+      const btn=document.getElementById('risk-toggle-'+id);
+      if(row){row.hidden=!riskDetailOpen[id];}
+      if(btn){btn.textContent=riskDetailOpen[id]?'Masquer cause et mesure':'Cause et mesure';}
+    }
+
+    function addZone(){const input=document.getElementById('zoneInput');const value=input.value.trim();if(!value)return;if(!zones.includes(value)){zones.push(value);input.value='';renderZones();renderRiskTable();refreshModalFilters();}}
+    function removeZone(zone){zones=zones.filter(z=>z!==zone);risks=risks.map(r=>r.zone===zone?{...r,zone:zones[0]||''}:r);renderZones();renderRiskTable();recalc();refreshModalFilters()}
+    function renderZones(){const c=document.getElementById('zonesContainer');if(!zones.length){c.innerHTML='<div class="empty" style="padding:8px 0;text-align:left;font-size:14px">Ajoutez au moins une zone ou un poste pour pouvoir saisir des risques.</div>';syncZoneOptions();return;}c.innerHTML=zones.map(z=>`<span class="zone-chip">${escapeHtml(z)}<button type="button" onclick="removeZone('${escapeJs(z)}')" aria-label="Retirer">×</button></span>`).join('');syncZoneOptions()}
+    function syncZoneOptions(){const select=document.getElementById('newRiskZone');select.innerHTML=zones.map(z=>`<option value="${escapeAttr(z)}">${escapeHtml(z)}</option>`).join('')}
+    function updateSuggestionHint(){
+      const sel=document.getElementById('sectorSelect');
+      const label=sel&&sel.selectedOptions[0]?sel.selectedOptions[0].text:'votre secteur';
+      const el=document.getElementById('suggestionsHint');
+      if(el) el.textContent=`Exemples cohérents avec votre secteur (${label}), un clic ajoute la ligne dans le tableau.`;
+    }
+    function loadSuggestions(){
+      const sector=document.getElementById('sectorSelect').value;
+      currentSuggestionList=suggestionsBySector[sector]||[];
+      document.getElementById('suggestionsBar').innerHTML=currentSuggestionList.map((item,i)=>`<button class="sugg-btn" type="button" onclick="addSuggestedRiskAt(${i})">${escapeHtml(item.label)}</button>`).join('');
+      updateSuggestionHint();
+    }
+    function addSuggestedRiskAt(index){
+      if(!zones.length){showToast("Ajoutez d'abord une zone ou un poste de travail.");return;}
+      const item=currentSuggestionList[index];
+      if(!item)return;
+      risks.push({id:uid(),zone:zones[0]||'',label:item.label,cause:'',measure:'',gravity:Number(item.gravity)||3,probability:Number(item.probability)||3,source:'suggestion'});
+      renderRiskTable();recalc();
+    }
+    function openAddRiskModal(){if(!zones.length){showToast("Ajoutez d'abord une zone ou un poste de travail.");return;}syncZoneOptions();document.getElementById('newRiskZone').value=zones[0]||'';document.getElementById('newRiskSource').value='manuel';document.getElementById('newRiskLabel').value='';document.getElementById('newRiskGravity').value='3';document.getElementById('newRiskProbability').value='3';document.getElementById('addRiskModal').classList.add('open')}
+    function closeAddRiskModal(){document.getElementById('addRiskModal').classList.remove('open')}
+    function saveNewRisk(){const zone=document.getElementById('newRiskZone').value;const label=document.getElementById('newRiskLabel').value.trim();const gravity=Number(document.getElementById('newRiskGravity').value);const probability=Number(document.getElementById('newRiskProbability').value);const source=document.getElementById('newRiskSource').value;if(!label){showToast('Indiquez un intitulé pour ce risque.');return;}risks.push({id:uid(),zone,label,cause:'',measure:'',gravity,probability,source});closeAddRiskModal();renderRiskTable();recalc()}
+    function updateRisk(id,field,value){risks=risks.map(r=>r.id===id?{...r,[field]:(field==='gravity'||field==='probability')?Number(value):value}:r);renderRiskTable();recalc()}
+    function deleteRisk(id){delete riskDetailOpen[id];risks=risks.filter(r=>r.id!==id);renderRiskTable();recalc()}
+    function openAiValidateModal(){document.getElementById('aiValidateModal').classList.add('open')}
+    function closeAiValidateModal(){document.getElementById('aiValidateModal').classList.remove('open');pendingEnhanceRiskId=null;pendingProposal=null}
+    function fillAiValidationModal(originalRisk,proposal){
+      document.getElementById('aiOriginalLabel').textContent=originalRisk.label||'Non renseigné';
+      const summary=(proposal.label||'')+' · G'+proposal.gravity+' × P'+proposal.probability;
+      document.getElementById('aiProposalSummary').textContent=summary;
+      document.getElementById('aiEditLabel').value=proposal.label||'';
+      document.getElementById('aiEditCause').value=proposal.cause||'';
+      document.getElementById('aiEditMeasure').value=proposal.measure||'';
+      document.getElementById('aiEditGravity').value=String(proposal.gravity||3);
+      document.getElementById('aiEditProbability').value=String(proposal.probability||3);
+    }
+    function acceptAllAiProposal(){if(!pendingProposal)return;fillAiValidationModal(risks.find(r=>r.id===pendingEnhanceRiskId)||{label:''},pendingProposal)}
+    async function requestAiProposal(id){
+      if(aiRemaining<=0){showToast('Quota IA épuisé pour cette session.');return;}
+      const risk=risks.find(r=>r.id===id);if(!risk)return;
+      const button=document.getElementById(`ai-btn-${id}`);if(button){button.disabled=true;button.textContent='…';}
+      try{
+        const response=await fetch(apiUrl('/api/enhance-risk'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({sessionId,sector:document.getElementById('sectorSelect').value,site:document.getElementById('siteName').value,activity:document.getElementById('activityName').value,zone:risk.zone,label:risk.label})});
+        const data=await response.json();
+        if(response.status===429){aiRemaining=0;updateAICounter();showToast('Quota IA atteint pour cette session.');return;}
+        if(!response.ok)throw new Error(data.error||'Erreur IA');
+        const raw=data.proposal&&typeof data.proposal==='object'?data.proposal:data;
+        pendingEnhanceRiskId=id;
+        pendingProposal={label:raw.label,cause:raw.cause,measure:raw.measure,gravity:Number(raw.gravity)||3,probability:Number(raw.probability)||3};
+        aiRemaining=Number(data.remaining);updateAICounter();
+        fillAiValidationModal(risk,pendingProposal);
+        openAiValidateModal();
+        showToast('Proposition prête, ouvrez la fenêtre pour la valider ou l\'ajuster.');
+      }catch(e){console.error(e);showToast('Service IA indisponible. Réessayez dans un instant.');}
+      finally{const refreshed=document.getElementById(`ai-btn-${id}`);if(refreshed){refreshed.disabled=false;refreshed.textContent='Affiner avec l\'IA';}}
+    }
+    function validateAiProposal(){
+      if(!pendingEnhanceRiskId||!pendingProposal)return;
+      const id=pendingEnhanceRiskId;
+      const label=document.getElementById('aiEditLabel').value.trim();
+      const cause=document.getElementById('aiEditCause').value.trim();
+      const measure=document.getElementById('aiEditMeasure').value.trim();
+      const gravity=Number(document.getElementById('aiEditGravity').value);
+      const probability=Number(document.getElementById('aiEditProbability').value);
+      if(!label){showToast('L\'intitulé du risque est obligatoire.');return;}
+      risks=risks.map(r=>r.id===id?{...r,label,cause,measure,gravity,probability,source:'ai'}:r);
+      closeAiValidateModal();
+      renderRiskTable();recalc();
+      showToast('Risque mis à jour avec la proposition validée.');
+    }
+    function rejectAiProposal(){
+      closeAiValidateModal();
+      showToast('Proposition écartée, le risque reste tel quel.');
+    }
+    async function generateGlobalPlan(){if(risks.length===0){showToast('Ajoutez au moins un risque pour lancer la synthèse.');return;}if(aiRemaining<=0){showToast('Quota IA épuisé pour cette session.');return;}showToast('Synthèse en cours…');try{const response=await fetch(apiUrl('/api/global-plan'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({sessionId,sector:document.getElementById('sectorSelect').value,activity:document.getElementById('activityName').value,risks:risks.map(r=>({label:r.label,gravity:r.gravity,probability:r.probability}))})});const data=await response.json();if(response.status===429){aiRemaining=0;updateAICounter();showToast('Limite serveur atteinte, réessayez plus tard.');return;}if(!response.ok)throw new Error(data.error||'Erreur plan');aiRemaining=Number(data.remaining);updateAICounter();renderGlobalPlan(data);{const q=aiRemaining;showToast(q===0?'Synthèse prête, quota IA atteint pour cette session.':`Synthèse prête, il vous reste ${q} analyse${q>1?'s':''} IA sur cette session.`);}document.getElementById('step-plan').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){console.error(e);showToast('La synthèse n\'a pas pu être générée. Vérifiez la connexion ou réessayez.');}}
+    function formatPlanLinesForUi(text){
+      const raw=String(text||'').trim();
+      if(!raw)return '<p class="plan-block-empty">Non renseigné</p>';
+      const parts=[];
+      for(const line of raw.split(/\n+/)){
+        const t=line.replace(/^[-–•·]\s*/,'').trim();
+        if(t)parts.push(`<div class="plan-action-line">${escapeHtml(t)}</div>`);
+      }
+      return parts.length?parts.join(''):'<p class="plan-block-empty">Non renseigné</p>';
+    }
+    function renderGlobalPlan(data){
+      const structured=data.planStructured||null;
+      const legacyText=typeof data.plan==='string'?data.plan:'';
+      window.__exportPlanStructured=structured;
+      window.__exportPlanText=structured?([
+        structured.immediate||'',
+        structured.shortTerm||'',
+        structured.prevention||'',
+        structured.vigilance||'',
+        structured.recommendation||''
+      ].join('\n\n')):legacyText;
+      const urgencyBanner='<p class="plan-urgency-banner">Ce plan reflète vos saisies du moment : les priorités peuvent évoluer, revoyez-le après tout changement notable sur site.</p>';
+      let bodyHtml='';
+      if(structured){
+        bodyHtml=`${urgencyBanner}<div class="plan-blocks">
+          <div class="plan-block plan-block--immediate"><h4><span class="plan-block-icon" aria-hidden="true">🔥</span> PRIORITÉ IMMÉDIATE <span class="plan-block-sub">(0–7 jours)</span></h4><div class="plan-block-body">${formatPlanLinesForUi(structured.immediate)}</div></div>
+          <div class="plan-block plan-block--short"><h4><span class="plan-block-icon" aria-hidden="true">📅</span> ACTIONS COURT TERME <span class="plan-block-sub">(≈30 jours)</span></h4><div class="plan-block-body">${formatPlanLinesForUi(structured.shortTerm)}</div></div>
+          <div class="plan-block plan-block--prevention"><h4><span class="plan-block-icon" aria-hidden="true">🛡</span> PRÉVENTION</h4><div class="plan-block-body">${formatPlanLinesForUi(structured.prevention)}</div></div>
+          <div class="plan-block plan-block--vigilance"><h4><span class="plan-block-icon" aria-hidden="true">⚠️</span> POINT CRITIQUE</h4><div class="plan-block-body">${formatPlanLinesForUi(structured.vigilance)}</div></div>
+          <div class="plan-block plan-block--reco"><h4><span class="plan-block-icon" aria-hidden="true">📌</span> RECOMMANDATION</h4><div class="plan-block-body">${formatPlanLinesForUi(structured.recommendation)}</div></div>
+        </div>`;
+      }else{
+        bodyHtml=`${urgencyBanner}<div class="plan-text">${formatPlanLinesForUi(legacyText)}</div>`;
+      }
+      const needsUrgency=(Number(document.getElementById('kpiScore').textContent)||0)<70 || (Number(document.getElementById('kpiCritical').textContent)||0)>0;
+      const urgencyHtml=needsUrgency?`<div class="urgency-banner"><span class="urgency-banner__icon" aria-hidden="true">⚠️</span><span>Situation à risque nécessitant un pilotage immédiat</span></div>`:'';
+      const conversionTunnel=`<section class="conversion-stack" aria-label="Après la synthèse">
+        ${urgencyHtml}
+        <div id="conversionAlertBox" class="conversion-alert fade-hidden">
+          <h4 class="conversion-alert__title">⚠️ Ce plan seul ne garantit pas la sécurité terrain</h4>
+          <p class="conversion-alert__text">Identifier les risques est une première étape.<br><br>Mais sans suivi structuré :</p>
+          <ul class="conversion-alert__list">
+            <li>❌ Les actions ne sont pas assignées</li>
+            <li>❌ Aucun responsable identifié</li>
+            <li>❌ Aucun suivi dans le temps</li>
+            <li>❌ Aucun rappel en cas de dérive</li>
+          </ul>
+          <p class="conversion-alert__proof">👉 En réalité, plus de 70% des actions HSE ne sont jamais suivies sans outil dédié.</p>
+        </div>
+        <div class="conversion-benefits" style="border-color:#bbf7d0;background:linear-gradient(180deg,#f0fdf4,#fff)">
+          <p class="conversion-benefits__lead" style="color:#166534">Avec la plateforme QHSE Control :</p>
+          <ul>
+            <li>Chaque risque devient une action assignée</li>
+            <li>Suivi en temps réel des actions</li>
+            <li>Alertes automatiques si retard</li>
+            <li>Vision claire pour la direction</li>
+          </ul>
+        </div>
+        <section id="conversionLeadPanel" class="conversion-lead" aria-labelledby="conversionLeadTitle">
+          <h3 id="conversionLeadTitle" class="conversion-lead__title">Recevoir ma synthèse HSE</h3>
+          <p class="conversion-lead__sub">Indiquez vos coordonnées professionnelles : nous préparons le PDF téléchargeable pour vos équipes et vos échanges internes.</p>
+          <div id="conversionLeadFormWrap">
+            <div class="conversion-lead__fields">
+              <div class="form-grid">
+                <div class="field"><label>Nom et prénom</label><input id="exportLeadName" type="text" autocomplete="name" placeholder="Facultatif" /></div>
+                <div class="field"><label>Email professionnel <span style="color:var(--red);">*</span></label><input id="exportLeadEmail" type="email" autocomplete="email" inputmode="email" required placeholder="prenom.nom@votredomaine.fr" /></div>
+                <div class="field full"><label>Entreprise ou site <span style="color:var(--red);">*</span></label><input id="exportLeadCompany" type="text" autocomplete="organization" required placeholder="Raison sociale ou nom du site" /></div>
+              </div>
+            </div>
+            <p class="conversion-lead__hint">Champs obligatoires *. Enregistrement sécurisé, puis génération automatique du PDF.</p>
+            <div class="conversion-lead__actions">
+              <button class="btn btn-primary" type="button" onclick="exportWithLead()" id="exportWithLeadBtn">Télécharger ma synthèse PDF</button>
+            </div>
+          </div>
+          <div id="conversionSuccess" class="conversion-success" hidden>
+            <h4 class="conversion-success__title">Votre synthèse HSE est prête à être utilisée en interne</h4>
+            <p class="conversion-success__msg">Votre synthèse a bien été générée. Vous pouvez maintenant la télécharger puis demander une démonstration pour structurer le suivi des actions sur votre site.</p>
+          </div>
+        </section>
+        <div class="conversion-followup" id="conversionFollowup" hidden>
+          <h4 class="conversion-followup__title">La suite en pratique</h4>
+          <p class="conversion-followup__text">Donnez du corps à ces actions : responsables, échéances et preuves dans un même cadre pour ne rien laisser retomber.</p>
+          <div class="conversion-followup__cta">
+            <a class="btn btn-secondary" href="https://qhse-control.net/pages/contact.php" target="_blank" rel="noopener noreferrer">Organiser le suivi de ce plan</a>
+            <a class="btn btn-primary" href="https://qhse-control.net/pages/contact.php" target="_blank" rel="noopener noreferrer">Voir comment piloter ce plan sur votre site (15 min)</a>
+          </div>
+        </div>
+        <div class="conversion-benefits">
+          <p class="conversion-benefits__lead">Au-delà de cette synthèse, QHSE Control aide à :</p>
+          <ul>
+            <li>suivre les actions jusqu'à leur preuve terrain</li>
+            <li>centraliser audits et événements importants</li>
+            <li>lire une vision claire pour la direction et les équipes</li>
+          </ul>
+        </div>
+      </section>`;
+      document.getElementById('globalPlanBox').innerHTML=`<div class="plan-deliverable"><div class="plan-kicker">Synthèse générée</div><h3>Plan d'action HSE</h3>${bodyHtml}<div class="plan-actions inline-actions"><button class="btn btn-secondary" type="button" onclick="scrollToRisks()">Modifier la liste des risques</button><button class="btn btn-primary" type="button" onclick="scrollToPlanLeadCapture()">Télécharger ma synthèse PDF</button></div></div>${conversionTunnel}`;
+      revealConversionAlertWithDelay();
+      const prefill=document.getElementById('companyName').value.trim();
+      const ec=document.getElementById('exportLeadCompany');
+      if(ec&&!ec.value) ec.value=prefill;
+    }
+    function renderRiskTable(){
+      const tbody=document.getElementById('riskTableBody');
+      if(!risks.length){tbody.innerHTML='<tr><td colspan="5" class="empty">Aucun risque pour l\'instant, ajoutez une zone en haut de page si besoin, puis saisissez ou importez des idées.</td></tr>';updatePlanButtonState();return;}
+      tbody.innerHTML=risks.map(r=>{
+        const score=Number(r.gravity)*Number(r.probability);const level=getLevel(score);
+        const open=!!riskDetailOpen[r.id];
+        const zoneOpts=zones.map(z=>`<option value="${escapeAttr(z)}" ${z===r.zone?'selected':''}>${escapeHtml(z)}</option>`).join('');
+        return `<tr class="risk-main-row">
+          <td data-label="Zone"><select onchange="updateRisk('${r.id}','zone',this.value)">${zoneOpts}</select></td>
+          <td data-label="Risque"><input type="text" value="${escapeAttr(r.label)}" placeholder="Intitulé court et concret" oninput="updateRisk('${r.id}','label',this.value)" /></td>
+          <td data-label="Gravité × proba."><div class="gp-cell"><select aria-label="Gravité" onchange="updateRisk('${r.id}','gravity',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${Number(r.gravity)===v?'selected':''}>${v}</option>`).join('')}</select><select aria-label="Probabilité" onchange="updateRisk('${r.id}','probability',this.value)">${[1,2,3,4,5].map(v=>`<option value="${v}" ${Number(r.probability)===v?'selected':''}>${v}</option>`).join('')}</select></div></td>
+          <td data-label="Évaluation"><div class="score-stack"><span class="score-pill ${level}">${score}</span><span class="risk-badge ${level}">${levelLabel(level)}</span><span class="source-muted">${escapeHtml(sourceLabel(r.source))}</span></div></td>
+          <td data-label="Actions"><div class="row-actions"><button type="button" class="btn-toggle-detail" id="risk-toggle-${r.id}" onclick="toggleRiskDetail('${r.id}')">${open?'Masquer cause et mesure':'Cause et mesure'}</button><button class="btn btn-secondary btn-small" id="ai-btn-${r.id}" type="button" onclick="requestAiProposal('${r.id}')" title="Proposer un affinement (IA), à valider ensuite">Affiner avec l'IA</button><button class="btn btn-danger btn-small" type="button" onclick="deleteRisk('${r.id}')">Retirer</button></div></td>
+        </tr><tr class="risk-detail-row" id="risk-detail-${r.id}" ${open?'':'hidden'}><td colspan="5">
+          <div class="form-grid" style="margin-top:4px">
+            <div class="field full"><label>Cause probable</label><input type="text" value="${escapeAttr(r.cause||'')}" placeholder="Ex. circulation non balisée, manque d'exclusion…" oninput="updateRisk('${r.id}','cause',this.value)" /></div>
+            <div class="field full"><label>Mesure ou prévention</label><input type="text" value="${escapeAttr(r.measure||'')}" placeholder="Ex. consignage, formation courte, EPI…" oninput="updateRisk('${r.id}','measure',this.value)" /></div>
+          </div>
+        </td></tr>`;
+      }).join('');
+      updatePlanButtonState();
+    }
+    function recalc(){const validRisks=risks.filter(r=>(r.label||'').trim()!=='');let critical=0,medium=0,low=0;validRisks.forEach(r=>{const score=Number(r.gravity)*Number(r.probability);const level=getLevel(score);if(level==='critique')critical++;else if(level==='moyen')medium++;else low++;});const score=Math.max(0,100-(critical*20)-(medium*8)-(low*2));document.getElementById('kpiCritical').textContent=critical;document.getElementById('kpiMedium').textContent=medium;document.getElementById('kpiLow').textContent=low;document.getElementById('kpiScore').textContent=score;renderInsights(critical,medium,low,score);renderActions(critical,medium,low);renderChart(critical,medium,low);refreshModalFilters();updatePlanButtonState();}
+    function renderInsights(critical,medium,low,score){const el=document.getElementById('insightList');const items=[];if(!critical&&!medium&&!low){items.push('<div class="insight">Ajoutez des risques pour alimenter le diagnostic.</div>');}else{if(critical>0)items.push(`<div class="insight red"><strong>${critical} critique(s)</strong>, traiter en priorité avec un responsable identifié.</div>`);if(medium>0)items.push(`<div class="insight amber"><strong>${medium} modéré(s)</strong>, planifier une action sous 30 jours.</div>`);if(low>0)items.push(`<div class="insight green"><strong>${low} faible(s)</strong>, maintenir la vigilance et le contrôle.</div>`);items.push(`<div class="insight teal"><strong>Indice global :</strong> ${score} / 100</div>`);}el.innerHTML=items.join('')}
+    function renderActions(critical,medium,low){const el=document.getElementById('actionList');const actions=[];if(critical>0)actions.push('<div class="insight red"><strong>Priorité :</strong> sécuriser les situations critiques et nommer un pilote terrain.</div>');if(medium>0)actions.push('<div class="insight amber"><strong>À planifier :</strong> réunir les moyens sur les risques modérés (délai cible : 30 jours).</div>');if(low>0)actions.push('<div class="insight green"><strong>À entretenir :</strong> conserver les bons gestes et rappeler les consignes aux équipes.</div>');if(!actions.length)actions.push('<div class="insight green">Les messages d\'action s\'affichent dès que des risques sont saisis.</div>');el.innerHTML=actions.join('')}
+    function renderChart(critical,medium,low){const ctx=document.getElementById('riskChart').getContext('2d');if(chartInstance)chartInstance.destroy();chartInstance=new Chart(ctx,{type:'doughnut',data:{labels:['Critiques','Modérés','Faibles'],datasets:[{data:[critical,medium,low],backgroundColor:['#d84c4c','#efab52','#37b58a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:14,color:'#556174',padding:18,font:{size:13,weight:'700'}}}},cutout:'68%'}})}
+    function openRiskModal(filter=''){document.getElementById('filterLevel').value=filter||'';const labels={critique:'critiques',moyen:'modérés',faible:'faibles'};document.getElementById('modalTitle').textContent=filter?`Vue : risques ${labels[filter]||filter}`:'Tous les risques saisis';document.getElementById('riskModal').classList.add('open');renderModalList()}
+    function closeRiskModal(){document.getElementById('riskModal').classList.remove('open')}
+    function refreshModalFilters(){const select=document.getElementById('filterZone');const current=select.value;select.innerHTML=`<option value="">Toutes</option>`+zones.map(z=>`<option value="${escapeAttr(z)}">${escapeHtml(z)}</option>`).join('');if([...select.options].some(o=>o.value===current))select.value=current;renderModalList()}
+    function renderModalList(){const tbody=document.getElementById('modalRiskTableBody');const zone=document.getElementById('filterZone').value;const level=document.getElementById('filterLevel').value;const text=document.getElementById('filterText').value.trim().toLowerCase();const filtered=risks.filter(r=>{const score=Number(r.gravity)*Number(r.probability);const currentLevel=getLevel(score);const matchesZone=!zone||r.zone===zone;const matchesLevel=!level||currentLevel===level;const matchesText=!text||(r.label||'').toLowerCase().includes(text)||(r.zone||'').toLowerCase().includes(text);return matchesZone&&matchesLevel&&matchesText&&(r.label||'').trim()!==''});if(!filtered.length){tbody.innerHTML='<tr><td colspan="4" class="empty">Aucun risque ne correspond à ces critères.</td></tr>';return;}tbody.innerHTML=filtered.map(r=>{const score=Number(r.gravity)*Number(r.probability);const currentLevel=getLevel(score);return `<tr><td>${escapeHtml(r.zone||'Non renseigné')}</td><td>${escapeHtml(r.label||'Non renseigné')}</td><td><span class="score-pill ${currentLevel}">${score}</span></td><td><span class="risk-badge ${currentLevel}">${levelLabel(currentLevel)}</span></td></tr>`}).join('')}
+    function scrollToRisks(){document.getElementById('step-risks')?.scrollIntoView({behavior:'smooth',block:'start'})}
+    function getLeadFormValues(){
+      const modal=document.getElementById('leadModal');
+      if(modal&&modal.classList.contains('open')){
+        return{
+          name:document.getElementById('leadName')?.value.trim()||'',
+          email:document.getElementById('leadEmail')?.value.trim()||'',
+          company:document.getElementById('leadCompany')?.value.trim()||''
+        };
+      }
+      const wrap=document.getElementById('conversionLeadFormWrap');
+      const ex=document.getElementById('exportLeadEmail');
+      const useInline=Boolean(ex&&wrap&&!wrap.hidden);
+      if(useInline){
+        return{
+          name:document.getElementById('exportLeadName')?.value.trim()||'',
+          email:document.getElementById('exportLeadEmail')?.value.trim()||'',
+          company:document.getElementById('exportLeadCompany')?.value.trim()||''
+        };
+      }
+      return{
+        name:document.getElementById('leadName')?.value.trim()||'',
+        email:document.getElementById('leadEmail')?.value.trim()||'',
+        company:document.getElementById('leadCompany')?.value.trim()||''
+      };
+    }
+    function scrollToPlanLeadCapture(){
+      const panel=document.getElementById('conversionLeadPanel');
+      const wrap=document.getElementById('conversionLeadFormWrap');
+      if(panel){panel.scrollIntoView({behavior:'smooth',block:'center'});}
+      if(wrap&&!wrap.hidden){setTimeout(()=>document.getElementById('exportLeadEmail')?.focus(),380);return;}
+      openLeadModal();
+    }
+    function showExportSuccessState(){
+      const wrap=document.getElementById('conversionLeadFormWrap');
+      const ok=document.getElementById('conversionSuccess');
+      const fu=document.getElementById('conversionFollowup');
+      if(wrap) wrap.hidden=true;
+      if(ok) ok.hidden=false;
+      if(fu) fu.hidden=false;
+    }
+    function revealConversionAlertWithDelay(){
+      clearTimeout(window.__conversionAlertTimer);
+      const box=document.getElementById('conversionAlertBox');
+      if(!box)return;
+      box.classList.add('fade-hidden');
+      box.classList.remove('fade-visible');
+      window.__conversionAlertTimer=setTimeout(()=>{
+        const target=document.getElementById('conversionAlertBox');
+        if(!target)return;
+        target.classList.remove('fade-hidden');
+        target.classList.add('fade-visible');
+      },3000);
+    }
+    function openDemoModal(){
+      console.log("lead_interested_demo");
+      const company=document.getElementById('companyName')?.value?.trim()||document.getElementById('exportLeadCompany')?.value?.trim()||'';
+      const email=document.getElementById('exportLeadEmail')?.value?.trim()||document.getElementById('leadEmail')?.value?.trim()||'';
+      const name=document.getElementById('exportLeadName')?.value?.trim()||document.getElementById('leadName')?.value?.trim()||'';
+      const companyField=document.getElementById('demoCompany');
+      const emailField=document.getElementById('demoEmail');
+      const nameField=document.getElementById('demoName');
+      if(companyField&&!companyField.value) companyField.value=company;
+      if(emailField&&!emailField.value) emailField.value=email;
+      if(nameField&&!nameField.value) nameField.value=name;
+      const form=document.getElementById('demoFormWrap');
+      const success=document.getElementById('demoSuccess');
+      if(form) form.hidden=false;
+      if(success) success.hidden=true;
+      document.getElementById('demoModal').classList.add('open');
+    }
+    function closeDemoModal(){document.getElementById('demoModal').classList.remove('open');}
+    function submitDemoRequest(){
+      const name=document.getElementById('demoName')?.value.trim()||'';
+      const company=document.getElementById('demoCompany')?.value.trim()||'';
+      const email=document.getElementById('demoEmail')?.value.trim()||'';
+      const phone=document.getElementById('demoPhone')?.value.trim()||'';
+      const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!company||!email){showToast('Renseignez au minimum l\'entreprise et l\'email pour la démo.');return;}
+      if(!emailOk.test(email)){showToast('Vérifiez le format de l\'adresse email.');return;}
+      console.log("lead_demo_payload",{name,company,email,phone,score:Number(document.getElementById('kpiScore').textContent)||0,criticalCount:Number(document.getElementById('kpiCritical').textContent)||0,riskCount:risks.length});
+      const form=document.getElementById('demoFormWrap');
+      const success=document.getElementById('demoSuccess');
+      if(form) form.hidden=true;
+      if(success) success.hidden=false;
+    }
+    function openLeadModal(){
+      const ec=document.getElementById('exportLeadCompany')?.value?.trim();
+      const en=document.getElementById('exportLeadName')?.value?.trim();
+      const ee=document.getElementById('exportLeadEmail')?.value?.trim();
+      document.getElementById('leadCompany').value=ec||document.getElementById('companyName').value||'';
+      document.getElementById('leadName').value=en||'';
+      document.getElementById('leadEmail').value=ee||'';
+      document.getElementById('leadModal').classList.add('open');
+    }
+    function closeLeadModal(){document.getElementById('leadModal').classList.remove('open')}
+    async function saveLeadBeforeExport(){
+      const vals=getLeadFormValues();
+      const company=vals.company;
+      const email=vals.email;
+      const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!company||!email){showToast('Renseignez l\'entreprise et un email professionnel.');throw new Error('validation');}
+      if(!emailOk.test(email)){showToast('Vérifiez le format de l\'adresse email.');throw new Error('validation');}
+      const sector=document.getElementById('sectorSelect').value;
+      const site=document.getElementById('siteName').value.trim();
+      const activity=document.getElementById('activityName').value.trim();
+      const rawScore=Number(document.getElementById('kpiScore').textContent);
+      const score=Number.isFinite(rawScore)?rawScore:0;
+      const criticalCount=Number(document.getElementById('kpiCritical').textContent)||0;
+      const payload={name:vals.name,email,company,sector,site,activity,score,riskCount:risks.length,criticalCount,planGenerated:true,sessionId};
+      let response;
+      try{response=await fetch(apiUrl('/api/save-lead'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify(payload)});}
+      catch(netErr){console.error(netErr);throw new Error('Impossible de joindre le serveur. Lancez l\'application locale ou réessayez.');}
+      let data={};
+      try{data=await response.json()}catch(_){throw new Error('Réponse serveur invalide.');}
+      if(!response.ok||data.success!==true){throw new Error(data.error||'Enregistrement impossible pour le moment.');}
+      return data;
+    }
+    function blobToBase64(blob){
+      return new Promise((resolve,reject)=>{
+        const r=new FileReader();
+        r.onload=()=>{const d=r.result;const b64=(typeof d==='string'&&d.includes(','))?d.split(',')[1]:d;resolve(b64);};
+        r.onerror=()=>reject(new Error('Lecture PDF impossible.'));
+        r.readAsDataURL(blob);
+      });
+    }
+    async function exportWithLead(){
+      const btn=document.getElementById('exportWithLeadBtn');
+      try{
+        if(btn){btn.disabled=true;}
+        await saveLeadBeforeExport();
+        const v=getLeadFormValues();
+        const company=v.company||document.getElementById('companyName')?.value.trim()||'Entreprise';
+        closeLeadModal();
+        let blob;
+        try{blob=await generateProPDF(company);}
+        catch(pdfErr){console.error('[exportWithLead] PDF:',pdfErr);showToast('La synthèse PDF n\'a pas pu être générée. Réessayez ou actualisez la page.');return;}
+        try{
+          const b64=await blobToBase64(blob);
+          const safeSlug=String(company||'entreprise').toLowerCase().replace(/[^a-z0-9]+/gi,'_');
+          const mailRes=await fetch(apiUrl('/api/send-lead-client-email'),{method:'POST',headers:{'Content-Type':'application/json','x-session-id':sessionId},body:JSON.stringify({email:v.email,name:v.name,company:v.company,sector:document.getElementById('sectorSelect').value,score:Number(document.getElementById('kpiScore').textContent)||0,criticalCount:Number(document.getElementById('kpiCritical').textContent)||0,riskCount:risks.length,pdfBase64:b64,pdfFilename:`plan_action_hse_${safeSlug}.pdf`})});
+          let mailData={};
+          try{mailData=await mailRes.json()}catch(_){}
+          if(mailData.clientEmailSent===false){console.warn('[exportWithLead] Email prospect non confirmé, vérifiez SMTP (.env).');}
+        }catch(mailErr){console.error('[exportWithLead] Email prospect:',mailErr);}
+        showToast('Votre synthèse est prête.');
+        showExportSuccessState();
+      }catch(e){
+        if(e.message==='validation')return;
+        console.error(e);
+        showToast(e.message||'Enregistrement impossible. Réessayez.');
+      }finally{if(btn){btn.disabled=false;}}
+    }
+    async function saveLeadAndExport(){
+      const v=getLeadFormValues();
+      if(!v.company||!v.email){showToast('Renseignez entreprise et email professionnel.');return;}
+      await exportWithLead();
+    }
+
+    function preprocessPlanBodyForPdf(body){
+      const s=String(body||'').trim();
+      if(!s)return '';
+      const lines=s.split(/\r?\n/);
+      const out=[];
+      for(const line of lines){
+        const t=line.trim();
+        if(!t)continue;
+        const isBullet=/^[-–•·]\s+/.test(t)||/^\d+[\.)]\s+/.test(t);
+        if(isBullet){out.push(line);continue;}
+        if(t.includes(';')&&t.length>55){
+          t.split(/\s*;\s*/).filter(Boolean).forEach(p=>{const x=p.trim();if(x)out.push('– '+x);});
+          continue;
+        }
+        out.push(line);
+      }
+      return out.join('\n');
+    }
+
+    /** Tente d'extraire les 5 sections d'un texte brut */
+    function parsePlainTextPlanToObject(text){
+      if(!text||typeof text!=='string')return null;
+      const t=text.replace(/\r\n/g,'\n');
+      const markers=[
+        {re:/(?:^|\n)\s*(?:\d\.?\s*)?(PRIORITÉ IMMÉDIATE[^\n]*)/i,key:'immediate'},
+        {re:/(?:^|\n)\s*(?:\d\.?\s*)?(ACTIONS COURT TERME[^\n]*)/i,key:'shortTerm'},
+        {re:/(?:^|\n)\s*(?:\d\.?\s*)?(PRÉVENTION(?:\s*\/\s*STABILISATION)?[^\n]*)/i,key:'prevention'},
+        {re:/(?:^|\n)\s*(?:\d\.?\s*)?(POINT DE VIGILANCE[^\n]*)/i,key:'vigilance'},
+        {re:/(?:^|\n)\s*(?:\d\.?\s*)?(RECOMMANDATION(?:\s+FINALE)?[^\n]*)/i,key:'recommendation'}
+      ];
+      const positions=[];
+      for(const {re,key} of markers){
+        const m=re.exec(t);
+        if(m)positions.push({key,index:m.index,headerLen:m[0].length});
+      }
+      if(positions.length<2)return null;
+      positions.sort((a,b)=>a.index-b.index);
+      const out={immediate:'',shortTerm:'',prevention:'',vigilance:'',recommendation:''};
+      for(let i=0;i<positions.length;i++){
+        const start=positions[i].index+positions[i].headerLen;
+        const end=i+1<positions.length?positions[i+1].index:t.length;
+        const slice=t.slice(start,end).trim();
+        out[positions[i].key]=slice.replace(/^\s*\n+/,'');
+      }
+      return out;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       generateProPDF v2 — NIVEAU CABINET
+    ═══════════════════════════════════════════════════════════════ */
+    function generateProPDF(companyName) {
+      return new Promise((resolve, reject) => {
+        try {
+          const jsPDFCtor =
+            window.jspdf && window.jspdf.jsPDF
+              ? window.jspdf.jsPDF
+              : window.jsPDF || null;
+          if (!jsPDFCtor) { reject(new Error('jsPDF indisponible.')); return; }
+
+          const company = String(companyName || document.getElementById('companyName')?.value || 'Entreprise').trim() || 'Entreprise';
+          const site     = String(document.getElementById('siteName')?.value    || 'Non renseigné').trim() || 'Non renseigné';
+          const activity = String(document.getElementById('activityName')?.value || 'Non renseigné').trim() || 'Non renseigné';
+          const sector   = document.getElementById('sectorSelect')?.value || '';
+          const sectorLabels = { mine:'Mine / Carrière', btp:'BTP / Chantier', industrie:'Industrie / Production', maintenance:'Maintenance industrielle', logistique:'Logistique / Entrepôt' };
+          const sectorLabel  = sectorLabels[sector] || sector;
+          const dateStr  = new Date().toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+          const refDoc   = 'QHSE-HSE-' + Date.now().toString(36).toUpperCase().slice(-6);
+
+          const scoreRaw  = Number(document.getElementById('kpiScore')?.textContent   || '0');
+          const critCount = Number(document.getElementById('kpiCritical')?.textContent || '0');
+          const medCount  = Number(document.getElementById('kpiMedium')?.textContent   || '0');
+          const lowCount  = Number(document.getElementById('kpiLow')?.textContent      || '0');
+          const totalRisks = risks.length;
+
+          const structured = window.__exportPlanStructured
+            || parsePlainTextPlanToObject(window.__exportPlanText || '')
+            || {
+                immediate:      '- Sécuriser la zone critique avant toute reprise\n- Nommer un responsable terrain pour la journée\n- Vérifier le port des EPI par toutes les équipes présentes',
+                shortTerm:      '- Fixer une date de revue des causes racines sous 30 jours\n- Intégrer un point sécurité au briefing quotidien\n- Mettre à jour les consignes de sécurité affichées',
+                prevention:     '- Photographier les états avant/après intervention\n- Réaliser un audit rapide après tout changement de méthode\n- Former les nouveaux entrants aux risques spécifiques du site',
+                vigilance:      '- Surveiller en priorité les zones à score G×P élevé\n- Renforcer la présence encadrement pendant les opérations critiques',
+                recommendation: '- Mettre en place un suivi structuré des actions avec responsables et échéances\n- Programmer une revue HSE mensuelle avec la direction'
+              };
+
+          const criticalRisks = risks.filter(r => Number(r.gravity) * Number(r.probability) >= 12);
+          const safeSlug = company.toLowerCase().replace(/[^a-z0-9]+/gi, '_');
+
+          const C = {
+            teal:[11,118,110], tealLight:[209,245,241], tealMid:[18,165,148],
+            red:[163,43,43], redLight:[248,227,227],
+            amber:[181,106,9], amberLight:[250,236,215],
+            green:[22,123,91], greenLight:[223,245,235],
+            navy:[15,23,42], slate:[71,85,105], muted:[100,116,139],
+            light:[241,245,249], border:[216,222,232], white:[255,255,255],
+          };
+
+          const doc = new jsPDFCtor({ orientation:'portrait', unit:'mm', format:'a4' });
+          const PW = doc.internal.pageSize.getWidth();
+          const PH = doc.internal.pageSize.getHeight();
+          const ML = 16, MR = 16, CW = PW - ML - MR;
+          const FOOTER_H = 10;
+          let y = 0, pageNum = 0;
+
+          const rgb   = col => doc.setTextColor(...col);
+          const fill  = col => doc.setFillColor(...col);
+          const stroke= col => doc.setDrawColor(...col);
+          const font  = (style='normal', size=10) => { doc.setFont('helvetica', style); doc.setFontSize(size); };
+
+          function addFooter(){
+            const fy = PH - 8;
+            fill(C.light); doc.rect(0, PH-FOOTER_H-2, PW, FOOTER_H+2, 'F');
+            stroke(C.border); doc.setLineWidth(0.3);
+            doc.line(ML, PH-FOOTER_H-2, PW-MR, PH-FOOTER_H-2);
+            font('normal', 8); rgb(C.muted);
+            doc.text('CONFIDENTIEL – Usage interne', ML, fy);
+            doc.text(`Réf. ${refDoc}`, PW/2, fy, {align:'center'});
+            doc.text(`${company}  ·  ${dateStr}  ·  Page ${pageNum}`, PW-MR, fy, {align:'right'});
+          }
+
+          function newPage(){
+            if(pageNum>0) addFooter();
+            doc.addPage(); pageNum++; y = ML;
+          }
+
+          function startFirstPage(){ pageNum=1; y=ML; }
+
+          function ensureSpace(needed=10){
+            if(y+needed > PH-FOOTER_H-14){
+              addFooter(); doc.addPage(); pageNum++; y=ML+4;
+            }
+          }
+
+          function hRule(color=C.border, lw=0.3, xStart=ML, xEnd=PW-MR){
+            stroke(color); doc.setLineWidth(lw); doc.line(xStart, y, xEnd, y);
+          }
+
+          function rect(x, ry, w, h, fillCol, strokeCol=null, lw=0.3, r=0){
+            fill(fillCol);
+            if(strokeCol){stroke(strokeCol); doc.setLineWidth(lw);}
+            if(r>0) doc.roundedRect(x, ry, w, h, r, r, strokeCol?'FD':'F');
+            else doc.rect(x, ry, w, h, strokeCol?'FD':'F');
+          }
+
+          function badge(text, x, by, w, h, bgCol, textCol, r=3){
+            rect(x, by, w, h, bgCol, null, 0, r);
+            font('bold', 8); rgb(textCol);
+            doc.text(String(text), x+w/2, by+h/2+0.5, {align:'center', baseline:'middle'});
+          }
+
+          function levelColors(level){
+            if(level==='critique') return {bg:C.redLight,   text:C.red,   border:[239,177,177]};
+            if(level==='moyen')    return {bg:C.amberLight, text:C.amber, border:[239,203,149]};
+            return                        {bg:C.greenLight, text:C.green, border:[167,222,198]};
+          }
+
+          function getLvl(score){ if(score>=12)return'critique'; if(score>=6)return'moyen'; return'faible'; }
+          function lvlLabel(l){ return ({critique:'Critique',moyen:'Modéré',faible:'Faible'})[l]||l; }
+
+          function sectionHeader(eyebrow, title){
+            ensureSpace(20);
+            rect(ML, y, CW, 7, C.tealLight, null);
+            font('bold', 8); rgb(C.teal);
+            doc.text(eyebrow.toUpperCase(), ML+4, y+4.5);
+            y += 7;
+            ensureSpace(12);
+            font('bold', 16); rgb(C.navy);
+            doc.text(title, ML, y+8);
+            y += 10;
+            hRule(C.teal, 0.8, ML, ML+28);
+            y += 5;
+          }
+
+          /* ── PAGE 1 : COUVERTURE ── */
+          startFirstPage();
+          fill(C.teal); doc.rect(0, 0, PW, 52, 'F');
+          fill(C.tealMid); doc.rect(0, 50, PW, 2, 'F');
+          font('bold', 22); doc.setTextColor(255,255,255);
+          doc.text('PLAN D\u2019ACTION HSE', ML, 20);
+          font('normal', 11); doc.setTextColor(209,245,241);
+          doc.text('Synth\u00e8se des priorit\u00e9s et programme d\u2019action \u00b7 Niveau cabinet', ML, 29);
+          font('normal', 9); doc.setTextColor(209,245,241);
+          doc.text(`R\u00e9f. ${refDoc}  \u00b7  ${dateStr}`, PW-MR, 20, {align:'right'});
+          y = 62;
+
+          rect(ML, y, CW, 38, C.light, C.border, 0.3, 3);
+          fill(C.teal); doc.rect(ML, y, 3, 38, 'F');
+          font('bold', 9); rgb(C.muted);
+          doc.text('P\u00c9RIM\u00c8TRE ANALYS\u00c9', ML+7, y+8);
+          font('bold', 15); rgb(C.navy);
+          doc.text(company, ML+7, y+18);
+          font('normal', 10); rgb(C.slate);
+          doc.text(`Site : ${site}    \u00b7    Activit\u00e9 : ${activity}    \u00b7    Secteur : ${sectorLabel}`, ML+7, y+27);
+          font('normal', 9); rgb(C.muted);
+          doc.text(`R\u00e9dig\u00e9 le ${dateStr}  \u00b7  ${totalRisks} situation(s) analys\u00e9e(s)`, ML+7, y+35);
+          y += 45;
+
+          const kpiW = (CW-9)/4;
+          const kpiDefs = [
+            {label:'Critiques',     value:critCount, color:C.red,   bg:C.redLight   },
+            {label:'Mod\u00e9r\u00e9s',       value:medCount,  color:C.amber, bg:C.amberLight},
+            {label:'Faibles',       value:lowCount,  color:C.green, bg:C.greenLight },
+            {label:'Indice global', value:scoreRaw,  color:scoreRaw<60?C.red:scoreRaw<80?C.amber:C.green,
+                                                     bg:scoreRaw<60?C.redLight:scoreRaw<80?C.amberLight:C.greenLight},
+          ];
+          kpiDefs.forEach((k,i)=>{
+            const kx = ML + i*(kpiW+3);
+            rect(kx, y, kpiW, 28, k.bg, C.border, 0.3, 3);
+            font('bold', 7); rgb(C.muted);
+            doc.text(k.label.toUpperCase(), kx+kpiW/2, y+7, {align:'center'});
+            font('bold', 22); rgb(k.color);
+            doc.text(String(k.value), kx+kpiW/2, y+20, {align:'center'});
+          });
+          y += 35;
+
+          font('bold', 9); rgb(C.muted);
+          doc.text('INDICE DE MA\u00ceTRISE', ML, y+4);
+          font('normal', 9); rgb(C.muted);
+          doc.text(`${scoreRaw} / 100`, PW-MR, y+4, {align:'right'});
+          y += 8;
+          rect(ML, y, CW, 6, C.border, null, 0, 3);
+          const barCol = scoreRaw<60?C.red:scoreRaw<80?C.amber:C.green;
+          rect(ML, y, Math.max(CW*scoreRaw/100, 4), 6, barCol, null, 0, 3);
+          y += 11;
+
+          const globalLevel = critCount>0?'critique':medCount>2?'moyen':'faible';
+          const levelC = levelColors(globalLevel);
+          rect(ML, y, CW, 20, levelC.bg, levelC.border, 0.3, 3);
+          font('bold', 9); rgb(levelC.text);
+          const levelMsg = {critique:'\u26a0  Situation \u00e0 risque \u00e9lev\u00e9 \u2014 actions imm\u00e9diates requises.',moyen:'\u25b2  Niveau de ma\u00eetrise partiel \u2014 planification rapide recommand\u00e9e.',faible:'\u2713  Niveau acceptable \u2014 maintenir la vigilance et le suivi.'}[globalLevel];
+          doc.text(levelMsg, ML+5, y+8);
+          font('normal', 9); rgb(levelC.text);
+          doc.text('Ce document constitue une base de d\u00e9cision n\u00e9cessitant un suivi structur\u00e9 des actions.', ML+5, y+16);
+          y += 26;
+
+          rect(ML, y, CW, 18, C.light, C.border, 0.3, 3);
+          font('bold', 8); rgb(C.muted);
+          doc.text('CADRE NORMATIF DE R\u00c9F\u00c9RENCE', ML+4, y+6);
+          font('normal', 8.5); rgb(C.slate);
+          doc.text('ISO 45001:2018 \u00b7 OHSAS 18001 \u00b7 R\u00e8glement (CE) n\u00b01272/2008 (CLP) \u00b7 Code du travail (art. L. 4121-1 \u00e0 L. 4121-5)', ML+4, y+13);
+          y += 24;
+
+          font('italic', 8); rgb(C.muted);
+          const dlText = 'Ce document est produit \u00e0 titre d\u2019aide \u00e0 la d\u00e9cision. Il ne se substitue pas \u00e0 une \u00e9valuation des risques professionnels (DUERP) r\u00e9glementaire ni aux obligations l\u00e9gales de l\u2019employeur.';
+          const dlLines = doc.splitTextToSize(dlText, CW);
+          doc.text(dlLines, ML, y);
+          y += dlLines.length*4+4;
+          addFooter();
+
+          /* ── PAGE 2 : TABLEAU DES RISQUES ── */
+          newPage();
+          sectionHeader('Section 1 \u2014 Tableau de synth\u00e8se', 'Inventaire des risques identifi\u00e9s');
+          font('normal', 10); rgb(C.slate);
+          doc.text(`${totalRisks} situation(s) dangereuse(s) analys\u00e9e(s) sur le p\u00e9rim\u00e8tre : ${site} / ${activity}.`, ML, y);
+          y += 8;
+
+          const colW = [38, 62, 16, 16, 18, 30];
+          const colX = [ML];
+          for(let i=0;i<colW.length-1;i++) colX.push(colX[i]+colW[i]);
+          const tableH = 8;
+          rect(ML, y, CW, tableH, C.navy, null);
+          ['Zone','Situation de travail','G','P','Score','Niveau'].forEach((h,i)=>{
+            font('bold', 8); doc.setTextColor(255,255,255);
+            doc.text(h, colX[i]+colW[i]/2, y+5.2, {align:'center'});
+          });
+          y += tableH;
+
+          const validRisks = risks.filter(r=>(r.label||'').trim()!=='');
+          validRisks.forEach((r,idx)=>{
+            const score = Number(r.gravity)*Number(r.probability);
+            const level = getLvl(score);
+            const lc    = levelColors(level);
+            const rowH  = 8;
+            ensureSpace(rowH+2);
+            rect(ML, y, CW, rowH, idx%2===0?C.white:C.light, C.border, 0.2);
+            fill(lc.text); doc.rect(ML, y, 2, rowH, 'F');
+            font('normal', 8.5); rgb(C.navy);
+            doc.text(doc.splitTextToSize(r.zone||'\u2014', colW[0]-3), colX[0]+3, y+5);
+            doc.text(doc.splitTextToSize(r.label||'\u2014', colW[1]-3).slice(0,1), colX[1]+2, y+5);
+            doc.text(String(r.gravity||'\u2014'), colX[2]+colW[2]/2, y+5, {align:'center'});
+            doc.text(String(r.probability||'\u2014'), colX[3]+colW[3]/2, y+5, {align:'center'});
+            font('bold', 8.5); rgb(lc.text);
+            doc.text(String(score), colX[4]+colW[4]/2, y+5, {align:'center'});
+            badge(lvlLabel(level), colX[5]+1, y+1, colW[5]-2, 6, lc.bg, lc.text, 2);
+            y += rowH;
+          });
+          if(!validRisks.length){
+            ensureSpace(10); font('italic',10); rgb(C.muted);
+            doc.text('Aucun risque saisi.', ML+4, y+6); y+=10;
+          }
+          y += 6;
+          rect(ML, y, CW, 14, C.light, C.border, 0.3, 2);
+          font('bold', 8); rgb(C.muted);
+          doc.text('L\u00c9GENDE  \u00b7  G = Gravit\u00e9  \u00b7  P = Probabilit\u00e9  \u00b7  Score = G \u00d7 P', ML+4, y+5);
+          font('normal', 8); rgb(C.muted);
+          doc.text('Critique : Score \u2265 12  \u00b7  Mod\u00e9r\u00e9 : 6 \u2264 Score < 12  \u00b7  Faible : Score < 6', ML+4, y+11);
+          y += 18;
+          addFooter();
+
+          /* ── PAGE 3 : FICHES CRITIQUES ── */
+          if(criticalRisks.length>0){
+            newPage();
+            sectionHeader(`Section 2 \u2014 Analyse des risques critiques`, `${criticalRisks.length} situation(s) critique(s) identifi\u00e9e(s)`);
+            font('normal', 10); rgb(C.slate);
+            doc.text('Chaque fiche pr\u00e9sente la situation, la cause probable, la cons\u00e9quence potentielle et la mesure \u00e0 engager.', ML, y);
+            y += 8;
+
+            criticalRisks.forEach((r, idx)=>{
+              const score = Number(r.gravity)*Number(r.probability);
+              const ficheH = 52;
+              ensureSpace(ficheH+4);
+              rect(ML, y, CW, ficheH, C.redLight, [239,177,177], 0.5, 4);
+              fill(C.red); doc.roundedRect(ML, y, CW, 10, 4, 4, 'F');
+              fill(C.red); doc.rect(ML, y+6, CW, 4, 'F');
+              font('bold', 9); doc.setTextColor(255,255,255);
+              doc.text(`RISQUE CRITIQUE #${idx+1}`, ML+5, y+7);
+              badge(`Score ${score}`, PW-MR-28, y+1, 26, 8, C.redLight, C.red, 3);
+              y += 13;
+              font('bold', 11); rgb(C.red);
+              doc.text(doc.splitTextToSize(r.label||'Non renseign\u00e9', CW-10).slice(0,1), ML+5, y+1);
+              y += 7;
+              font('normal', 8.5); rgb(C.muted);
+              doc.text(`Zone : ${r.zone||'\u2014'}   \u00b7   Gravit\u00e9 : ${r.gravity}   \u00b7   Probabilit\u00e9 : ${r.probability}`, ML+5, y);
+              y += 6;
+              const c3W = (CW-12)/3;
+              const c3Labels = ['Cause probable','Cons\u00e9quence potentielle','Mesure recommand\u00e9e'];
+              const c3Values = [
+                r.cause||'Exposition insuffisamment ma\u00eetris\u00e9e, consignes non appliqu\u00e9es ou absentes.',
+                'Risque d\u2019incident majeur avec impact humain et interruption d\u2019activit\u00e9.',
+                r.measure||'Consigne \u00e9crite courte, r\u00e9f\u00e9rent d\u00e9sign\u00e9, briefing \u00e9quipe avant reprise.'
+              ];
+              const c3Colors = [C.amber, C.red, C.teal];
+              const c3X = [ML+5, ML+5+c3W+4, ML+5+(c3W+4)*2];
+              c3Labels.forEach((lbl,i)=>{
+                font('bold', 8); rgb(c3Colors[i]);
+                doc.text(lbl.toUpperCase(), c3X[i], y);
+                font('normal', 9); rgb(C.navy);
+                doc.text(doc.splitTextToSize(c3Values[i], c3W-2).slice(0,2), c3X[i], y+5);
+              });
+              y += 18;
+            });
+          }
+          addFooter();
+
+          /* ── PAGE 4 : PLAN D'ACTION ── */
+          newPage();
+          sectionHeader('Section 3 \u2014 Plan d\u2019action HSE', 'Hi\u00e9rarchisation des mesures \u00e0 engager');
+
+          const planSections = [
+            {key:'immediate',      num:'1.', title:'PRIORIT\u00c9 IMMED\u00cdATE',           sub:'0 \u2013 7 jours \u00b7 D\u00e9cisions sans d\u00e9lai',    bg:C.redLight,   acc:C.red,   note:'Ces actions doivent \u00eatre engag\u00e9es imm\u00e9diatement, avec un responsable identifi\u00e9 et une preuve de cl\u00f4ture.'},
+            {key:'shortTerm',      num:'2.', title:'ACTIONS COURT TERME',             sub:'\u2248 30 jours \u00b7 Organisation',                 bg:C.amberLight, acc:C.amber, note:null},
+            {key:'prevention',     num:'3.', title:'PR\u00c9VENTION',                   sub:'Stabilisation des pratiques',               bg:C.greenLight, acc:C.green, note:null},
+            {key:'vigilance',      num:'4.', title:'POINT CRITIQUE',                  sub:'Vigilance et encadrement',                   bg:C.amberLight, acc:C.amber, note:'N\u00e9cessite une attention directe de l\u2019encadrement jusqu\u2019au traitement complet.'},
+            {key:'recommendation', num:'5.', title:'RECOMMANDATION DE PILOTAGE',      sub:'D\u00e9cision de direction',                     bg:C.tealLight,  acc:C.teal,  note:null},
+          ];
+
+          planSections.forEach(sec=>{
+            const body  = structured[sec.key]||'';
+            const lines = String(body).split(/\n+/).map(l=>l.replace(/^[-\u2013\u2022\u00b7]\s*/,'').trim()).filter(Boolean);
+            const estH  = Math.max(32, lines.length*6+24+(sec.note?10:0));
+            ensureSpace(estH+6);
+            const cardY = y;
+            rect(ML, cardY, CW, estH, sec.bg, sec.acc, 0.4, 4);
+            fill(sec.acc); doc.rect(ML, cardY, 3.5, estH, 'F');
+            font('bold', 8); rgb(sec.acc);
+            doc.text(sec.num+' '+sec.title, ML+7, cardY+7);
+            font('normal', 8); rgb(sec.acc);
+            doc.text(sec.sub, ML+7, cardY+13);
+            y = cardY+17;
+            if(lines.length===0){
+              font('italic', 9); rgb(C.muted);
+              doc.text('Non renseign\u00e9', ML+10, y); y+=6;
+            } else {
+              for(const line of lines){
+                ensureSpace(7);
+                fill(sec.acc); doc.circle(ML+8, y-0.5, 0.8, 'F');
+                font('normal', 9.5); rgb(C.navy);
+                const wrapped = doc.splitTextToSize(line, CW-16);
+                doc.text(wrapped, ML+11, y);
+                y += wrapped.length*5+1.5;
+              }
+            }
+            if(sec.note){
+              ensureSpace(8);
+              fill([250,240,210]); stroke(C.amber); doc.setLineWidth(0.3);
+              doc.roundedRect(ML+6, y, CW-12, 8, 2, 2, 'FD');
+              font('bold', 8); rgb(C.amber);
+              doc.text('\u26a0  '+sec.note, ML+9, y+5.2);
+              y += 10;
+            }
+            y = cardY+estH+5;
+          });
+          addFooter();
+
+          /* ── PAGE 5 : SYNTHÈSE FINALE ── */
+          newPage();
+          sectionHeader('Section 4 \u2014 Synth\u00e8se et lecture globale', '\u00c9valuation du niveau de ma\u00eetrise HSE');
+
+          const sbX=ML, sbY=y, sbW=CW, sbH=44;
+          const scoreCol = scoreRaw<60?C.red:scoreRaw<80?C.amber:C.green;
+          rect(sbX, sbY, sbW, sbH, C.light, C.border, 0.3, 4);
+          fill(C.navy); doc.rect(sbX, sbY, 3.5, sbH, 'F');
+          font('bold', 36); rgb(scoreCol);
+          doc.text(String(scoreRaw), sbX+14, sbY+28);
+          font('normal', 11); rgb(C.muted);
+          doc.text('/ 100', sbX+14+doc.getTextWidth(String(scoreRaw))+4, sbY+28);
+          font('bold', 10); rgb(C.navy);
+          doc.text(scoreRaw<60?'Niveau insuffisant \u2014 risque op\u00e9rationnel \u00e9lev\u00e9':scoreRaw<80?'Niveau partiel \u2014 des \u00e9carts subsistent':'Niveau satisfaisant \u2014 maintenir la vigilance', sbX+60, sbY+14);
+          const summaryText = scoreRaw<60
+            ? 'Les \u00e9carts identifi\u00e9s pr\u00e9sentent un risque op\u00e9rationnel imm\u00e9diat. Sans d\u00e9cision rapide sur les actions prioritaires, la probabilit\u00e9 d\u2019un incident reste \u00e9lev\u00e9e.'
+            : scoreRaw<80
+            ? 'Le niveau de ma\u00eetrise reste partiel. Une structuration rapide du plan d\u2019action est recommand\u00e9e pour r\u00e9duire l\u2019exposition r\u00e9siduelle.'
+            : 'Le niveau de ma\u00eetrise observ\u00e9 est globalement satisfaisant. Le principal enjeu est d\u00e9sormais le suivi structur\u00e9 des actions dans le temps.';
+          font('normal', 9.5); rgb(C.slate);
+          doc.text(doc.splitTextToSize(summaryText, sbW-65), sbX+60, sbY+22);
+          y += sbH+8;
+
+          const recapW = (CW-6)/3;
+          [{label:'Critiques',val:critCount,col:C.red,bg:C.redLight},{label:'Mod\u00e9r\u00e9s',val:medCount,col:C.amber,bg:C.amberLight},{label:'Faibles',val:lowCount,col:C.green,bg:C.greenLight}]
+            .forEach((rc,i)=>{
+              const rx = ML+i*(recapW+3);
+              rect(rx, y, recapW, 20, rc.bg, C.border, 0.2, 3);
+              font('bold', 7); rgb(C.muted);
+              doc.text(rc.label.toUpperCase(), rx+recapW/2, y+6, {align:'center'});
+              font('bold', 18); rgb(rc.col);
+              doc.text(String(rc.val), rx+recapW/2, y+16, {align:'center'});
+            });
+          y += 26;
+
+          rect(ML, y, CW, 28, C.tealLight, [185,233,226], 0.3, 4);
+          fill(C.teal); doc.rect(ML, y, 3.5, 28, 'F');
+          font('bold', 10); rgb(C.teal);
+          doc.text('Prochaine \u00e9tape recommand\u00e9e', ML+7, y+8);
+          font('normal', 9.5); rgb(C.navy);
+          doc.text(doc.splitTextToSize('Structurer le suivi op\u00e9rationnel des actions : assigner un responsable par ligne d\u2019action, d\u00e9finir des \u00e9ch\u00e9ances pr\u00e9cises, collecter les preuves terrain et programmer une revue \u00e0 30 jours.', CW-14), ML+7, y+15);
+          y += 34;
+
+          ensureSpace(50);
+          font('bold', 10); rgb(C.navy);
+          doc.text('Tableau de conformit\u00e9 normatif', ML, y); y+=6;
+          const norms = [
+            ['ISO 45001:2018','Identification des dangers et \u00e9valuation des risques (\u00a7 6.1.2)','Analyse r\u00e9alis\u00e9e sur la base des d\u00e9clarations terrain'],
+            ['OHSAS 18001','Ma\u00eetrise op\u00e9rationnelle des risques','Actions correctrices \u00e0 formaliser et suivre'],
+            ['Art. L4121-1','Obligation de pr\u00e9vention et d\u2019\u00e9valuation des risques (DUERP)','Ce document compl\u00e8te mais ne remplace pas le DUERP'],
+          ];
+          const nColW=[36,90,CW-36-90-3], nColX=[ML,ML+36,ML+36+90];
+          rect(ML, y, CW, 7, C.navy);
+          ['R\u00e9f\u00e9rentiel','Exigence','Traitement dans ce document'].forEach((h,i)=>{
+            font('bold',7.5); doc.setTextColor(255,255,255);
+            doc.text(h, nColX[i]+2, y+5);
+          });
+          y+=7;
+          norms.forEach((row,idx)=>{
+            const rowH=9; ensureSpace(rowH);
+            rect(ML, y, CW, rowH, idx%2===0?C.white:C.light, C.border, 0.2);
+            row.forEach((cell,i)=>{
+              font(i===0?'bold':'normal', 8); rgb(i===0?C.teal:C.navy);
+              doc.text(doc.splitTextToSize(cell, nColW[i]-3).slice(0,1), nColX[i]+2, y+6);
+            });
+            y+=rowH;
+          });
+          y+=8;
+
+          ensureSpace(30);
+          rect(ML, y, CW, 26, C.light, C.border, 0.3, 3);
+          font('bold', 9); rgb(C.muted);
+          doc.text('Vis\u00e9 par', ML+6, y+8);
+          doc.text('Responsable HSE', ML+CW/2+6, y+8);
+          stroke(C.border); doc.setLineWidth(0.3);
+          doc.line(ML+6, y+17, ML+CW/2-6, y+17);
+          doc.line(ML+CW/2+6, y+17, PW-MR-6, y+17);
+          font('italic', 8); rgb(C.muted);
+          doc.text('Signature, cachet, date', ML+6, y+23);
+          doc.text('Signature, cachet, date', ML+CW/2+6, y+23);
+          y+=30;
+
+          font('italic', 8); rgb(C.muted);
+          doc.text(doc.splitTextToSize(`Document produit avec QHSE Control \u00b7 R\u00e9f. ${refDoc} \u00b7 ${dateStr} \u00b7 Ce rapport est confidentiel et destin\u00e9 exclusivement au commanditaire nomm\u00e9 en page de couverture.`, CW), ML, y);
+          addFooter();
+
+          /* ── EXPORT ── */
+          const blob = doc.output('blob');
+          const url  = URL.createObjectURL(blob);
+          const a    = document.createElement('a');
+          a.href = url; a.download = `plan_action_hse_${safeSlug}.pdf`;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(()=>URL.revokeObjectURL(url), 1000);
+          resolve(blob);
+
+        } catch(err) {
+          console.error('[generateProPDF v2]', err);
+          reject(err);
+        }
+      });
+    }
+    /* ── FIN generateProPDF v2 ── */
+
+    function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>toast.classList.remove('show'),2400)}
+    function escapeHtml(str){return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;')}
+    function escapeAttr(str){return escapeHtml(str)}
+    function escapeJs(str){return String(str).replaceAll('\\','\\\\').replaceAll("'","\\'")}
+
+    /* ── LEAD MAGNET PREMIUM ── */
+    function computeLeadScore(){
+      const score=Number(document.getElementById('kpiScore')?.textContent)||0;
+      const critical=Number(document.getElementById('kpiCritical')?.textContent)||0;
+      const total=Array.isArray(risks)?risks.length:0;
+      let level="low";
+      if(score<60||critical>=2)level="high";
+      else if(score<80||critical>=1)level="medium";
+      return{score,critical,total,level};
+    }
+    function getDynamicMessage(){
+      const{level}=computeLeadScore();
+      if(level==="high")return"Situation à risque élevé nécessitant une action immédiate et un pilotage structuré.";
+      if(level==="medium")return"Le niveau de maîtrise reste partiel. Une structuration rapide des actions est recommandée.";
+      return"Le niveau global reste acceptable. L'enjeu principal est désormais le suivi dans le temps.";
+    }
+    function injectDynamicInsight(){
+      const box=document.getElementById("globalPlanBox");
+      if(!box||document.getElementById("dynamicInsight"))return;
+      const el=document.createElement("div");
+      el.id="dynamicInsight";el.className="insight teal";el.style.marginTop="16px";
+      el.innerHTML=`<strong>Lecture direction :</strong><br>${getDynamicMessage()}`;
+      box.prepend(el);
+    }
+    function injectConversion(){
+      const box=document.getElementById("globalPlanBox");
+      if(!box||document.getElementById("conversionBlock"))return;
+      const div=document.createElement("div");
+      div.id="conversionBlock";div.className="conversion-alert fade-visible";div.style.marginTop="18px";
+      div.innerHTML=`<h4 class="conversion-alert__title">Ce document constitue une base de décision, pas un dispositif de suivi</h4><p class="conversion-alert__text">Le diagnostic permet d'identifier les priorités. Il ne remplace pas un pilotage structuré des actions.</p><ul class="conversion-alert__list"><li>Responsables non assignés</li><li>Échéances non suivies</li><li>Preuves terrain non centralisées</li></ul><p class="conversion-alert__proof">La suite logique consiste à structurer le suivi opérationnel dans QHSE Control.</p>`;
+      box.appendChild(div);
+    }
+    const __originalRenderGlobalPlan=renderGlobalPlan;
+    renderGlobalPlan=function(data){
+      __originalRenderGlobalPlan(data);
+      setTimeout(()=>{injectDynamicInsight();injectConversion();},250);
+    };
+    const __originalExportWithLead=exportWithLead;
+    exportWithLead=async function(){
+      const lead={company:document.getElementById('exportLeadCompany')?.value||'',email:document.getElementById('exportLeadEmail')?.value||'',...computeLeadScore()};
+      console.log("LEAD_QUALIFIE",lead);
+      return await __originalExportWithLead();
+    };
+    document.addEventListener("DOMContentLoaded",()=>{
+      const btn=document.getElementById("exportWithLeadBtn");
+      if(btn)btn.textContent="Recevoir une synthèse exploitable HSE";
+    });
+
+    document.getElementById('sectorSelect').addEventListener('change',loadSuggestions);
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){closeRiskModal();closeAddRiskModal();closeLeadModal();closeAiValidateModal();closeDemoModal();}
+    });
+    loadSuggestions();renderZones();renderRiskTable();recalc();updateAICounter();initStepper();
+  </script>
+</body>
+</html>
