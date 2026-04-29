@@ -1,13 +1,43 @@
-# QHSE Control — Générateur DUERP + Backend Leads
+# QHSE Control - Générateur de risques (frontend + backend)
 
 Pack prêt à ouvrir dans Cursor.
 
-## Lancement rapide
+## Structure finale (référence)
+
+```txt
+project/
+├── backend/
+│   ├── server.js
+│   ├── package.json
+│   ├── routes/
+│   ├── services/
+│   ├── config/
+│   ├── middleware/
+│   └── supabase.sql
+│
+├── frontend/
+│   ├── index.html
+│   ├── manifest.webmanifest
+│   └── sw.js
+│
+├── docs/
+├── README.md
+└── .gitignore
+```
+
+## Lancement local (recommandé)
 
 ```bash
-npm run install:all
+cd backend
+npm install
 cp backend/.env.example backend/.env
 npm run dev
+```
+
+Dans un autre terminal :
+
+```bash
+npx serve frontend -l 5173
 ```
 
 Front : http://localhost:5173  
@@ -15,34 +45,34 @@ Backend : http://localhost:3000/health
 
 ## Connexion front/back
 
-Le front `frontend/index.html` envoie les leads vers :
+Le front `frontend/index.html` appelle le backend via :
 
 ```txt
-POST http://localhost:3000/api/public/duerp-leads
+API_BASE_URL = window.QHSE_API_BASE_URL || "https://api.qhsecontrol.com"
 ```
 
-Le backend stocke par défaut dans :
+En local, tu peux surcharger côté navigateur :
+
+```js
+window.QHSE_API_BASE_URL = "http://localhost:3000";
+```
+
+Endpoint principal :
 
 ```txt
-backend/data/leads.json
+POST /api/public/duerp-leads
 ```
 
-Consultation locale :
+## Railway (production)
 
-```txt
-http://localhost:3000/api/public/leads
-```
+Railway doit lancer **uniquement** le backend dans `backend/`.
 
-## GitHub
+- **Root Directory** : `backend`
+- **Build Command** : `npm install`
+- **Start Command** : `npm start`
+- **Port** : géré par `process.env.PORT` dans `backend/server.js`
 
-```bash
-git init
-git add .
-git commit -m "init qhse duerp lead magnet"
-git branch -M main
-git remote add origin https://github.com/TON-USER/qhse-duerp-leadmagnet.git
-git push -u origin main
-```
+Variables à définir dans Railway : recopier `backend/.env.example` (sans commiter `.env`).
 
 ## Supabase optionnel
 
