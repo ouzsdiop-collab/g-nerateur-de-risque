@@ -1,0 +1,392 @@
+{
+  "legal_sources": [
+    {
+      "id": "ALL-OIT-C155",
+      "country": "ALL",
+      "authority": "Organisation Internationale du Travail (OIT)",
+      "title": "Convention n°155 sur la sécurité et la santé des travailleurs",
+      "source_type": "OIT",
+      "topic": "cadre_sst",
+      "obligation": "Mettre en place une politique de prévention et garantir des conditions de travail sûres et sans risque pour la santé, selon les responsabilités applicables.",
+      "summary": "Cadre international de référence pour la sécurité et la santé au travail, utilisé comme socle transversal dans le générateur.",
+      "exact_excerpt_short": "Cadre SST au niveau national et au niveau de l'entreprise ; obligations à préciser selon le droit national.",
+      "risk_implication": "Un défaut d’évaluation et de prévention peut aggraver la responsabilité de l’employeur en cas d’accident.",
+      "risk_tags": [
+        "general",
+        "prevention",
+        "audit",
+        "accident",
+        "formation",
+        "epi",
+        "machines"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://www.ilo.org/media/107601/download"
+    },
+    {
+      "id": "ALL-OIT-C187",
+      "country": "ALL",
+      "authority": "Organisation Internationale du Travail (OIT)",
+      "title": "Convention n°187 sur le cadre promotionnel pour la SST",
+      "source_type": "OIT",
+      "topic": "systeme_management_sst",
+      "obligation": "Promouvoir l’amélioration continue de la sécurité et santé au travail dans un cadre structuré.",
+      "summary": "Référence internationale pour structurer une démarche SST progressive et documentée.",
+      "exact_excerpt_short": "Cadre promotionnel SST — amélioration continue et culture de prévention.",
+      "risk_implication": "Sans système de suivi, les risques identifiés restent peu maîtrisés.",
+      "risk_tags": [
+        "general",
+        "management",
+        "audit",
+        "plan_action"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://www.ilo.org/resource/c187-promotional-framework-occupational-safety-and-health-convention-2006"
+    },
+    {
+      "id": "ALL-IFC-PS2",
+      "country": "ALL",
+      "authority": "International Finance Corporation (IFC)",
+      "title": "Performance Standard 2 — Labor and Working Conditions",
+      "source_type": "IFC",
+      "topic": "conditions_travail_sst",
+      "obligation": "Fournir un environnement de travail sûr et sain, en tenant compte des risques propres au secteur et aux zones de travail.",
+      "summary": "Standard clé pour les projets financés ou audités par des bailleurs internationaux.",
+      "exact_excerpt_short": "Client to provide a safe and healthy work environment, taking into account inherent risks.",
+      "risk_implication": "Un manque de maîtrise SST peut bloquer un financement, un audit ou une exigence client.",
+      "risk_tags": [
+        "general",
+        "bailleur",
+        "audit",
+        "sst",
+        "sous_traitants"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://www.ifc.org/content/dam/ifc/doc/2010/2012-ifc-performance-standard-2-en.pdf"
+    },
+    {
+      "id": "CI-CODE-TRAVAIL-2015",
+      "country": "ci",
+      "authority": "Inspection du Travail · autorités compétentes ivoiriennes",
+      "title": "Côte d’Ivoire — Code du Travail, Loi n°2015-532",
+      "source_type": "loi",
+      "topic": "obligation_generale_employeur",
+      "obligation": "Assurer la protection de la santé et de la sécurité des travailleurs, organiser la prévention et respecter les règles applicables du Code du travail.",
+      "summary": "Base nationale principale pour les relations employeur-travailleur et obligations de prévention.",
+      "exact_excerpt_short": "Le Code du travail régit les relations entre employeurs et travailleurs sur le territoire ivoirien.",
+      "risk_implication": "Accident grave ou défaut de prévention : risque social, civil, administratif et réputationnel.",
+      "risk_tags": [
+        "general",
+        "accident",
+        "formation",
+        "machines",
+        "epi",
+        "sous_traitants"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://www.economie-ivoirienne.ci/sites/default/files/sites/default/files/inline-files/Loi%20n%C2%B0%202015-532%20du%2020%20juillet%202015%20portant%20code%20du%20Travail.pdf"
+    },
+    {
+      "id": "SN-DECRET-2006-1256",
+      "country": "sn",
+      "authority": "Inspection du Travail et de la Sécurité sociale",
+      "title": "Sénégal — Décret n°2006-1256 relatif aux obligations de sécurité et santé au travail",
+      "source_type": "décret",
+      "topic": "evaluation_risques",
+      "obligation": "Disposer d’une évaluation des risques pour la sécurité et la santé au travail, déterminer les mesures de protection et tenir une liste des activités de travail.",
+      "summary": "Source forte pour justifier une évaluation structurée des risques au Sénégal.",
+      "exact_excerpt_short": "L’employeur doit disposer d’une évaluation des risques pour la sécurité et la santé au travail.",
+      "risk_implication": "Absence d’évaluation : exposition forte en cas de contrôle, audit ou accident.",
+      "risk_tags": [
+        "general",
+        "audit",
+        "plan_action",
+        "evaluation",
+        "formation"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://natlex.ilo.org/dyn/natlex2/natlex2/files/download/81947/SEN-81947.pdf"
+    },
+    {
+      "id": "SN-DECRET-2006-1250",
+      "country": "sn",
+      "authority": "Inspection du Travail et de la Sécurité sociale",
+      "title": "Sénégal — Décret n°2006-1250 sur la circulation des véhicules et engins en entreprise",
+      "source_type": "décret",
+      "topic": "circulation_engins",
+      "obligation": "Organiser la circulation des véhicules, engins mobiles et travailleurs afin d’éviter les risques de heurts et collisions.",
+      "summary": "Référence utile pour les risques transport interne, logistique, mines, BTP et sites industriels.",
+      "exact_excerpt_short": "Fixe les règles relatives à la circulation, dans l’entreprise, des véhicules et engins mobiles.",
+      "risk_implication": "Collision engin-piéton : risque critique souvent mortel et fortement auditée.",
+      "risk_tags": [
+        "transport",
+        "circulation",
+        "vehicule",
+        "engin",
+        "collision",
+        "route"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://www.scribd.com/document/779586054/D-2006-1250-Circulation-ve-hicules-et-engins"
+    },
+    {
+      "id": "ML-CODE-TRAVAIL-1992",
+      "country": "ml",
+      "authority": "Direction Nationale du Travail · Inspection du Travail",
+      "title": "Mali — Code du Travail, Loi n°92-020",
+      "source_type": "loi",
+      "topic": "cadre_travail_sst",
+      "obligation": "Respecter les règles nationales du travail et intégrer les questions de sécurité et santé au travail dans la prévention.",
+      "summary": "Base nationale du droit du travail malien ; à compléter par textes d’application sectoriels.",
+      "exact_excerpt_short": "Le Code régit les relations de travail ; le Conseil supérieur du Travail traite aussi de santé et sécurité au travail.",
+      "risk_implication": "Un défaut de prévention peut exposer à contrôle, litige ou aggravation de responsabilité.",
+      "risk_tags": [
+        "general",
+        "accident",
+        "sst",
+        "formation",
+        "machines"
+      ],
+      "reliability_level": "moyen",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://sgg-mali.ml/codes/mali-code-du-itravail-1992.pdf"
+    },
+    {
+      "id": "BF-CODE-TRAVAIL-2008",
+      "country": "bf",
+      "authority": "Inspection du Travail · autorités SST compétentes",
+      "title": "Burkina Faso — Code du Travail, Loi n°028-2008/AN",
+      "source_type": "loi",
+      "topic": "cadre_travail_sst",
+      "obligation": "Respecter les obligations de prévention, d’hygiène, de sécurité et de protection des travailleurs prévues par le droit du travail.",
+      "summary": "Base du droit du travail au Burkina Faso ; à compléter par textes SST et sectoriels.",
+      "exact_excerpt_short": "Loi n°028-2008/AN portant Code du travail au Burkina Faso.",
+      "risk_implication": "Manque de documentation HSE : faiblesse en cas d’audit ou de contrôle.",
+      "risk_tags": [
+        "general",
+        "sst",
+        "formation",
+        "audit"
+      ],
+      "reliability_level": "moyen",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://natlex.ilo.org/dyn/natlex2/natlex2/files/download/79332/BFA-79332.pdf"
+    },
+    {
+      "id": "GN-CODE-TRAVAIL-2014",
+      "country": "gn",
+      "authority": "Inspection du Travail · autorités guinéennes compétentes",
+      "title": "Guinée — Code du Travail, Loi L/2014/072/CNT",
+      "source_type": "loi",
+      "topic": "cadre_travail_sst",
+      "obligation": "Appliquer les règles nationales relatives aux conditions de travail, à la santé et à la sécurité au travail.",
+      "summary": "Cadre juridique principal du travail en Guinée, incluant la santé et sécurité au travail.",
+      "exact_excerpt_short": "Code du travail de la République de Guinée — relations de travail, santé et sécurité.",
+      "risk_implication": "Non maîtrise des risques : exposition en cas d’accident, contrôle ou exigence bailleur.",
+      "risk_tags": [
+        "general",
+        "sst",
+        "formation",
+        "audit",
+        "mines"
+      ],
+      "reliability_level": "moyen",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://soguipami.net/wp-content/uploads/2020/06/Codedutravail2014-ilovepdf-compressed.pdf"
+    },
+    {
+      "id": "GH-LABOUR-ACT-2003",
+      "country": "gh",
+      "authority": "Labour Department · Factories Inspectorate",
+      "title": "Ghana — Labour Act 2003, Act 651",
+      "source_type": "loi",
+      "topic": "occupational_health_safety_environment",
+      "obligation": "Ensure safe and healthy working conditions, including instruction, training and supervision where applicable.",
+      "summary": "Ghanaian labour framework including Part XV on occupational health, safety and environment.",
+      "exact_excerpt_short": "Part XV — Occupational Health, Safety and Environment; general health and safety conditions.",
+      "risk_implication": "Poor OHS controls can trigger inspection findings, liability and business disruption.",
+      "risk_tags": [
+        "general",
+        "training",
+        "machines",
+        "audit",
+        "accident"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://www.gipc.gov.gh/wp-content/uploads/2023/05/LABOUR-ACT-2003-ACT-651.pdf"
+    },
+    {
+      "id": "TG-CODE-TRAVAIL-2021",
+      "country": "tg",
+      "authority": "Inspection du Travail · autorités togolaises compétentes",
+      "title": "Togo — Code du Travail, Loi n°2021-012",
+      "source_type": "loi",
+      "topic": "cadre_travail_sst",
+      "obligation": "Respecter les obligations du Code du travail relatives aux relations de travail, à la prévention et aux conditions de travail.",
+      "summary": "Code du travail togolais applicable aux relations employeurs-travailleurs.",
+      "exact_excerpt_short": "La loi institue le Code du travail de la République togolaise.",
+      "risk_implication": "Absence de démarche HSE : risque de non-conformité et difficulté en audit.",
+      "risk_tags": [
+        "general",
+        "sst",
+        "audit",
+        "formation"
+      ],
+      "reliability_level": "moyen",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://investissement.gouv.tg/wp-content/uploads/2021/08/Loi-n%C2%B0-2021-012-portant-code-du-travail_nouveau.pdf"
+    },
+    {
+      "id": "BJ-CODE-TRAVAIL-1998",
+      "country": "bj",
+      "authority": "Inspection du Travail · CNSS · autorités béninoises compétentes",
+      "title": "Bénin — Code du Travail, Loi n°98-004",
+      "source_type": "loi",
+      "topic": "cadre_travail_sst",
+      "obligation": "Appliquer les dispositions du Code du travail aux travailleurs et employeurs, y compris les obligations liées à la sécurité et santé au travail.",
+      "summary": "Code du travail béninois ; comprend notamment une commission nationale de sécurité et santé au travail.",
+      "exact_excerpt_short": "La loi est applicable aux travailleurs et employeurs exerçant leur activité professionnelle au Bénin.",
+      "risk_implication": "Non documentation HSE : fragilité en cas d’accident, litige ou inspection.",
+      "risk_tags": [
+        "general",
+        "sst",
+        "audit",
+        "formation"
+      ],
+      "reliability_level": "moyen",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://travail.gouv.bj/download-data/docs/2112310618-935pdf.pdf/Loi%20no%2098-004%20du%2027%20janvier%201998"
+    },
+    {
+      "id": "NG-FACTORIES-ACT",
+      "country": "ng",
+      "authority": "Federal Ministry of Labour and Employment · Factories Inspectorate",
+      "title": "Nigeria — Factories Act",
+      "source_type": "loi",
+      "topic": "factory_health_safety_welfare",
+      "obligation": "Secure health, safety and welfare in factories and relevant workplaces, and require workers to use safety means provided.",
+      "summary": "Key Nigerian workplace safety instrument for factories and industrial workplaces.",
+      "exact_excerpt_short": "Securing health, safety or welfare of persons employed in factories or applicable workplaces.",
+      "risk_implication": "Failure to maintain safety controls can lead to inspection action, accident liability and operational disruption.",
+      "risk_tags": [
+        "general",
+        "factory",
+        "machines",
+        "epi",
+        "training",
+        "accident"
+      ],
+      "reliability_level": "élevé",
+      "status": "active",
+      "last_verified_at": "2026-04-25",
+      "source_url": "https://lawsofnigeria.placng.org/laws/F1.pdf"
+    }
+  ],
+  "risk_legal_map": {
+    "transport": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2",
+      "SN-DECRET-2006-1250"
+    ],
+    "circulation": [
+      "ALL-OIT-C155",
+      "SN-DECRET-2006-1250"
+    ],
+    "vehicule": [
+      "ALL-OIT-C155",
+      "SN-DECRET-2006-1250"
+    ],
+    "route": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2",
+      "SN-DECRET-2006-1250"
+    ],
+    "machine": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2",
+      "GH-LABOUR-ACT-2003",
+      "NG-FACTORIES-ACT"
+    ],
+    "machines": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2",
+      "GH-LABOUR-ACT-2003",
+      "NG-FACTORIES-ACT"
+    ],
+    "bruit": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "poussiere": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "chimique": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "cyanure": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "incendie": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "chaleur": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "thermique": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "tms": [
+      "ALL-OIT-C155"
+    ],
+    "manutention": [
+      "ALL-OIT-C155"
+    ],
+    "paludisme": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "biologique": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2"
+    ],
+    "sous_traitants": [
+      "ALL-IFC-PS2",
+      "ALL-OIT-C155"
+    ],
+    "formation": [
+      "ALL-OIT-C155",
+      "ALL-IFC-PS2",
+      "GH-LABOUR-ACT-2003"
+    ],
+    "epi": [
+      "ALL-OIT-C155",
+      "NG-FACTORIES-ACT"
+    ]
+  },
+  "generated_at": "2026-04-25"
+}

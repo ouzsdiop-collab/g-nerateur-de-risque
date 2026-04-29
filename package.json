@@ -1,0 +1,1 @@
+{"name":"qhse-duerp-leadmagnet","version":"1.0.0","private":true,"scripts":{"dev":"concurrently \"npm run backend\" \"npm run frontend\"","backend":"cd backend && npm run dev","frontend":"npx serve frontend -l 5173","install:all":"npm install && cd backend && npm install"},"devDependencies":{"concurrently":"^8.2.2","serve":"^14.2.1"}}
