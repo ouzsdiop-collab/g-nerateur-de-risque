@@ -2791,7 +2791,13 @@ function buildDuerpPayload() { var pays=document.getElementById("e_pays")?docume
 // Mode actuel : API si disponible, fallback localStorage si non configuré.
 // À remplacer au déploiement : API_BASE_URL = "https://api.qhsecontrol.com"
 // ══════════════════════════════════════════════════════════════
-var API_BASE_URL = window.QHSE_API_BASE_URL || "http://localhost:3000";
+var API_BASE_URL = (function(){
+  if (window.QHSE_API_BASE_URL) return window.QHSE_API_BASE_URL;
+  var host = (window.location && window.location.hostname) ? window.location.hostname : "";
+  if (host === "localhost" || host === "127.0.0.1") return "http://localhost:3000";
+  // Production default (future split: duerp.qhsecontrol.com -> api.qhsecontrol.com)
+  return "https://api.qhsecontrol.com";
+})();
 var API_PUBLIC_KEY = "sb_publishable_gHpdNLyBa2SydITAMa-Q7Q_EIN_jBIj";
 (async function loadConfig() {
   try {
