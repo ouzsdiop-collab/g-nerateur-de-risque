@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Générateur DUERP Gratuit — Afrique de l'Ouest — QHSE Control</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -58,12 +58,22 @@ body {
   background: var(--bg);
   color: var(--ink);
   min-height: 100vh;
+  min-height: 100dvh;
   font-size: 13px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 /* ─── TOPBAR — exact QHSE Control style ─── */
+.app-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: var(--bg);
+}
 .topbar {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -72,7 +82,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky; top: 0; z-index: 500;
 }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-logo {
@@ -91,6 +100,22 @@ body {
   border: 1px solid var(--teal-b);
 }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-menu-btn {
+  display: none;
+  margin-left: auto;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink2);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-height: 40px;
+}
+.topbar-menu-btn:hover { background: var(--bg); }
+.topbar-menu-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 .mode-toggle {
   display: flex; align-items: center;
   border: 1px solid var(--border);
@@ -110,6 +135,8 @@ body {
 .mode-btn.active { background: var(--teal); color: #fff; font-weight: 600; }
 .mode-btn:hover:not(.active) { background: var(--bg); color: var(--ink); }
 .save-badge { font-size: 11px; color: var(--ink4); }
+.plan-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--ink3); white-space: nowrap; }
+.plan-badge.pro { background: linear-gradient(135deg, var(--teal-l), #fff); border-color: var(--teal-b); color: var(--coal); }
 
 /* ─── PROGRESS ─── */
 .pbar-wrap { height: 2px; background: var(--border2); }
@@ -119,7 +146,8 @@ body {
 .stepper {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  position: sticky; top: 52px; z-index: 400;
+  position: relative;
+  z-index: 1;
 }
 .steps { display: flex; overflow-x: auto; padding: 0 20px; scrollbar-width: none; }
 .steps::-webkit-scrollbar { display: none; }
@@ -145,8 +173,253 @@ body {
 
 /* ─── MAIN ─── */
 .main { max-width: 960px; margin: 0 auto; padding: 24px 24px; }
-.panel { display: none; }
+.panel { display: none; position: relative; }
 .panel.active { display: block; animation: fadein .2s ease; }
+
+/* Teasing Free : overlays légers (non bloquants pour la navigation) */
+.qhse-pro-gate-host { position: relative; border-radius: var(--r12); min-height: 100px; }
+.qhse-tier-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  background: rgba(253, 250, 246, 0.28);
+  border-radius: inherit;
+}
+.qhse-tier-overlay-inner {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+  padding: 11px 22px;
+  border-radius: 999px;
+  box-shadow: 0 6px 24px rgba(28, 20, 9, 0.07);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  text-align: center;
+  max-width: 92%;
+}
+.qhse-pro-tier .qhse-tier-overlay { display: none !important; }
+.qhse-tier-overlay--click {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.qhse-tier-overlay--click:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+/* Conversion Pro — discret, mobile-first */
+#conversion-modal.modal-overlay { z-index: 1200; padding: 16px; align-items: flex-end; }
+@media (min-width: 600px) {
+  #conversion-modal.modal-overlay { align-items: center; padding: 20px; }
+}
+.conversion-modal-box { max-width: 420px; padding: 24px 22px 22px; }
+.conversion-modal-box .modal-title { font-size: 20px; line-height: 1.25; margin-bottom: 6px; }
+.conversion-modal-lead {
+  margin: 12px 0 0 0;
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.5;
+}
+.conversion-modal-list {
+  margin: 10px 0 0 0;
+  padding-left: 1.15em;
+  color: var(--ink3);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.conversion-modal-list li { margin-bottom: 4px; }
+.conversion-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.conversion-modal-actions .btn { width: 100%; justify-content: center; font-weight: 600; }
+.conversion-modal-secondary {
+  background: transparent !important;
+  color: var(--ink3) !important;
+  border: 1px solid var(--border) !important;
+  font-weight: 500 !important;
+}
+.conversion-modal-secondary:hover { background: var(--bg) !important; color: var(--ink) !important; }
+
+/* Limite DUERP gratuit */
+#duerp-limit-modal.modal-overlay { z-index: 1210; padding: 16px; align-items: flex-end; }
+@media (min-width: 600px) {
+  #duerp-limit-modal.modal-overlay { align-items: center; padding: 20px; }
+}
+#pro-coming-modal.modal-overlay { z-index: 1220; padding: 16px; align-items: flex-end; }
+@media (min-width: 600px) {
+  #pro-coming-modal.modal-overlay { align-items: center; padding: 20px; }
+}
+.pro-coming-modal-box { position: relative; max-width: 420px; padding-top: 28px; }
+.btn-pro-coming-primary {
+  white-space: normal;
+  line-height: 1.3;
+  text-align: center;
+  padding: 11px 14px;
+}
+.free-duerp-counter {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink3);
+  line-height: 1.4;
+  text-align: right;
+  max-width: 100%;
+}
+.free-duerp-counter strong { color: var(--teal-d); font-weight: 700; }
+.free-duerp-counter.is-pro { color: var(--teal-d); }
+
+/* Page Tarifs */
+#pricing-modal.modal-overlay { z-index: 1180; padding: 16px; align-items: flex-end; }
+@media (min-width: 640px) {
+  #pricing-modal.modal-overlay { align-items: center; }
+}
+.pricing-modal-box {
+  position: relative;
+  max-width: 760px;
+  width: 100%;
+  padding: 26px 20px 22px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-top: 3px solid var(--teal);
+}
+.pricing-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  padding: 6px 12px !important;
+  min-width: auto !important;
+}
+.pricing-head { margin-bottom: 18px; padding-right: 40px; }
+.pricing-head h2 { font-size: 21px; font-weight: 800; margin: 0 0 6px; color: var(--ink); line-height: 1.2; }
+.pricing-head p { margin: 0; font-size: 13px; color: var(--ink3); line-height: 1.5; }
+.pricing-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 720px) {
+  .pricing-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }
+}
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r12);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.pricing-card--pro {
+  border-color: var(--teal-b);
+  box-shadow: 0 6px 24px rgba(15, 160, 160, 0.1);
+}
+.pricing-tier-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink4); margin-bottom: 6px; }
+.pricing-card h3 { font-size: 16px; font-weight: 800; margin: 0 0 10px; color: var(--ink); }
+.pricing-card ul { margin: 0; padding-left: 1.1em; font-size: 13px; color: var(--ink2); line-height: 1.55; flex: 1; }
+.pricing-card ul li { margin-bottom: 5px; }
+.pricing-card-note { margin-top: 10px; font-size: 11px; color: var(--ink4); line-height: 1.4; }
+.pricing-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+@media (min-width: 520px) {
+  .pricing-actions { flex-direction: row; flex-wrap: wrap; }
+  .pricing-actions .btn { flex: 1; min-width: 0; justify-content: center; }
+}
+.pricing-code-box {
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--border2);
+  border-radius: var(--r8);
+  background: var(--bg);
+}
+.pricing-code-box .lbl { margin-bottom: 0; }
+.pricing-code-input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r6);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.pricing-code-input:focus {
+  outline: none;
+  border-color: var(--teal-b);
+  box-shadow: 0 0 0 2px rgba(15, 160, 160, 0.15);
+}
+.pricing-code-msg {
+  font-size: 12px;
+  margin-top: 8px;
+  line-height: 1.45;
+}
+.pricing-code-msg.hidden { display: none; }
+.pricing-code-msg.err { color: #b42318; }
+.pricing-code-msg.ok { color: var(--green); }
+.topbar-link-btn {
+  border: none;
+  background: transparent;
+  color: var(--teal-d);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.topbar-link-btn:hover { background: var(--teal-l); color: var(--coal); }
+.topbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: min(220px, 100%);
+}
+.topbar-auth-user {
+  font-size: 11px;
+  color: var(--ink3);
+  max-width: 132px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar-auth .hidden { display: none !important; }
+
+#auth-modal.modal-overlay { z-index: 1190; padding: 16px; align-items: flex-end; }
+@media (min-width: 640px) {
+  #auth-modal.modal-overlay { align-items: center; }
+}
+.auth-modal-box {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  padding: 24px 20px 20px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-top: 3px solid var(--teal);
+}
+.auth-modal-head { margin-bottom: 16px; padding-right: 36px; }
+.auth-modal-head h2 { font-size: 20px; font-weight: 800; margin: 0 0 6px; color: var(--ink); line-height: 1.2; }
+.auth-modal-head p { margin: 0; font-size: 13px; color: var(--ink3); line-height: 1.5; }
+.auth-error { font-size: 12px; color: #b42318; margin: 0 0 10px; line-height: 1.45; }
+.auth-error.hidden { display: none; }
+
+.plan-badge-row { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.plan-badge.limited-tag {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px dashed var(--teal-b);
+  color: var(--teal-d);
+  background: rgba(15, 160, 160, 0.06);
+}
+.plan-badge-row .plan-badge.limited-tag.hidden { display: none; }
 @keyframes fadein { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
 /* ─── HERO — QHSE Control header style ─── */
@@ -299,6 +572,8 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
 /* ─── QUICK GEN ─── */
 .quickgen { background: var(--teal-l); border: 1px solid var(--teal-b); border-radius: var(--r12); padding: 18px; margin-bottom: 16px; }
 .qg-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.qg-actions-col { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.qg-actions-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .qg-title { font-size: 15px; font-weight: 700; color: var(--ink); }
 .qg-sub { font-size: 12px; color: var(--ink3); margin-top: 3px; max-width: 560px; line-height: 1.55; }
 .qg-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 12px; }
@@ -476,16 +751,126 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
 .lead-warm { background:var(--amber-l); color:var(--amber); border:1px solid var(--amber-b); }
 .lead-cold { background:var(--green-l); color:var(--green); border:1px solid var(--green-b); }
 
-/* ─── RESPONSIVE ─── */
+/* ─── RESPONSIVE — mobile-first complément (téléphone) ─── */
 @media (max-width: 640px) {
-  .main { padding: 14px 14px; }
+  .main { padding: 12px 12px 24px; }
   .g2, .g3, .pp-grid, .measures-grid, .qg-grid, .score-shell, .score-metrics, .v2-grid { grid-template-columns: 1fr; }
-  .topbar { padding: 0 14px; height: auto; min-height: 52px; gap: 8px; flex-wrap: wrap; }
-  .topbar-right { width: 100%; justify-content: space-between; padding-bottom: 8px; }
-  .steps { padding: 0 8px; }
-  .stab { padding: 10px 10px; font-size: 11px; }
-  .hero { padding: 18px 20px; }
-  .hero-right { display: none; }
+  .topbar {
+    padding: 10px 12px;
+    height: auto;
+    min-height: 0;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .brand { flex-wrap: wrap; row-gap: 4px; max-width: 100%; }
+  .brand-name { font-size: 14px; }
+  .brand-pill { font-size: 10px; padding: 2px 6px; }
+  .topbar-menu-btn { display: inline-flex; align-items: center; justify-content: center; }
+  .topbar-right {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 0 4px;
+  }
+  .topbar-right.open { display: flex; }
+  .topbar-auth { justify-content: flex-start; }
+  .mode-toggle { width: 100%; }
+  .mode-btn { flex: 1; }
+  .plan-badge-row { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .topbar-link-btn { min-height: 40px; padding: 8px 10px; }
+  .mode-btn { padding: 8px 12px; font-size: 11px; min-height: 40px; }
+  .save-badge { font-size: 10px; flex-basis: 100%; }
+  .steps { padding: 0 6px; -webkit-overflow-scrolling: touch; }
+  .stab { padding: 10px 8px; font-size: 10px; gap: 4px; }
+  .stab .snum { width: 16px; height: 16px; font-size: 9px; }
+  .hero { padding: 16px 16px; border-radius: var(--r8); }
+  .hero-inner { flex-direction: column; gap: 16px; }
+  .hero-title { font-size: 20px; }
+  .hero-sub { font-size: 12px; max-width: none; }
+  .hero-right { display: flex; width: 100%; }
+  .hero-stat-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .hero-stat { padding: 10px 8px; }
+  .hero-stat-v { font-size: 18px; }
+  .val-banner { font-size: 11px; padding: 10px 12px; }
+  .ai-inp { font-size: 16px; padding: 10px 12px; min-height: 44px; }
+  .qg-top { flex-direction: column; align-items: stretch; gap: 10px; }
+  .qg-top > div:first-child { min-width: 0; }
+  .qg-top .free-duerp-counter { text-align: left; width: 100%; font-size: 11px; }
+  .qg-actions-col { width: 100%; align-items: stretch; }
+  .qg-actions-row { justify-content: stretch; }
+  .qg-actions-row .btn { flex: 1 1 auto; min-width: min(100%, 140px); }
+  .qg-top .btn { min-height: 44px; white-space: normal; justify-content: center; text-align: center; line-height: 1.25; }
+  .quickgen { padding: 14px; margin-bottom: 12px; }
+  .qg-title { font-size: 14px; }
+  .card { padding: 14px; }
+  .sec-tit { font-size: 16px; }
+  input, select, textarea {
+    font-size: 16px;
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+  input[type="range"] {
+    min-height: 0;
+    height: 4px;
+    padding: 0;
+  }
+  textarea { min-height: 100px; }
+  select { min-height: 44px; }
+  .btn, .modal-cta, .ai-btn {
+    min-height: 44px;
+    padding: 10px 14px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-g { min-height: 36px; }
+  .nav-row { flex-direction: column; align-items: stretch; gap: 10px; }
+  .nav-row .btn { width: 100%; justify-content: center; }
+  .uc-head { flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+  .uc-head .btn { width: 100%; justify-content: center; }
+  .legal-box ul { grid-template-columns: 1fr; }
+  .legal-trust-row { grid-template-columns: 1fr; gap: 2px; }
+  .legal-trust-row b { font-size: 10px; }
+  .score-ring { width: 88px; height: 88px; }
+  .score-ring span { font-size: 18px; }
+  .kpi-row { gap: 6px; }
+  .kpi { min-width: calc(50% - 4px); flex: 1 1 calc(50% - 4px); }
+  .modal-box { padding: 22px 16px 20px; max-height: min(92dvh, 92vh); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .modal-title { font-size: 18px; }
+  .modal-fields { gap: 12px; }
+  .pricing-modal-box { padding: 22px 14px 18px; }
+  .smart-toast {
+    left: 12px;
+    right: 12px;
+    bottom: max(86px, env(safe-area-inset-bottom, 0px) + 72px);
+    max-width: none;
+  }
+  .cta-float {
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+    bottom: max(16px, env(safe-area-inset-bottom, 0px) + 8px);
+    justify-content: center;
+    padding: 14px 16px;
+    font-size: 12px;
+  }
+  .funnel-grid, .funnel-pipeline { grid-template-columns: 1fr; gap: 8px; }
+  .funnel-kpi { padding: 12px; }
+  .funnel-kpi .fk-value { font-size: 20px; }
+  .risk-filters { grid-template-columns: 1fr; }
+  .risk-row { grid-template-columns: 42px 1fr; }
+  .risk-row > div:nth-child(n+3) { grid-column: 2; }
+  .risk-modal-body { max-height: calc(100dvh - 140px); }
+}
+@media (max-width: 480px) {
+  .brand-pill { display: none; }
+  .stab { padding: 9px 6px; font-size: 9px; }
+  .hero-tag { font-size: 10px; padding: 3px 8px; }
+  .topbar-auth { max-width: none; flex: 1 1 auto; justify-content: flex-start; }
+  .topbar-auth-user { max-width: 100px; }
+}
+@media (max-width: 380px) {
+  .stab { font-size: 8px; padding: 8px 4px; }
 }
 
 .mode-essential .expert-only { display: none !important; }
@@ -536,8 +921,13 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
 .risk-row-title { font-size:13px; font-weight:700; color:var(--ink); }
 .risk-row-meta { font-size:11px; color:var(--ink3); margin-top:2px; }
 .risk-modal-foot { display:flex; justify-content:flex-end; gap:8px; padding:14px 20px; border-top:1px solid var(--border); background:var(--bg); }
-@media(max-width:720px){ .funnel-grid,.funnel-pipeline{grid-template-columns:1fr 1fr;} .risk-filters{grid-template-columns:1fr;} .risk-row{grid-template-columns:42px 1fr;}.risk-row>div:nth-child(n+3){grid-column:2;} .cta-float{left:14px;right:14px;justify-content:center;} }
-
+@media (max-width: 720px) and (min-width: 641px) {
+  .funnel-grid, .funnel-pipeline { grid-template-columns: 1fr 1fr; }
+  .risk-filters { grid-template-columns: 1fr; }
+  .risk-row { grid-template-columns: 42px 1fr; }
+  .risk-row > div:nth-child(n+3) { grid-column: 2; }
+  .cta-float { left: 14px; right: 14px; justify-content: center; }
+}
 </style>
 </head>
 <body>
@@ -632,14 +1022,140 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   </div>
 </div>
 
-<!-- TOPBAR -->
+<!-- CONVERSION PRO — soft upsell -->
+<div class="modal-overlay hidden" id="conversion-modal" aria-modal="true" role="dialog" aria-labelledby="conversion-modal-title" onclick="if(event.target===this)closeConversionModal()">
+  <div class="modal-box conversion-modal-box" onclick="event.stopPropagation()">
+    <div class="modal-logo" style="margin-bottom:8px">
+      <div class="modal-logo-sq">Q</div>
+      <div class="modal-logo-name" style="font-size:13px">QHSE Control</div>
+    </div>
+    <div class="modal-title" id="conversion-modal-title">Votre analyse est prête</div>
+    <p class="conversion-modal-lead">Pour aller plus loin :</p>
+    <ul class="conversion-modal-list">
+      <li>plan d’action complet</li>
+      <li>analyse détaillée</li>
+      <li>export professionnel</li>
+    </ul>
+    <div class="conversion-modal-actions">
+      <button type="button" class="btn btn-p conversion-modal-primary btn-pro-coming-primary" onclick="onProCtaClick()">Accéder à la version complète (bientôt disponible)</button>
+      <button type="button" class="btn btn-s conversion-modal-secondary" onclick="closeConversionModal()">Continuer en version gratuite</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIMITE DUERP GRATUIT -->
+<div class="modal-overlay hidden" id="duerp-limit-modal" aria-modal="true" role="dialog" aria-labelledby="duerp-limit-modal-title" onclick="if(event.target===this)closeDuerpLimitModal()">
+  <div class="modal-box conversion-modal-box" onclick="event.stopPropagation()">
+    <div class="modal-logo" style="margin-bottom:8px">
+      <div class="modal-logo-sq">Q</div>
+      <div class="modal-logo-name" style="font-size:13px">QHSE Control</div>
+    </div>
+    <div class="modal-title" id="duerp-limit-modal-title">Limite atteinte</div>
+    <p class="conversion-modal-lead" style="margin-top:14px">Vous avez utilisé vos 4 DUERP gratuits.<br>Passez à la version complète pour continuer.</p>
+    <div class="conversion-modal-actions" style="margin-top:20px">
+      <button type="button" class="btn btn-p conversion-modal-primary btn-pro-coming-primary" onclick="onProCtaClick()">Accéder à la version complète (bientôt disponible)</button>
+      <button type="button" class="btn btn-s conversion-modal-secondary" onclick="closeDuerpLimitModal()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TARIFS — FREE / PRO / ENTREPRISE -->
+<div class="modal-overlay hidden" id="pricing-modal" aria-modal="true" role="dialog" aria-labelledby="pricing-modal-title" onclick="if(event.target===this)closeModal('pricing-modal')">
+  <div class="modal-box pricing-modal-box" onclick="event.stopPropagation()">
+    <button type="button" class="btn btn-g pricing-modal-close" onclick="closeModal('pricing-modal')" aria-label="Fermer les tarifs">✕</button>
+    <div class="pricing-head">
+      <h2 id="pricing-modal-title">Formules</h2>
+      <p>Comparez rapidement l’essentiel. Vous pouvez commencer gratuitement et passer au complet quand vous êtes prêt.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier-label">Gratuit</div>
+        <h3>Démarrage</h3>
+        <ul>
+          <li>4 DUERP gratuits (total sur l’appareil)</li>
+          <li>PDF limité</li>
+          <li>IA partielle</li>
+        </ul>
+      </div>
+      <div class="pricing-card pricing-card--pro">
+        <div class="pricing-tier-label">Pro</div>
+        <h3>Version complète</h3>
+        <ul>
+          <li>DUERP illimités</li>
+          <li>PDF complet</li>
+          <li>IA avancée</li>
+          <li>Sauvegarde locale</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-tier-label">Entreprise</div>
+        <h3>Organisation</h3>
+        <ul>
+          <li>Multi-sites</li>
+          <li>Multi-utilisateurs</li>
+        </ul>
+        <p class="pricing-card-note">Idéal pour les groupes et directions HSE. Contact commercial pour cadrage.</p>
+      </div>
+    </div>
+    <div class="pricing-code-box">
+      <label class="lbl" for="premium-code-input">Entrer votre code premium</label>
+      <input type="text" id="premium-code-input" class="pricing-code-input" placeholder="Code fourni après achat" autocomplete="off" spellcheck="false" />
+      <div class="pricing-code-msg hidden" id="premium-code-msg" role="status"></div>
+      <button type="button" class="btn btn-p" style="width:100%;margin-top:12px" onclick="activatePremiumCodeFromInput()">Activer version complète</button>
+    </div>
+    <div class="pricing-actions">
+      <button type="button" class="btn btn-s" onclick="startFreeFromPricing()">Commencer gratuitement</button>
+      <button type="button" class="btn btn-p btn-pro-coming-primary" onclick="onProCtaClick()">Accéder à la version complète (bientôt disponible)</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONNEXION (optionnel — Pro via compte Supabase) -->
+<div class="modal-overlay hidden" id="auth-modal" aria-modal="true" role="dialog" aria-labelledby="auth-modal-title" onclick="if(event.target===this)closeModal('auth-modal')">
+  <div class="modal-box auth-modal-box" onclick="event.stopPropagation()">
+    <button type="button" class="btn btn-g pricing-modal-close" onclick="closeModal('auth-modal')" aria-label="Fermer">✕</button>
+    <div class="auth-modal-head">
+      <h2 id="auth-modal-title">Connexion</h2>
+      <p>Connectez-vous pour activer votre offre Pro. Vous pouvez aussi utiliser l’outil sans compte, en version gratuite.</p>
+    </div>
+    <form id="auth-form" onsubmit="submitQhseLogin(event); return false;">
+      <div class="modal-fields">
+        <div class="fg fgfull">
+          <label class="lbl" for="auth-email">Email</label>
+          <input type="email" id="auth-email" name="email" autocomplete="email" required placeholder="vous@entreprise.com" />
+        </div>
+        <div class="fg fgfull">
+          <label class="lbl" for="auth-password">Mot de passe</label>
+          <input type="password" id="auth-password" name="password" autocomplete="current-password" required />
+        </div>
+      </div>
+      <div class="auth-error hidden" id="auth-error" role="alert"></div>
+      <button type="submit" class="btn btn-p modal-cta" id="auth-submit">Se connecter</button>
+      <button type="button" class="btn btn-s conversion-modal-secondary" style="width:100%;margin-top:8px" onclick="closeModal('auth-modal')">Continuer sans compte</button>
+    </form>
+  </div>
+</div>
+
+<!-- En-tête sticky : topbar + progression + étapes (mobile sans chevauchement) -->
+<div class="app-sticky-header">
 <header class="topbar">
   <div class="brand">
     <div class="brand-logo">Q</div>
     <span class="brand-name">QHSE Control</span>
     <span class="brand-pill">Afrique de l'Ouest</span>
   </div>
-  <div class="topbar-right">
+  <button type="button" class="topbar-menu-btn" id="topbar-menu-btn" aria-expanded="false" aria-controls="topbar-menu" onclick="toggleTopbarMenu()">Menu</button>
+  <div class="topbar-right" id="topbar-menu">
+    <button type="button" class="topbar-link-btn" onclick="openModal('pricing-modal')">Tarifs</button>
+    <div class="topbar-auth" id="topbar-auth">
+      <button type="button" class="topbar-link-btn" id="btn-auth-open" onclick="openModal('auth-modal')">Connexion</button>
+      <span class="topbar-auth-user hidden" id="topbar-auth-user" title=""></span>
+      <button type="button" class="topbar-link-btn hidden" id="btn-auth-logout" onclick="logoutQhseAuth()">Déconnexion</button>
+    </div>
+    <div class="plan-badge-row">
+      <span class="plan-badge" id="plan-badge" title="Version gratuite : fonctionnalités limitées.">Gratuit</span>
+      <span class="plan-badge limited-tag hidden" id="plan-badge-limited" title="Certaines vues et exports sont en aperçu.">Version limitée</span>
+    </div>
     <div class="mode-toggle">
       <button class="mode-btn active" id="mode-essential-btn" onclick="setMode('essential')">Essentiel</button>
       <button class="mode-btn" id="mode-expert-btn" onclick="setMode('expert')">Expert</button>
@@ -660,6 +1176,7 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     <div class="stab" id="t5" onclick="goStep(5)"><div class="snum"><span class="snlabel">5</span></div>Génération PDF</div>
   </div>
 </nav>
+</div>
 
 <main class="main">
 
@@ -808,10 +1325,13 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
         <div class="qg-title">Décrivez votre situation de travail</div>
         <div class="qg-sub">Pour générer une analyse de risques précise et exploitable, renseignez simplement les éléments ci-dessous. Vous pouvez répondre de manière simple, même en vrac : l'outil structure automatiquement vos informations.</div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
-        <button class="btn btn-s" onclick="loadQuickExample()">📄 Charger un exemple</button>
-        <button class="btn btn-g" onclick="improveQuickActivityPhase1()">✨ Améliorer automatiquement mes réponses</button>
-        <button class="btn btn-p" onclick="autoGenerateDUERP()">⚡ Générer la base</button>
+      <div class="qg-actions-col">
+        <div class="qg-actions-row">
+          <button class="btn btn-s" onclick="loadQuickExample()">📄 Charger un exemple</button>
+          <button class="btn btn-g" onclick="improveQuickActivityPhase1()">✨ Améliorer automatiquement mes réponses</button>
+          <button type="button" class="btn btn-p" id="btn-generate-duerp" onclick="handleGenerateDuerpClick(event)">⚡ Générer la base</button>
+        </div>
+        <div class="free-duerp-counter" id="free-duerp-counter" aria-live="polite"></div>
       </div>
     </div>
     <div class="qg-grid">
@@ -948,7 +1468,12 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
       <li>9. Donner les instructions appropriées</li>
     </ul>
   </div>
-  <div id="prev-container"></div>
+  <div class="qhse-pro-gate-host" id="qhse-gate-p4">
+    <div id="prev-container"></div>
+    <div class="qhse-tier-overlay qhse-tier-overlay--click" id="qhse-overlay-p4" role="button" tabindex="0" aria-hidden="true" onclick="openConversionModalFromTeaser(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openConversionModalFromTeaser(event);}">
+      <div class="qhse-tier-overlay-inner">Disponible en version complète</div>
+    </div>
+  </div>
   <div class="nav-row">
     <button class="btn btn-s" onclick="prevStep(4)">← Retour</button>
     <button class="btn btn-p" onclick="nextStep(4)">Suivant : Générer le PDF →</button>
@@ -1005,6 +1530,7 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   </div>
 
 
+  <div class="qhse-pro-gate-host" id="qhse-gate-p5">
   <div class="funnel-dashboard" id="funnel-dashboard">
     <div class="funnel-dashboard-head">
       <div>
@@ -1034,6 +1560,10 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     <div class="v2-card">
       <div class="sec-hdr" style="margin-bottom:12px"><div class="sec-ico">💰</div><div><div class="sec-tit" style="font-size:18px">Impact business potentiel</div><div class="sec-sub">Lecture dirigeant : arrêt, conformité, responsabilité</div></div></div>
       <div id="business-impact"><div class="empty">Complétez les risques pour calculer l’impact.</div></div>
+    </div>
+  </div>
+    <div class="qhse-tier-overlay" id="qhse-overlay-p5" aria-hidden="true">
+      <div class="qhse-tier-overlay-inner">Disponible en version complète</div>
     </div>
   </div>
 
@@ -1347,13 +1877,367 @@ var QA_KB = [
 var step = 1, units = [], uc = 0, rc = 0, uiMode = "essential", leadCaptured = false;
 
 // ══════════════════════════════════════════════════════════════
+// PLANS FREE / PRO — compte optionnel (Supabase) ; code premium (localStorage) ; override dev sans session.
+// ══════════════════════════════════════════════════════════════
+var userPlan = { type: "free", isPremium: false };
+var qhseAuthenticated = false;
+var qhseServerPlan = "free";
+var QHSE_AUTH_STORAGE_KEY = "qhse_auth_v1";
+/** Déblocage Pro par code saisi (persistant sur l’appareil). */
+var QHSE_PREMIUM_CODE_STORAGE_KEY = "qhse_premium_code_unlock";
+var QHSE_PREMIUM_CODE_VALID = "QHSE2026PRO";
+var QHSE_DRAFT_KEY = "qhse_duerp_draft_v1";
+/** Quota gratuit : jusqu’à FREE_LIMIT générations « Générer la base » par appareil (localStorage). */
+var FREE_LIMIT = 4;
+var QHSE_DUERP_COUNT_STORAGE = "duerp_count";
+/** Total des générations « Générer la base » (tous plans), pour analytics. */
+var QHSE_DUERP_GEN_TOTAL_KEY = "qhse_duerp_gen_total";
+var QHSE_VISITOR_ID_KEY = "qhse_visitor_id";
+var QHSE_TAB_SESSION_KEY = "qhse_tab_session";
+var FREE_PDF_MAX_RISKS = 12;
+var FREE_PDF_MAX_CONSULTANT_ROWS = 4;
+/** Nombre max. de fiches « plan d’action » (risques) dans le PDF gratuit */
+var FREE_PDF_PLAN_ACTIONS_MAX = 3;
+/** Lignes utiles max. par fiche plan en PDF gratuit (aperçu) */
+var FREE_PDF_PLAN_ROWS_PER_RISK = 3;
+
+function qhseHasPremiumCodeUnlock() {
+  try {
+    return localStorage.getItem(QHSE_PREMIUM_CODE_STORAGE_KEY) === "1";
+  } catch (e) {
+    return false;
+  }
+}
+function refreshUserPlan() {
+  var devPlan = (window.QHSE_USER_PLAN || "").toString().toLowerCase().trim();
+  var fromCode = qhseHasPremiumCodeUnlock();
+  if (qhseAuthenticated) {
+    var sp = (qhseServerPlan || "free").toString().toLowerCase().trim();
+    if (sp === "pro" || sp === "premium") {
+      userPlan.type = "pro";
+      userPlan.isPremium = true;
+    } else if (fromCode) {
+      userPlan.type = "pro";
+      userPlan.isPremium = true;
+    } else {
+      userPlan.type = "free";
+      userPlan.isPremium = false;
+    }
+    return;
+  }
+  if (fromCode) {
+    userPlan.type = "pro";
+    userPlan.isPremium = true;
+    return;
+  }
+  if (devPlan === "pro" || devPlan === "premium") {
+    userPlan.type = "pro";
+    userPlan.isPremium = true;
+    return;
+  }
+  userPlan.type = "free";
+  userPlan.isPremium = false;
+}
+function isProUser() {
+  return userPlan.type === "pro";
+}
+/** Retourne true si la fonctionnalité est autorisée (Pro), false si limitée (Gratuit). */
+function restrictFeature(featureName) {
+  if (!isProUser()) {
+    return false;
+  }
+  return true;
+}
+function getFreeDuerpUsed() {
+  try {
+    if (localStorage.getItem(QHSE_DUERP_COUNT_STORAGE) === null) {
+      var fromSess = 0;
+      var sc = sessionStorage.getItem("qhse_free_duerp_count");
+      if (sc != null) {
+        fromSess = parseInt(sc, 10);
+        if (isNaN(fromSess) || fromSess < 0) fromSess = 0;
+      } else if (sessionStorage.getItem("qhse_free_duerp_generated") === "1") {
+        fromSess = 1;
+      }
+      localStorage.setItem(QHSE_DUERP_COUNT_STORAGE, String(fromSess));
+      sessionStorage.removeItem("qhse_free_duerp_generated");
+      sessionStorage.removeItem("qhse_free_duerp_count");
+    }
+    var n = parseInt(localStorage.getItem(QHSE_DUERP_COUNT_STORAGE) || "0", 10);
+    if (isNaN(n) || n < 0) n = 0;
+    return n;
+  } catch (e) {
+    return 0;
+  }
+}
+function saveFreeDuerpUsed(n) {
+  try {
+    localStorage.setItem(QHSE_DUERP_COUNT_STORAGE, String(Math.max(0, n)));
+  } catch (e) {}
+}
+function bumpFreeDuerpUsed() {
+  saveFreeDuerpUsed(getFreeDuerpUsed() + 1);
+}
+function getTotalDuerpGenerations() {
+  try {
+    if (localStorage.getItem(QHSE_DUERP_GEN_TOTAL_KEY) === null) {
+      localStorage.setItem(QHSE_DUERP_GEN_TOTAL_KEY, String(getFreeDuerpUsed()));
+    }
+    var n = parseInt(localStorage.getItem(QHSE_DUERP_GEN_TOTAL_KEY) || "0", 10);
+    if (isNaN(n) || n < 0) n = 0;
+    return n;
+  } catch (e) {
+    return 0;
+  }
+}
+function bumpTotalDuerpGenerations() {
+  try {
+    localStorage.setItem(QHSE_DUERP_GEN_TOTAL_KEY, String(getTotalDuerpGenerations() + 1));
+  } catch (e) {}
+}
+function getOrCreateVisitorId() {
+  try {
+    var id = localStorage.getItem(QHSE_VISITOR_ID_KEY);
+    if (!id) {
+      id = "v_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 12);
+      localStorage.setItem(QHSE_VISITOR_ID_KEY, id);
+    }
+    return id;
+  } catch (e) {
+    try {
+      var fb = sessionStorage.getItem("qhse_visitor_fallback");
+      if (!fb) {
+        fb = "vf_" + Math.random().toString(36).slice(2);
+        sessionStorage.setItem("qhse_visitor_fallback", fb);
+      }
+      return fb;
+    } catch (e2) {
+      return "anon";
+    }
+  }
+}
+function getOrCreateTabSessionId() {
+  try {
+    var s = sessionStorage.getItem(QHSE_TAB_SESSION_KEY);
+    if (!s) {
+      s = "ts_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 9);
+      sessionStorage.setItem(QHSE_TAB_SESSION_KEY, s);
+    }
+    return s;
+  } catch (e) {
+    return "ts_unknown";
+  }
+}
+function trackEvent(name) {
+  var ev = String(name || "").trim();
+  if (!ev) return;
+  var base = "";
+  try {
+    if (typeof getQhseApiBase === "function") base = getQhseApiBase();
+  } catch (e) {}
+  if (!base) base = String(window.QHSE_API_BASE_URL || "https://api.qhsecontrol.com").replace(/\/$/, "");
+  var payload = {
+    event: ev,
+    date: new Date().toISOString(),
+    userId: getOrCreateVisitorId(),
+    sessionId: getOrCreateTabSessionId(),
+    duerpGeneratedCount: getTotalDuerpGenerations()
+  };
+  try {
+    fetch(base + "/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).catch(function () {});
+  } catch (e) {}
+}
+function onProCtaClick() {
+  trackEvent("pro_click");
+  openProComingModal();
+}
+function updateFreeDuerpCounterUi() {
+  var el = document.getElementById("free-duerp-counter");
+  if (!el) return;
+  refreshUserPlan();
+  if (isProUser()) {
+    el.classList.add("is-pro");
+    el.textContent = "Pro · DUERP illimités";
+    return;
+  }
+  el.classList.remove("is-pro");
+  var u = getFreeDuerpUsed();
+  el.innerHTML = "DUERP utilisés : <strong>" + u + "</strong> / " + FREE_LIMIT;
+}
+function syncFreeTierUi() {
+  refreshUserPlan();
+  var pro = isProUser();
+  document.body.classList.toggle("qhse-pro-tier", pro);
+  document.body.classList.toggle("qhse-tier-free", !pro);
+  var lim = document.getElementById("plan-badge-limited");
+  if (lim) lim.classList.toggle("hidden", pro);
+  var genBtn = document.getElementById("btn-generate-duerp");
+  if (genBtn) {
+    var atLimit = false;
+    try {
+      atLimit = !pro && getFreeDuerpUsed() >= FREE_LIMIT;
+    } catch (e) {}
+    if (atLimit) {
+      genBtn.disabled = true;
+      genBtn.setAttribute("aria-disabled", "true");
+      genBtn.title = "Gratuit : " + FREE_LIMIT + " DUERP utilisés sur cet appareil. Passez en Pro pour continuer.";
+      genBtn.style.opacity = "0.65";
+    } else {
+      genBtn.disabled = false;
+      genBtn.removeAttribute("aria-disabled");
+      genBtn.title = "";
+      genBtn.style.opacity = "";
+    }
+  }
+  updateFreeDuerpCounterUi();
+}
+function updatePlanChrome() {
+  refreshUserPlan();
+  syncFreeTierUi();
+  var el = document.getElementById("plan-badge");
+  if (!el) return;
+  if (isProUser()) {
+    var sp = (qhseServerPlan || "").toString().toLowerCase().trim();
+    var fromSrv = qhseAuthenticated && (sp === "pro" || sp === "premium");
+    var fromCd = qhseHasPremiumCodeUnlock();
+    el.textContent = "Pro";
+    el.className = "plan-badge pro";
+    if (fromSrv) {
+      el.title = "Compte Pro : générations illimitées, PDF complet, sauvegarde locale du brouillon.";
+    } else if (fromCd) {
+      el.title = "Pro activé avec votre code : générations illimitées, PDF complet, sauvegarde locale du brouillon.";
+    } else {
+      el.title = "Pro : générations illimitées, PDF complet avec charge utile QHSE Control, sauvegarde locale du brouillon.";
+    }
+  } else {
+    el.textContent = "Gratuit";
+    el.className = "plan-badge";
+    el.title = qhseAuthenticated
+      ? "Compte connecté — offre gratuite : mêmes limites que l’essai sans compte."
+      : "Gratuit : jusqu’à " + FREE_LIMIT + " DUERP sur cet appareil, PDF limité, IA partielle. Pas de sauvegarde locale du brouillon.";
+  }
+}
+/** Dev / hors session : window.__qhseSetPlan("pro"). Session serveur Pro ou code premium local priment selon les règles ci-dessus. */
+window.__qhseSetPlan = function (plan) {
+  window.QHSE_USER_PLAN = plan;
+  updatePlanChrome();
+};
+refreshUserPlan();
+
+function exportDuerpDraftSnapshot() {
+  saveDOM();
+  var company = {};
+  ["e_nom", "e_pays", "e_secteur", "e_adresse", "e_effectif", "e_soustraitants", "e_resp", "e_date", "e_cse", "e_med", "e_bailleur", "e_obs"].forEach(function (id) {
+    var e = document.getElementById(id);
+    company[id] = e ? e.value : "";
+  });
+  var qa = document.getElementById("quick-activity");
+  var qs = document.getElementById("quick-activity-structured");
+  var unitsSnap = units.map(function (u) {
+    var un = document.getElementById("un-" + u.id);
+    var unb = document.getElementById("unb-" + u.id);
+    var unst = document.getElementById("unst-" + u.id);
+    var unh = document.getElementById("unh-" + u.id);
+    var und = document.getElementById("und-" + u.id);
+    return {
+      id: u.id,
+      name: un ? un.value : "",
+      nb: unb ? unb.value : "",
+      st: unst ? unst.value : "",
+      h: unh ? unh.value : "",
+      d: und ? und.value : "",
+      risks: u.risks.map(function (r) { return JSON.parse(JSON.stringify(r)); })
+    };
+  });
+  return {
+    v: 1,
+    savedAt: new Date().toISOString(),
+    step: step,
+    uiMode: uiMode,
+    leadCaptured: leadCaptured,
+    company: company,
+    quickActivity: qa ? qa.value : "",
+    quickStructured: qs ? qs.value : "",
+    units: unitsSnap
+  };
+}
+
+function mountUnitRowFromSnapshot(su) {
+  var uid = su.id;
+  var d = document.createElement("div");
+  d.className = "uc";
+  d.id = "uc-" + uid;
+  d.innerHTML = '<div class="uc-head"><div class="uc-title">🏗 Unité de travail <span class="ubadge">#' + uid + '</span></div><button class="btn btn-g" onclick="rmUnit(' + uid + ')">✕ Supprimer</button></div>' +
+    '<div class="uc-body"><div class="g2">' +
+    '<div class="fg fgfull"><label class="lbl">Nom de l\'unité <span class="req">*</span></label><input id="un-' + uid + '" placeholder="Ex : Forage-Abattage, Traitement cyanuration, Maintenance engins, Bureau technique, Gardiennage..." oninput="autosv()"></div>' +
+    '<div class="fg"><label class="lbl">Travailleurs exposés</label><input type="number" id="unb-' + uid + '" min="0" placeholder="0" oninput="autosv()"></div>' +
+    '<div class="fg"><label class="lbl">dont Sous-traitants</label><input type="number" id="unst-' + uid + '" min="0" placeholder="0" oninput="autosv()"></div>' +
+    '<div class="fg"><label class="lbl">Type d\'horaires</label><select id="unh-' + uid + '" onchange="autosv()"><option value="">—</option><option value="journee">Journée (6h-14h ou 7h-15h)</option><option value="2x8">2×8 (jour/nuit)</option><option value="3x8">3×8 (rotation continue)</option><option value="nuit">Nuit fixe</option><option value="variable">Variable / saisonnier</option></select></div>' +
+    '<div class="fg fgfull"><label class="lbl">Description activités et équipements</label><textarea id="und-' + uid + '" placeholder="Tâches principales, machines, produits chimiques, conditions terrain, expositions particulières..." oninput="autosv()"></textarea></div>' +
+    '</div></div>';
+  var container = document.getElementById("units-container");
+  if (container) container.appendChild(d);
+  setFieldValue("un-" + uid, su.name || "");
+  if (su.nb != null && su.nb !== "") setFieldValue("unb-" + uid, su.nb);
+  if (su.st != null && su.st !== "") setFieldValue("unst-" + uid, su.st);
+  setFieldValue("unh-" + uid, su.h || "");
+  setFieldValue("und-" + uid, su.d || "");
+}
+
+function applyDuerpDraftSnapshot(d) {
+  if (!d || d.v !== 1 || !Array.isArray(d.units)) return false;
+  Object.keys(d.company || {}).forEach(function (k) {
+    var el = document.getElementById(k);
+    if (el && d.company[k] != null) el.value = d.company[k];
+  });
+  var qa = document.getElementById("quick-activity");
+  var qs = document.getElementById("quick-activity-structured");
+  if (qa && d.quickActivity != null) qa.value = d.quickActivity;
+  if (qs && d.quickStructured != null) qs.value = d.quickStructured;
+  units = [];
+  uc = 0;
+  rc = 0;
+  var c = document.getElementById("units-container");
+  if (c) c.innerHTML = "";
+  d.units.forEach(function (su) {
+    uc = Math.max(uc, su.id);
+    var u = { id: su.id, risks: (su.risks || []).map(function (sr) {
+      rc = Math.max(rc, sr.id);
+      return JSON.parse(JSON.stringify(sr));
+    }) };
+    units.push(u);
+    mountUnitRowFromSnapshot(su);
+  });
+  leadCaptured = !!d.leadCaptured;
+  setMode(d.uiMode === "expert" ? "expert" : "essential");
+  return true;
+}
+
+function restoreGoStep(target) {
+  target = Math.max(1, Math.min(5, target || 1));
+  for (var s = 1; s <= target; s++) goStep(s, true);
+}
+
+// ══════════════════════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════════════════════
 function autosv() {
   clearTimeout(window._svt);
   window._svt = setTimeout(function() {
     var s = document.getElementById("sv");
-    if (s) { s.textContent = "Sauvegardé ✓"; setTimeout(function() { s.textContent = ""; }, 1800); }
+    refreshUserPlan();
+    if (restrictFeature("local_draft")) {
+      if (s) { s.textContent = "Sauvegardé ✓"; setTimeout(function() { s.textContent = ""; }, 1800); }
+      try {
+        localStorage.setItem(QHSE_DRAFT_KEY, JSON.stringify(exportDuerpDraftSnapshot()));
+      } catch (e) { console.warn("Sauvegarde brouillon Pro impossible:", e); }
+    } else {
+      if (s) { s.textContent = "Sauvegarde désactivée (version limitée)"; setTimeout(function() { s.textContent = ""; }, 2200); }
+    }
   }, 600);
 }
 function setq(id, txt) {
@@ -1372,6 +2256,278 @@ function setMode(mode) {
 }
 function openModal(id) { var m = document.getElementById(id); if (m) { m.classList.remove("hidden"); } }
 function closeModal(id) { var m = document.getElementById(id); if (m) { m.classList.add("hidden"); } }
+
+function isMobileViewport() {
+  try { return window.matchMedia && window.matchMedia("(max-width: 640px)").matches; }
+  catch (e) { return false; }
+}
+function setTopbarMenuOpen(open) {
+  var menu = document.getElementById("topbar-menu");
+  var btn = document.getElementById("topbar-menu-btn");
+  if (!menu || !btn) return;
+  var want = !!open;
+  if (!isMobileViewport()) want = false;
+  menu.classList.toggle("open", want);
+  btn.setAttribute("aria-expanded", want ? "true" : "false");
+}
+function toggleTopbarMenu() {
+  var menu = document.getElementById("topbar-menu");
+  if (!menu) return;
+  setTopbarMenuOpen(!menu.classList.contains("open"));
+}
+
+// ══════════════════════════════════════════════════════════════
+// POPUP CONVERSION (Gratuit → Pro)
+// ══════════════════════════════════════════════════════════════
+function openConversionModal(source) {
+  void source;
+  if (typeof isProUser === "function" && isProUser()) return;
+  var m = document.getElementById("conversion-modal");
+  if (!m) return;
+  m.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  var prev = m._convKeydown;
+  if (prev) document.removeEventListener("keydown", prev);
+  var onKey = function (e) {
+    if (e.key === "Escape") closeConversionModal();
+  };
+  m._convKeydown = onKey;
+  document.addEventListener("keydown", onKey);
+}
+function closeConversionModal() {
+  var m = document.getElementById("conversion-modal");
+  if (m) {
+    m.classList.add("hidden");
+    if (m._convKeydown) {
+      document.removeEventListener("keydown", m._convKeydown);
+      m._convKeydown = null;
+    }
+  }
+  document.body.style.overflow = "";
+}
+function showLimitReachedModal() {
+  if (typeof isProUser === "function" && isProUser()) return;
+  var m = document.getElementById("duerp-limit-modal");
+  if (!m) return;
+  m.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  var prev = m._limKeydown;
+  if (prev) document.removeEventListener("keydown", prev);
+  var onKey = function (e) {
+    if (e.key === "Escape") closeDuerpLimitModal();
+  };
+  m._limKeydown = onKey;
+  document.addEventListener("keydown", onKey);
+}
+function closeDuerpLimitModal() {
+  var m = document.getElementById("duerp-limit-modal");
+  if (m) {
+    m.classList.add("hidden");
+    if (m._limKeydown) {
+      document.removeEventListener("keydown", m._limKeydown);
+      m._limKeydown = null;
+    }
+  }
+  document.body.style.overflow = "";
+}
+function resetProWaitlistForm() {
+  var err = document.getElementById("pro-waitlist-error");
+  var ok = document.getElementById("pro-waitlist-success");
+  var form = document.getElementById("pro-waitlist-form");
+  var submit = document.getElementById("pro-waitlist-submit");
+  if (err) {
+    err.textContent = "";
+    err.classList.add("hidden");
+  }
+  if (ok) {
+    ok.textContent = "";
+    ok.classList.add("hidden");
+  }
+  if (form) form.classList.remove("hidden");
+  if (submit) submit.disabled = false;
+}
+function openProComingModal() {
+  closeConversionModal();
+  closeDuerpLimitModal();
+  closeModal("pricing-modal");
+  resetProWaitlistForm();
+  trackEvent("pro_modal_open");
+  var inp = document.getElementById("pro-waitlist-email");
+  if (inp) {
+    try {
+      var g = document.getElementById("gate-email");
+      var d = document.getElementById("demo-email");
+      if (g && g.value) inp.value = g.value.trim();
+      else if (d && d.value) inp.value = d.value.trim();
+      else inp.value = "";
+    } catch (e) {
+      inp.value = "";
+    }
+  }
+  var m = document.getElementById("pro-coming-modal");
+  if (!m) return;
+  m.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  var prev = m._proComeKeydown;
+  if (prev) document.removeEventListener("keydown", prev);
+  var onKey = function (e) {
+    if (e.key === "Escape") closeProComingModal();
+  };
+  m._proComeKeydown = onKey;
+  document.addEventListener("keydown", onKey);
+}
+function closeProComingModal() {
+  var m = document.getElementById("pro-coming-modal");
+  if (m) {
+    m.classList.add("hidden");
+    if (m._proComeKeydown) {
+      document.removeEventListener("keydown", m._proComeKeydown);
+      m._proComeKeydown = null;
+    }
+  }
+  document.body.style.overflow = "";
+}
+function submitProWaitlist(ev) {
+  if (ev && ev.preventDefault) ev.preventDefault();
+  var inp = document.getElementById("pro-waitlist-email");
+  var errEl = document.getElementById("pro-waitlist-error");
+  var okEl = document.getElementById("pro-waitlist-success");
+  var btn = document.getElementById("pro-waitlist-submit");
+  var email = inp ? String(inp.value || "").trim() : "";
+  if (errEl) {
+    errEl.textContent = "";
+    errEl.classList.add("hidden");
+  }
+  if (okEl) {
+    okEl.textContent = "";
+    okEl.classList.add("hidden");
+  }
+  if (!email) {
+    if (errEl) {
+      errEl.textContent = "Indiquez votre email.";
+      errEl.classList.remove("hidden");
+    }
+    return;
+  }
+  if (btn) btn.disabled = true;
+  var body = {
+    email: email,
+    source: "generator_pro_interest",
+    date: new Date().toISOString()
+  };
+  fetch(getQhseApiBase() + "/api/waitlist", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  })
+    .then(function (res) {
+      return res.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        return { res: res, data: data };
+      });
+    })
+    .then(function (pack) {
+      if (!pack.res.ok) {
+        if (errEl) {
+          errEl.textContent = (pack.data && pack.data.error) ? pack.data.error : "Envoi impossible. Réessayez.";
+          errEl.classList.remove("hidden");
+        }
+        return;
+      }
+      if (okEl) {
+        okEl.textContent = "Vous serez informé dès le lancement.";
+        okEl.classList.remove("hidden");
+      }
+      if (inp) inp.value = "";
+      trackEvent("pro_waitlist_signup");
+    })
+    .catch(function () {
+      if (errEl) {
+        errEl.textContent = "Réseau indisponible. Réessayez plus tard.";
+        errEl.classList.remove("hidden");
+      }
+    })
+    .then(function () {
+      if (btn) btn.disabled = false;
+    });
+}
+function openConversionModalFromTeaser(ev) {
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  if (typeof isProUser === "function" && isProUser()) return;
+  openConversionModal("blocked_feature");
+}
+function scheduleConversionModalAfterPdf() {
+  setTimeout(function () {
+    if (typeof isProUser === "function" && isProUser()) return;
+    openConversionModal("pdf_export");
+  }, 600);
+}
+function handleGenerateDuerpClick(ev) {
+  var btn = document.getElementById("btn-generate-duerp");
+  if (btn && btn.disabled) {
+    if (ev && ev.preventDefault) ev.preventDefault();
+    showLimitReachedModal();
+    return false;
+  }
+  autoGenerateDUERP();
+}
+function fillDemoFromDuerp() {
+  try {
+    var demoCompany = document.getElementById("demo-company");
+    var demoName = document.getElementById("demo-name");
+    var demoEmail = document.getElementById("demo-email");
+    var demoSector = document.getElementById("demo-sector");
+    if (demoCompany && document.getElementById("e_nom")) demoCompany.value = document.getElementById("e_nom").value || "";
+    if (demoSector && document.getElementById("e_secteur")) demoSector.value = document.getElementById("e_secteur").value || "";
+    if (demoName && document.getElementById("gate-name")) demoName.value = document.getElementById("gate-name").value || "";
+    if (demoEmail && document.getElementById("gate-email")) demoEmail.value = document.getElementById("gate-email").value || "";
+  } catch (e) {}
+}
+function startFreeFromPricing() {
+  closeModal("pricing-modal");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function activatePremiumCodeFromInput() {
+  var inp = document.getElementById("premium-code-input");
+  var msg = document.getElementById("premium-code-msg");
+  var raw = inp ? String(inp.value || "").trim() : "";
+  if (msg) {
+    msg.classList.remove("err", "ok");
+    msg.classList.add("hidden");
+    msg.textContent = "";
+  }
+  if (raw.toUpperCase() !== String(QHSE_PREMIUM_CODE_VALID).toUpperCase()) {
+    if (msg) {
+      msg.textContent = "Code invalide. Vérifiez votre saisie.";
+      msg.classList.add("err");
+      msg.classList.remove("hidden");
+    }
+    return;
+  }
+  try {
+    localStorage.setItem(QHSE_PREMIUM_CODE_STORAGE_KEY, "1");
+  } catch (e) {
+    if (msg) {
+      msg.textContent = "Stockage local impossible sur cet appareil.";
+      msg.classList.add("err");
+      msg.classList.remove("hidden");
+    }
+    return;
+  }
+  refreshUserPlan();
+  updatePlanChrome();
+  syncFreeTierUi();
+  if (inp) inp.value = "";
+  if (msg) {
+    msg.textContent = "Version complète activée sur cet appareil.";
+    msg.classList.add("ok");
+    msg.classList.remove("hidden");
+  }
+}
+function goProFromPricing() {
+  onProCtaClick();
+}
 
 function updateLegalBanner() {
   var pays = document.getElementById("e_pays") ? document.getElementById("e_pays").value : "ci";
@@ -1404,8 +2560,8 @@ function submitDemo() {
 // ══════════════════════════════════════════════════════════════
 var PBAR_W = [20, 40, 60, 80, 100];
 
-function goStep(n) {
-  if (n > step && !validate(step)) return;
+function goStep(n, skipValidate) {
+  if (!skipValidate && n > step && !validate(step)) return;
   if (n === 3) { saveDOM(); buildRisks(); }
   if (n === 4) { saveDOM(); buildPrev(); }
   if (n === 5) { saveDOM(); updateComplianceUI(); renderCriticalRisks(); renderBusinessImpact(); renderConversionDashboard(); evaluateSmartAlerts(); }
@@ -2348,6 +3504,15 @@ function fillAgroTransDemo() {
 // AUTO GENERATE
 // ══════════════════════════════════════════════════════════════
 function autoGenerateDUERP() {
+  refreshUserPlan();
+  if (!isProUser()) {
+    try {
+      if (getFreeDuerpUsed() >= FREE_LIMIT) {
+        showLimitReachedModal();
+        return;
+      }
+    } catch (e) {}
+  }
   var secteur = document.getElementById("e_secteur") ? document.getElementById("e_secteur").value : "autre";
   var structured = document.getElementById("quick-activity-structured") ? document.getElementById("quick-activity-structured").value.trim() : "";
   var raw = document.getElementById("quick-activity") ? document.getElementById("quick-activity").value.trim() : "";
@@ -2400,6 +3565,9 @@ function autoGenerateDUERP() {
     console.warn("Contextualisation risques indisponible:", e);
   }
   buildRisks(); autosv();
+  bumpTotalDuerpGenerations();
+  if (!isProUser()) bumpFreeDuerpUsed();
+  syncFreeTierUi();
   alert("Base DUERP V6 générée : risques contextualisés par unité, horaires, effectifs et texte libre. Vérifiez les cotations terrain avant signature.");
 }
 
@@ -2800,6 +3968,197 @@ var API_PUBLIC_KEY = "sb_publishable_gHpdNLyBa2SydITAMa-Q7Q_EIN_jBIj";
   } catch (e) { console.warn("Config backend non disponible, mode offline."); }
 })();
 
+function getQhseApiBase() {
+  try {
+    if (typeof API_BASE_URL !== "undefined" && API_BASE_URL) return String(API_BASE_URL).replace(/\/$/, "");
+  } catch (e) {}
+  return String(window.QHSE_API_BASE_URL || "https://api.qhsecontrol.com").replace(/\/$/, "");
+}
+
+function updateAuthTopbar() {
+  var openBtn = document.getElementById("btn-auth-open");
+  var userEl = document.getElementById("topbar-auth-user");
+  var outBtn = document.getElementById("btn-auth-logout");
+  var session = null;
+  try {
+    var raw = localStorage.getItem(QHSE_AUTH_STORAGE_KEY);
+    if (raw) session = JSON.parse(raw);
+  } catch (e) {}
+  var loggedIn = !!(qhseAuthenticated && session && session.access_token);
+  if (openBtn) openBtn.classList.toggle("hidden", loggedIn);
+  if (outBtn) outBtn.classList.toggle("hidden", !loggedIn);
+  if (userEl) {
+    if (loggedIn) {
+      var em = (session && session.email) ? String(session.email) : "";
+      userEl.textContent = em.length > 24 ? em.slice(0, 22) + "\u2026" : em;
+      userEl.title = em;
+      userEl.classList.remove("hidden");
+    } else {
+      userEl.textContent = "";
+      userEl.title = "";
+      userEl.classList.add("hidden");
+    }
+  }
+}
+
+function fetchAuthMe() {
+  var raw = null;
+  try {
+    raw = localStorage.getItem(QHSE_AUTH_STORAGE_KEY);
+  } catch (e) {}
+  if (!raw) {
+    qhseAuthenticated = false;
+    qhseServerPlan = "free";
+    refreshUserPlan();
+    updatePlanChrome();
+    updateAuthTopbar();
+    return Promise.resolve();
+  }
+  var session;
+  try {
+    session = JSON.parse(raw);
+  } catch (e2) {
+    session = null;
+  }
+  if (!session || !session.access_token) {
+    try {
+      localStorage.removeItem(QHSE_AUTH_STORAGE_KEY);
+    } catch (e3) {}
+    qhseAuthenticated = false;
+    qhseServerPlan = "free";
+    refreshUserPlan();
+    updatePlanChrome();
+    updateAuthTopbar();
+    return Promise.resolve();
+  }
+  return fetch(getQhseApiBase() + "/api/public/auth/me", {
+    headers: { Authorization: "Bearer " + session.access_token }
+  })
+    .then(function (res) {
+      if (res.status === 401) {
+        try {
+          localStorage.removeItem(QHSE_AUTH_STORAGE_KEY);
+        } catch (e4) {}
+        qhseAuthenticated = false;
+        qhseServerPlan = "free";
+        return null;
+      }
+      if (!res.ok) {
+        qhseAuthenticated = false;
+        qhseServerPlan = "free";
+        return null;
+      }
+      return res.json().catch(function () {
+        return {};
+      });
+    })
+    .then(function (data) {
+      if (data && data.ok) {
+        qhseAuthenticated = true;
+        qhseServerPlan = (data.plan || "free").toString().toLowerCase();
+        if (data.email && session) {
+          session.email = data.email;
+          try {
+            localStorage.setItem(QHSE_AUTH_STORAGE_KEY, JSON.stringify(session));
+          } catch (e5) {}
+        }
+      }
+    })
+    .catch(function () {
+      qhseAuthenticated = false;
+      qhseServerPlan = "free";
+    })
+    .then(function () {
+      refreshUserPlan();
+      updatePlanChrome();
+      syncFreeTierUi();
+      updateAuthTopbar();
+    });
+}
+
+function logoutQhseAuth() {
+  try {
+    localStorage.removeItem(QHSE_AUTH_STORAGE_KEY);
+  } catch (e) {}
+  qhseAuthenticated = false;
+  qhseServerPlan = "free";
+  refreshUserPlan();
+  updatePlanChrome();
+  syncFreeTierUi();
+  updateAuthTopbar();
+}
+
+function submitQhseLogin(ev) {
+  if (ev && ev.preventDefault) ev.preventDefault();
+  var emailEl = document.getElementById("auth-email");
+  var passEl = document.getElementById("auth-password");
+  var errEl = document.getElementById("auth-error");
+  var submitBtn = document.getElementById("auth-submit");
+  var email = emailEl ? emailEl.value.trim() : "";
+  var password = passEl ? passEl.value : "";
+  if (errEl) {
+    errEl.textContent = "";
+    errEl.classList.add("hidden");
+  }
+  if (!email || !password) {
+    if (errEl) {
+      errEl.textContent = "Renseignez email et mot de passe.";
+      errEl.classList.remove("hidden");
+    }
+    return;
+  }
+  if (submitBtn) submitBtn.disabled = true;
+  fetch(getQhseApiBase() + "/api/public/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email, password: password })
+  })
+    .then(function (res) {
+      return res.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        return { res: res, data: data };
+      });
+    })
+    .then(function (pack) {
+      var res = pack.res;
+      var data = pack.data;
+      if (!res.ok) {
+        if (errEl) {
+          errEl.textContent = (data && data.error) ? data.error : "Connexion impossible.";
+          errEl.classList.remove("hidden");
+        }
+        return;
+      }
+      var session = {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token || "",
+        expires_at: data.expires_at != null ? data.expires_at : null,
+        email: data.email || email
+      };
+      try {
+        localStorage.setItem(QHSE_AUTH_STORAGE_KEY, JSON.stringify(session));
+      } catch (e) {}
+      qhseAuthenticated = true;
+      qhseServerPlan = (data.plan || "free").toString().toLowerCase();
+      refreshUserPlan();
+      updatePlanChrome();
+      syncFreeTierUi();
+      updateAuthTopbar();
+      closeModal("auth-modal");
+      if (passEl) passEl.value = "";
+    })
+    .catch(function () {
+      if (errEl) {
+        errEl.textContent = "Réseau indisponible. Réessayez.";
+        errEl.classList.remove("hidden");
+      }
+    })
+    .then(function () {
+      if (submitBtn) submitBtn.disabled = false;
+    });
+}
+
 var LEGAL_SOURCES = [];
 var RISK_MAP = [];
 async function loadLegalSources() {
@@ -2822,7 +4181,8 @@ async function sendLeadToBackend(lead, duerpPayload) {
 
   if (!isBackendEnabled()) {
     saveLeadToPrivateCrmInbox(lead, duerpPayload);
-    return { ok: true, mode: "localStorage", lead: crmLead };
+    refreshUserPlan();
+    return { ok: true, mode: restrictFeature("crm_local_inbox") ? "localStorage" : "offline_free_no_local_crm", lead: crmLead };
   }
 
   try {
@@ -2847,7 +4207,8 @@ async function sendLeadToBackend(lead, duerpPayload) {
   } catch (err) {
     console.warn("⚠️ Backend indisponible, fallback localStorage", err);
     saveLeadToPrivateCrmInbox(lead, duerpPayload);
-    return { ok: false, mode: "fallback_localStorage", error: err.message, lead: crmLead };
+    refreshUserPlan();
+    return { ok: false, mode: restrictFeature("crm_local_inbox") ? "fallback_localStorage" : "fallback_free_no_local_crm", error: err.message, lead: crmLead };
   }
 }
 
@@ -2952,6 +4313,11 @@ function buildCrmLeadFromGate(lead, duerpPayload) {
 function saveLeadToPrivateCrmInbox(lead, duerpPayload) {
   try {
     var crmLead = buildCrmLeadFromGate(lead, duerpPayload);
+    refreshUserPlan();
+    if (!restrictFeature("crm_local_inbox")) {
+      console.log("Inbox CRM locale désactivée en version gratuite (pas de sauvegarde locale).");
+      return crmLead;
+    }
     var keys = ["crm_leads", "qhse_duerp_leads"];
     keys.forEach(function(key) {
       var existing = [];
@@ -3017,6 +4383,8 @@ function togglePreview() {
 function genPDF() {
   try {
     saveDOM();
+  refreshUserPlan();
+  var pdfPro = isProUser();
   var jsPDF = window.jspdf.jsPDF;
   var doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
   var W = 210, H = 297, M = 14, CW = W - M * 2;
@@ -3103,6 +4471,7 @@ function genPDF() {
   }
 
   function buildQhseControlPayload() {
+    refreshUserPlan();
     var pays = document.getElementById("e_pays") ? document.getElementById("e_pays").value : "ci";
     var paysInfo = PAYS_INFO[pays] || PAYS_INFO.other;
     var globalScoreEl = document.getElementById("score-value");
@@ -3174,6 +4543,7 @@ function genPDF() {
       schema: "qhse-control-risk-import",
       version: "1.0",
       source: "risk-generator",
+      generatorPlan: { type: userPlan.type, isPremium: userPlan.isPremium },
       generatedAt: new Date().toISOString(),
       company: {
         name: document.getElementById("e_nom") ? document.getElementById("e_nom").value : "",
@@ -3280,6 +4650,8 @@ function genPDF() {
   var allR = [];
   units.forEach(function(u) { u.risks.forEach(function(r) { allR.push({ unit: u, risk: r, crit: (r.gravite||2)*(r.probabilite||2) }); }); });
   allR.sort(function(a,b) { return b.crit - a.crit; });
+  var allRTotal = allR.length;
+  var pdfRiskSet = pdfPro ? allR : allR.slice(0, Math.min(FREE_PDF_MAX_RISKS, allR.length));
 
   function addPage() { doc.addPage(); y = 20; }
   function checkPage(need) { if (y + (need||30) > H - 12) addPage(); }
@@ -3344,7 +4716,7 @@ function genPDF() {
     ["Effectif", ent.effectif],
     ["Bailleur(s)", ent.bailleur || "—"],
     ["Unités de travail", String(units.length)],
-    ["Risques identifiés", String(allR.length)]
+    ["Risques identifiés", String(allRTotal) + (!pdfPro && allRTotal > pdfRiskSet.length ? " (PDF gratuit : aperçu " + pdfRiskSet.length + " max.)" : "")]
   ];
   doc.autoTable({ startY: 112, margin: { left: M, right: M }, theme: "plain",
     styles: { fontSize: 9, cellPadding: 2.8, textColor: C.ink, overflow: "linebreak" },
@@ -3359,7 +4731,7 @@ function genPDF() {
   doc.rect(M, y, 3, 22, "F");
   doc.setFont("helvetica", "italic"); doc.setFontSize(8);
   doc.setTextColor.apply(doc, C.goldL);
-  doc.text(truncPdfLine("Ce document gratuit a été généré avec QHSE Control — Évaluation des risques Afrique de l'Ouest.", 105), M + 6, y + 7);
+  doc.text(truncPdfLine(pdfPro ? "Document Pro — export complet (plan d’action détaillé et charge utile import QHSE Control)." : "Ce document gratuit a été généré avec QHSE Control — Évaluation des risques Afrique de l'Ouest.", 105), M + 6, y + 7);
   doc.text(truncPdfLine("Il doit être lu, vérifié et validé par un Responsable HSE qualifié avant usage officiel ou soumission bailleur.", 112), M + 6, y + 13);
   doc.text(truncPdfLine("Références indicatives : " + paysInfo.loi, 85), M + 6, y + 19);
 
@@ -3510,7 +4882,9 @@ function genPDF() {
   // ── AVIS CONSULTANT IA ──
   checkPage(50);
   secTitle("4.  AVIS CONSULTANT IA — POINTS À VALIDER SUR SITE");
-  var consultantRows = buildConsultantSummary(allR).map(function(a, i){ return [String(i+1), a]; });
+  var consultantRowsRaw = buildConsultantSummary(allR);
+  if (!pdfPro) consultantRowsRaw = consultantRowsRaw.slice(0, FREE_PDF_MAX_CONSULTANT_ROWS);
+  var consultantRows = consultantRowsRaw.map(function(a, i){ return [String(i+1), a]; });
   doc.autoTable({ startY: y, margin:{left:M,right:M}, theme:"plain",
     styles:{ fontSize:8, cellPadding:2.7, textColor:C.ink, lineColor:C.border, lineWidth:0.25, overflow:"linebreak" },
     alternateRowStyles:{ fillColor:C.lgray },
@@ -3520,7 +4894,7 @@ function genPDF() {
     columnStyles:{ 0:{cellWidth:9,halign:"center",fontStyle:"bold"}, 1:{cellWidth:CW-9} }
   });
   y = doc.lastAutoTable.finalY + 7;
-  var qRows = getConsultantQuestions(5).map(function(q, i){ return [String(i+1), q]; });
+  var qRows = getConsultantQuestions(pdfPro ? 5 : 3).map(function(q, i){ return [String(i+1), q]; });
   doc.autoTable({ startY: y, margin:{left:M,right:M}, theme:"plain",
     styles:{ fontSize:7.5, cellPadding:2.5, textColor:C.ink, lineColor:C.border, lineWidth:0.2, overflow:"linebreak" },
     alternateRowStyles:{ fillColor:C.lgray },
@@ -3533,8 +4907,8 @@ function genPDF() {
 
   // ── SECTION 5 — INVENTAIRE RISQUES ──
   addPage();
-  secTitle("5.  INVENTAIRE ET COTATION DES RISQUES (G × P)");
-  var riskRows = allR.map(function(item) {
+  secTitle("5.  INVENTAIRE ET COTATION DES RISQUES (G × P)" + (!pdfPro && allRTotal > pdfRiskSet.length ? " — APERÇU (" + pdfRiskSet.length + "/" + allRTotal + ")" : ""));
+  var riskRows = pdfRiskSet.map(function(item) {
     var cc = item.crit >= 16 ? "ÉLEVÉ" : item.crit >= 7 ? "MODÉRÉ" : "FAIBLE";
     return [uname(item.unit.id), item.risk.intitule||item.risk.freeText||"—", CATS[item.risk.categorie]||"—",
       String(item.risk.gravite||"—"), String(item.risk.probabilite||"—"), String(item.crit), cc, (item.risk.ref||"—").split("·")[0].trim()];
@@ -3567,8 +4941,11 @@ function genPDF() {
 
   // ── SECTION 5 — PLAN DE PRÉVENTION ──
   addPage();
-  secTitle("6.  PLAN DE PRÉVENTION — VERSION GRATUITE LIMITÉE");
-  allR.forEach(function(item) {
+  secTitle(pdfPro ? "6.  PLAN DE PRÉVENTION — VERSION PRO (COMPLET)" : "6.  PLAN DE PRÉVENTION — VERSION GRATUITE (APERÇU)");
+  var planSource = pdfPro ? allR : pdfRiskSet;
+  var planLoop = pdfPro ? planSource : planSource.slice(0, Math.min(FREE_PDF_PLAN_ACTIONS_MAX, planSource.length));
+  var planRemain = pdfPro ? 0 : Math.max(0, planSource.length - planLoop.length);
+  planLoop.forEach(function(item) {
     var r = item.risk, u = item.unit, crit = item.crit;
     var cc = crit >= 16 ? "R" : crit >= 7 ? "M" : "V";
     var bCol = cc === "R" ? C.rouge : cc === "M" ? C.gold : C.vert;
@@ -3582,20 +4959,28 @@ function genPDF() {
     doc.setTextColor(230,220,200);
     doc.text(npt(uname(u.id) + " · G" + r.gravite + "×P" + r.probabilite + "=" + crit + " · " + (r.ref||"-").split("·")[0].trim()), W-M-4, y+5.5, {align:"right"});
     y += 10;
-    var prevRows = [
-      ["Pourquoi ce risque", r.source ? r.source.substring(0,220) : "À préciser après visite terrain"],
+    var prevRows = pdfPro ? [
+      ["Pourquoi ce risque", r.source ? r.source.substring(0,420) : "À préciser après visite terrain"],
       ["Facteur horaire", getRiskScheduleFactor(u, r)],
-      ["Mesures existantes", r.mesuresExist ? r.mesuresExist.substring(0,200) : "Non renseigné"],
-      ["Nouvelles mesures", "[Version complète] Plan d’action détaillé disponible dans QHSE Control après diagnostic expert."],
-      ["Responsable", "[Version gratuite] Non inclus"],
-      ["Délai", "[Version gratuite] Non inclus"],
-      ["Coût estimé", "[Version complète] Estimation détaillée disponible dans QHSE Control"],
+      ["Mesures existantes", r.mesuresExist ? r.mesuresExist.substring(0,420) : "Non renseigné"],
+      ["Nouvelles mesures", r.mesuresNew ? r.mesuresNew.substring(0,520) : "À définir"],
+      ["Responsable", r.responsable || "À désigner"],
+      ["Délai", r.delai || "—"],
+      ["Coût estimé", r.cout ? String(r.cout) : "—"],
       ["Pertinence IA", r.confidence || "À vérifier"],
       ["Avis consultant", r.consultantAdvice || "À confirmer par observation terrain et preuves documentaires."],
       ["Preuves à demander", r.evidenceNeeded || "Photos, registres, formations, entretiens opérateurs"],
       ["Question terrain", r.consultantQuestion || "Ce risque est-il confirmé par les travailleurs exposés ?"],
       ["Principes (OIT)", (r.principes||[]).map(function(n){return "P"+n+". "+PRINCIPES[n-1];}).join(" / ")||"—"]
-    ];
+    ] : (function () {
+      var freeRows = [
+        ["Pourquoi ce risque", r.source ? r.source.substring(0, 200) : "À préciser après visite terrain"],
+        ["Mesures existantes / pistes", r.mesuresExist ? r.mesuresExist.substring(0, 180) : "Non renseigné"],
+        ["Piste d’action", r.mesuresNew ? r.mesuresNew.substring(0, 180) : "À compléter avec le terrain"]
+      ].slice(0, FREE_PDF_PLAN_ROWS_PER_RISK);
+      freeRows.push(["Suite du plan", "Plan d’action complet disponible dans la version avancée"]);
+      return freeRows;
+    })();
     doc.autoTable({ startY: y, margin: { left: M, right: M }, theme: "plain",
       styles: { fontSize: 7.5, cellPadding: 2.5, textColor: C.ink, lineColor: C.border, lineWidth: 0.2, overflow:"linebreak" },
       alternateRowStyles: { fillColor: C.lgray },
@@ -3604,19 +4989,29 @@ function genPDF() {
     });
     y = doc.lastAutoTable.finalY + 6;
   });
+  if (!pdfPro && planRemain > 0) {
+    checkPage(34);
+    doc.setFillColor.apply(doc, C.lgray);
+    doc.roundedRect(M, y, CW, 28, 1.5, 1.5, "F");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); doc.setTextColor.apply(doc, C.coal);
+    doc.text(npt("Plan d’action complet disponible dans la version avancée"), M + 6, y + 11, { maxWidth: CW - 12 });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor.apply(doc, C.gray);
+    doc.text(npt("+" + planRemain + " autre(s) fiche(s) risque non détaillée(s) dans cet aperçu. Version complète : QHSE Control Pro."), M + 6, y + 19, { maxWidth: CW - 12 });
+    y += 34;
+  }
 
-  // ── SECTION 6 — LIMITES VERSION GRATUITE / CTA ──
+  // ── SECTION 7 — QHSE CONTROL / CTA ──
   checkPage(40);
-  secTitle("7.  PASSER DE L’ANALYSE AU PLAN D’ACTION SUIVI");
+  secTitle(pdfPro ? "7.  IMPORT ET PILOTAGE DANS QHSE CONTROL" : "7.  PASSER DE L’ANALYSE AU PLAN D’ACTION SUIVI");
   doc.setFillColor.apply(doc, C.lgray);
   doc.roundedRect(M, y, CW, 24, 1.5, 1.5, "F");
   doc.setFillColor.apply(doc, C.teal);
   doc.rect(M, y, 3, 24, "F");
   doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor.apply(doc, C.coal);
-  doc.text(npt("Plan d’action complet disponible dans QHSE Control après validation."), M+6, y+7, {maxWidth:CW-12});
+  doc.text(npt(pdfPro ? "Ce PDF Pro inclut une charge utile importable (page technique) pour accélérer la reprise dans QHSE Control." : "Plan d’action complet disponible dans QHSE Control après validation."), M+6, y+7, {maxWidth:CW-12});
   doc.setFont("helvetica","normal"); doc.setFontSize(8); doc.setTextColor.apply(doc, C.gray);
   doc.text(npt("QHSE Control permet de transformer cette base en plan d’action suivi : responsables, délais, coûts, preuves, relances, tableaux de bord et historique."), M+6, y+13, {maxWidth:CW-12});
-  doc.text(npt("Ces risques peuvent engager la responsabilité de l’employeur. Prochaine étape : diagnostic expert 15 min pour prioriser les corrections et débloquer le plan d’action complet."), M+6, y+20, {maxWidth:CW-12});
+  doc.text(npt(pdfPro ? "Prochaine étape : importer ou saisir les actions dans QHSE Control, puis suivre les preuves et échéances." : "Ces risques peuvent engager la responsabilité de l’employeur. Prochaine étape : diagnostic expert 15 min pour prioriser les corrections et débloquer le plan d’action complet."), M+6, y+20, {maxWidth:CW-12});
   y += 32;
 
   // ── SECTION SIGNATURES ──
@@ -3658,8 +5053,10 @@ function genPDF() {
   doc.setFont("helvetica","italic"); doc.setFontSize(7); doc.setTextColor.apply(doc, C.gray);
   doc.text(npt("Généré avec QHSE Control — Générateur DUERP Afrique de l'Ouest. Ce document ne remplace pas un audit terrain ni l'accompagnement d'un expert HSE certifié."), M, y, {maxWidth: CW});
 
-  // ── QHSE Control machine-readable payload (export PDF only) ──
-  try { injectMachineReadablePayload(buildQhseControlPayload()); } catch (_e) {}
+  // ── QHSE Control machine-readable payload (PDF Pro uniquement) ──
+  if (pdfPro) {
+    try { injectMachineReadablePayload(buildQhseControlPayload()); } catch (_e) {}
+  }
 
   // ── FOOTERS ──
   var totalPages = doc.getNumberOfPages();
@@ -3669,7 +5066,7 @@ function genPDF() {
     doc.setFillColor.apply(doc, C.gold); doc.rect(0, 284, W, 1, "F");
     doc.setFont("helvetica","normal"); doc.setFontSize(6.5);
     doc.setTextColor.apply(doc, C.goldL);
-    doc.text(truncPdfLine(ent.nom + " — DUERP " + paysInfo.nom + " — " + ent.date + " — Responsable HSE : " + ent.resp, 95), M, 290.5);
+    doc.text(truncPdfLine(ent.nom + " — DUERP " + paysInfo.nom + " — " + ent.date + " — Responsable HSE : " + ent.resp + (pdfPro ? " — Pro" : " — Gratuit"), 95), M, 290.5);
     doc.setTextColor.apply(doc, C.white);
     doc.text("QHSE Control · Page " + pg + " / " + totalPages, W-M, 290.5, {align:"right"});
   }
@@ -3677,13 +5074,17 @@ function genPDF() {
   var fname = ent.nom.replace(/[^a-zA-Z0-9]/g,"_").substring(0,35);
   doc.save("DUERP_" + paysInfo.nom.replace(/[^a-zA-Z]/g,"") + "_" + fname + "_" + ent.date + ".pdf");
   if (typeof getRiskRows === "function") getRiskRows();
-  if (typeof showSmartToast === "function") showSmartToast("warn", "PDF généré — prochaine action", "Le PDF gratuit est téléchargé. Proposez maintenant le diagnostic 15 min pour débloquer le plan d’action complet.");
+  if (typeof showSmartToast === "function") {
+    if (pdfPro) showSmartToast("warn", "PDF Pro généré", "Export complet téléchargé (inventaire, plan détaillé, charge utile QHSE Control).");
+    else showSmartToast("warn", "PDF généré — prochaine action", "PDF gratuit (aperçu) téléchargé. Pro : inventaire complet, plan d’action détaillé et import QHSE Control.");
+  }
   var status = document.getElementById("pdf-status");
   if (status) {
     status.className = "alert a-ok";
     status.style.display = "flex";
-    status.innerHTML = "✅ <div><strong>Document téléchargé !</strong> Fichier DUERP_" + paysInfo.nom.replace(/[^a-zA-Z]/g,"") + "_" + fname + ".pdf — Retrouvez-le dans vos Téléchargements. <strong>Rappel :</strong> Faites valider par un HSE qualifié avant soumission.</div>";
+    status.innerHTML = "✅ <div><strong>Document téléchargé !</strong> " + (pdfPro ? "<em>Export Pro complet.</em> " : "<em>Version gratuite (aperçu PDF).</em> ") + "Fichier DUERP_" + paysInfo.nom.replace(/[^a-zA-Z]/g,"") + "_" + fname + ".pdf — Retrouvez-le dans vos Téléchargements. <strong>Rappel :</strong> Faites valider par un HSE qualifié avant soumission.</div>";
   }
+  if (!pdfPro) scheduleConversionModalAfterPdf();
   } catch (e) {
     try { console.error("PDF generation error:", e); } catch (_e) {}
     var status = document.getElementById("pdf-status");
@@ -3706,7 +5107,17 @@ var lastAlertKey = "";
 function classifyScore(score) { if (score < 70) return { cls:"red", label:"À risque", msg:"Risque de non-maîtrise à traiter" }; if (score < 85) return { cls:"orange", label:"À renforcer", msg:"Base correcte mais actions à compléter" }; return { cls:"green", label:"Maîtrisé", msg:"Base solide à valider terrain" }; }
 function riskSeverityClass(crit) { return crit >= 16 ? "red" : crit >= 7 ? "orange" : "green"; }
 function getCurrentScoreValue() { var el = document.getElementById("score-value"); return el ? (parseInt(el.textContent, 10) || 0) : 0; }
-function getRiskRows() { var rows = getAllRisksFlat ? getAllRisksFlat() : []; try { localStorage.setItem("last_duerp_risks", JSON.stringify(rows.map(function(x){ return { title: x.risk.intitule || x.risk.freeText || "Risque non nommé", unit: uname(x.unit.id), crit: x.crit, g: x.risk.gravite || 2, p: x.risk.probabilite || 2, category: x.risk.categorie || "", confidence: x.risk.confidence || "À vérifier", schedule: getRiskScheduleFactor ? getRiskScheduleFactor(x.unit, x.risk) : "—" }; }))); } catch(e) {} return rows; }
+function getRiskRows() {
+  var rows = getAllRisksFlat ? getAllRisksFlat() : [];
+  refreshUserPlan();
+  if (!restrictFeature("risk_snapshot_local")) return rows;
+  try {
+    localStorage.setItem("last_duerp_risks", JSON.stringify(rows.map(function (x) {
+      return { title: x.risk.intitule || x.risk.freeText || "Risque non nommé", unit: uname(x.unit.id), crit: x.crit, g: x.risk.gravite || 2, p: x.risk.probabilite || 2, category: x.risk.categorie || "", confidence: x.risk.confidence || "À vérifier", schedule: getRiskScheduleFactor ? getRiskScheduleFactor(x.unit, x.risk) : "—" };
+    })));
+  } catch (e) {}
+  return rows;
+}
 function renderConversionDashboard() { var score = getCurrentScoreValue(); var state = classifyScore(score); var critical = getCriticalCount ? getCriticalCount() : 0; var temp = getLeadTemperature ? getLeadTemperature() : "cold"; var tempLabel = temp === "hot" ? "Chaud" : temp === "warm" ? "Tiède" : "Froid"; var set = function(id, val){ var el=document.getElementById(id); if(el) el.textContent=val; }; set("fk-score-value", score + "%"); set("fk-score-sub", state.msg); set("fk-critical-value", critical); set("fk-lead-value", tempLabel); set("fk-action-sub", critical >= 2 || score < 70 ? "Appeler sous 24h" : "Nourrir + proposer RDV"); [["fk-score", state.cls], ["fk-critical", critical>=2?"red":critical?"orange":"green"], ["fk-lead", temp==="hot"?"red":temp==="warm"?"orange":"green"], ["fk-action", critical>=2?"red":"orange"]].forEach(function(pair){ var el=document.getElementById(pair[0]); if(el){ el.classList.remove("red","orange","green"); el.classList.add(pair[1]); } }); }
 function showSmartToast(type, title, body) { var el = document.getElementById("smart-toast"); if(!el) return; el.className = "smart-toast " + (type || ""); el.innerHTML = "<strong>" + title + "</strong><div>" + body + "</div>"; el.classList.add("show"); clearTimeout(window._smartToastTimer); window._smartToastTimer = setTimeout(function(){ el.classList.remove("show"); }, 5200); }
 function evaluateSmartAlerts() { var score = getCurrentScoreValue(); var critical = getCriticalCount ? getCriticalCount() : 0; var key = score + "|" + critical + "|" + step; if (key === lastAlertKey || step !== 5) return; lastAlertKey = key; if (score < 70 || critical >= 2) showSmartToast("danger", "⚠️ Diagnostic prioritaire", "Score faible ou risques critiques détectés. Positionnez rapidement un diagnostic 15 min pour transformer le PDF en plan d’action suivi."); else if (score < 85 || critical === 1) showSmartToast("warn", "À renforcer", "Le diagnostic est exploitable, mais certaines actions doivent être formalisées pour éviter la perte de suivi."); }
@@ -4250,8 +5661,8 @@ function renderLegalSourcesPanelV9() {
 // Override step 5 pour afficher le panel légal.
 var goStepPreviousV9 = typeof goStep === "function" ? goStep : null;
 if (goStepPreviousV9) {
-  goStep = function(n) {
-    goStepPreviousV9(n);
+  goStep = function(n, skipValidate) {
+    goStepPreviousV9(n, skipValidate);
     if (n === 5) setTimeout(renderLegalSourcesPanelV9, 50);
   };
 }
@@ -4263,8 +5674,43 @@ if (goStepPreviousV9) {
 document.addEventListener("DOMContentLoaded", function() {
   var dateEl = document.getElementById("e_date");
   if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];
-  setMode("essential");
-  updateLegalBanner();
+  // Menu mobile topbar : fermer au tap dehors / resize.
+  document.addEventListener("click", function (e) {
+    if (!isMobileViewport()) return;
+    var menu = document.getElementById("topbar-menu");
+    var btn = document.getElementById("topbar-menu-btn");
+    if (!menu || !btn) return;
+    if (!menu.classList.contains("open")) return;
+    var t = e && e.target;
+    if (t && (menu.contains(t) || btn.contains(t))) return;
+    setTopbarMenuOpen(false);
+  }, true);
+  window.addEventListener("resize", function () { setTopbarMenuOpen(false); });
+  function finishInit() {
+    setMode("essential");
+    updateLegalBanner();
+    if (isProUser()) {
+      try {
+        var raw = localStorage.getItem(QHSE_DRAFT_KEY);
+        if (raw) {
+          var draft = JSON.parse(raw);
+          if (draft && draft.v === 1 && Array.isArray(draft.units) && draft.units.length && confirm("Restaurer votre dernier brouillon Pro enregistré sur cet appareil ?")) {
+            applyDuerpDraftSnapshot(draft);
+            updateLegalBanner();
+            restoreGoStep(draft.step || 1);
+            syncFreeTierUi();
+          }
+        }
+      } catch (e) { console.warn("Restauration brouillon ignorée:", e); }
+    }
+  }
+  if (typeof fetchAuthMe === "function") {
+    fetchAuthMe().then(finishInit).catch(finishInit);
+  } else {
+    refreshUserPlan();
+    updatePlanChrome();
+    finishInit();
+  }
 });
 </script>
 </body>

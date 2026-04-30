@@ -2,4 +2,6 @@ node_modules
 .env
 backend/.env
 backend/data/leads.json
+backend/data/waitlist.json
+backend/data/analytics_events.json
 .DS_Store

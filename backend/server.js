@@ -5,7 +5,9 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const duerpRoutes = require('./routes/duerp.routes');
 const legalRoutes = require('./routes/legal.routes');
-const adminAuth = require('./middleware/adminAuth');
+const authRoutes = require('./routes/auth.routes');
+const waitlistRoutes = require('./routes/waitlist.routes');
+const trackRoutes = require('./routes/track.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +34,9 @@ app.get('/health', (_req, res) =>
   res.json({ ok: true, service: 'QHSE DUERP backend', at: new Date().toISOString() })
 );
 
+app.use('/api', leadLimiter, waitlistRoutes);
+app.use('/api', leadLimiter, trackRoutes);
+app.use('/api/public', leadLimiter, authRoutes);
 app.use('/api/public', leadLimiter, duerpRoutes);
 app.use('/api/duerp', leadLimiter, duerpRoutes);
 app.use('/api/public', legalRoutes);
