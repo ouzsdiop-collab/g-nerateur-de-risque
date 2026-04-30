@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const duerpRoutes = require('./routes/duerp.routes');
 const legalRoutes = require('./routes/legal.routes');
 const authRoutes = require('./routes/auth.routes');
@@ -40,6 +41,12 @@ app.use('/api/public', leadLimiter, authRoutes);
 app.use('/api/public', leadLimiter, duerpRoutes);
 app.use('/api/duerp', leadLimiter, duerpRoutes);
 app.use('/api/public', legalRoutes);
+
+// Servir le frontend statique
+app.use(express.static(path.join(__dirname, '../frontend')));
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
 
 app.use((err, _req, res, _next) => {
   console.error(err);

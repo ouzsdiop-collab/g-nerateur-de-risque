@@ -3959,7 +3959,7 @@ function buildDuerpPayload() { var pays=document.getElementById("e_pays")?docume
 // Mode actuel : API si disponible, fallback localStorage si non configuré.
 // À remplacer au déploiement : API_BASE_URL = "https://api.qhsecontrol.com"
 // ══════════════════════════════════════════════════════════════
-var API_BASE_URL = window.QHSE_API_BASE_URL || "https://api.qhsecontrol.com";
+var API_BASE_URL = window.QHSE_API_BASE_URL || window.location.origin;
 var API_PUBLIC_KEY = "sb_publishable_gHpdNLyBa2SydITAMa-Q7Q_EIN_jBIj";
 (async function loadConfig() {
   try {
