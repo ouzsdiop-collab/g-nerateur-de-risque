@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<meta name="theme-color" content="#1e293b" />
+<meta name="application-name" content="QHSE Control - Générateur DUERP" />
+<meta name="description" content="Générateur DUERP gratuit pour évaluer les risques professionnels en Afrique. QHSE Control." />
 <title>Générateur DUERP Gratuit — Afrique de l'Ouest — QHSE Control</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -518,6 +524,83 @@ body {
 .ai-chip { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 4px 10px; font-size: 11px; color: rgba(255,255,255,.45); cursor: pointer; transition: all .12s; }
 .ai-chip:hover { background: rgba(15,160,160,.2); border-color: rgba(15,160,160,.35); color: #fff; }
 
+/* ─── SUGGESTIONS IA RISQUES (validation humaine obligatoire) ─── */
+.ai-suggestions-host {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r12);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.ai-suggestions-host .ash-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ai-sug-badge-ia {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: linear-gradient(120deg, rgba(15,160,160,.15), rgba(200,134,10,.12));
+  border: 1px solid rgba(15,160,160,.35);
+  color: var(--teal-d);
+}
+.ai-sug-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.ai-sug-msg { font-size: 12px; color: var(--ink3); margin-bottom: 10px; line-height: 1.5; }
+.ai-sug-msg.hidden { display: none; }
+.ai-sug-msg.warn { color: var(--amber-d); }
+.ai-sug-list { display: flex; flex-direction: column; gap: 10px; }
+.ai-sug-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r8);
+  padding: 12px 14px;
+  background: var(--bg);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 12px;
+  align-items: start;
+}
+.ai-sug-card .ai-sug-check { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--teal); cursor: pointer; }
+.ai-sug-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  justify-content: space-between;
+}
+.ai-sug-titles { min-width: 0; flex: 1; }
+.ai-sug-titles strong { font-size: 13px; color: var(--ink); display: block; margin-bottom: 4px; }
+.ai-sug-desc { font-size: 12px; color: var(--ink2); line-height: 1.5; margin: 0; }
+.ai-sug-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; font-size: 11px; color: var(--ink3); }
+.ai-sug-lvl {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+.ai-sug-lvl.critical { background: var(--red-l); color: var(--red-d); border: 1px solid var(--red-b); }
+.ai-sug-lvl.major { background: var(--amber-l); color: #92400E; border: 1px solid var(--amber); }
+.ai-sug-lvl.moderate { background: var(--green-l); color: var(--green-d); border: 1px solid var(--green); }
+.ai-sug-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.ai-sug-edit { margin-top: 10px; display: none; }
+.ai-sug-edit.open { display: block; }
+.ai-sug-edit .g2 { margin-top: 8px; }
+
 /* ─── SEC HEADER ─── */
 .sec-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .sec-ico { width: 32px; height: 32px; background: var(--teal-l); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
@@ -754,6 +837,10 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
 /* ─── RESPONSIVE — mobile-first complément (téléphone) ─── */
 @media (max-width: 640px) {
   .main { padding: 12px 12px 24px; }
+  .ai-sug-toolbar { flex-direction: column; align-items: stretch; }
+  .ai-sug-toolbar .btn { width: 100%; justify-content: center; }
+  .ai-sug-card { grid-template-columns: 1fr; }
+  .ai-sug-card .ai-sug-check { margin-top: 0; }
   .g2, .g3, .pp-grid, .measures-grid, .qg-grid, .score-shell, .score-metrics, .v2-grid { grid-template-columns: 1fr; }
   .topbar {
     padding: 10px 12px;
@@ -1262,12 +1349,13 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
           <option value="">— Sélectionner —</option>
           <option value="mines">⛏ Mines / Or / Bauxite / Diamant / Phosphate</option>
           <option value="petrole">🛢 Pétrole / Gaz / Raffinage</option>
+          <option value="energie">⚡ Énergie (production, transport, distribution — HT, hydro, solaire)</option>
           <option value="btp">🏗 BTP / Génie Civil / Infrastructures</option>
           <option value="agro">🌱 Agro-industrie / Cacao / Café / Coton / Sucre</option>
           <option value="port">⚓ Port / Logistique / Transport</option>
           <option value="industrie">⚙️ Industrie manufacturière / Cimenterie</option>
           <option value="sante">🏥 Santé / Hôpital / Clinique</option>
-          <option value="telecom">📡 Télécoms / Énergie / Eau</option>
+          <option value="telecom">📡 Télécoms / Réseaux / Eau</option>
           <option value="banque">🏦 Banque / Finance / Services</option>
           <option value="autre">📋 Autre</option>
         </select>
@@ -1431,6 +1519,20 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   </div>
   <div class="sec-hdr"><div class="sec-ico">⚠️</div><div><div class="sec-tit">Identification des risques</div><div class="sec-sub">Saisie libre → analyse automatique · Risques tropicaux intégrés</div></div></div>
   <div class="alert a-warn">⚠️ <div><strong>Validation terrain requise.</strong> Les suggestions IA sont basées sur les référentiels OIT et les codes du travail CEDEAO. Chaque risque doit être confirmé par observation directe sur le site.</div></div>
+  <div class="ai-suggestions-host" id="ai-risk-suggestions-host">
+    <div class="ash-title">
+      Risques proposés automatiquement
+      <span class="ai-sug-badge-ia" title="Propositions à valider avant intégration">Suggestion IA</span>
+    </div>
+    <p class="hint" style="margin:0 0 12px">Aucun risque n’est ajouté tant que vous n’avez pas cliqué sur « Valider les risques sélectionnés ». Vous pouvez décocher, modifier ou supprimer chaque proposition.</p>
+    <div class="ai-sug-toolbar">
+      <button type="button" class="btn btn-p" id="btn-ai-suggest-risks" onclick="runAiRiskSuggestions(event)">✨ Obtenir des suggestions IA</button>
+      <button type="button" class="btn btn-s" id="btn-ai-suggest-add-manual" onclick="addManualAiSuggestion()">+ Ajouter une proposition manuelle</button>
+      <button type="button" class="btn btn-ok" id="btn-ai-suggest-validate" onclick="validateSelectedAiRisks()">Valider les risques sélectionnés</button>
+    </div>
+    <div class="ai-sug-msg hidden" id="ai-sug-status"></div>
+    <div class="ai-sug-list" id="ai-sug-list"></div>
+  </div>
   <div id="risks-container"></div>
   <div class="nav-row">
     <button class="btn btn-s" onclick="prevStep(3)">← Retour</button>
@@ -1661,7 +1763,7 @@ var KB = [
     cat: "physique", g: 4, p: 3,
     title: "Chutes (hauteur / plain-pied)",
     ref: "OIT C155 · Code travail CI Art.42 · INRS ED6110",
-    source: "Travaux en hauteur sans protections, sols instables, excavations non balisées",
+    source: "Travaux en hauteur (toiture, échafaudage, coffrage) ou circulation en bord de fouille : protections collectives absentes ou insuffisantes, garde-corps incomplets, points d’ancrage harnais non qualifiés ; opérateurs et compagnons exposés à la perte d’équilibre ; conséquences possibles : traumatismes graves, arrêt du poste, responsabilité employeur — à confirmer sur site.",
     exist: "Signalisation périmètre. EPI hauteur (harnais). Balisage excavations.",
     mesure: "Garde-corps H ≥ 1m obligatoires. Harnais EN361 + lignes de vie pour H > 2m. Filets de sécurité. Formation travaux hauteur. Éclairage nocturne zones circulation. Chaussures antidérapantes S3.",
     principes: [1,3,7,8,9]
@@ -1721,21 +1823,21 @@ var KB = [
     principes: [1,3,7,8,9]
   },
   {
-    kw: ["electrique","electrocution","cable","installation","tableau","tension","ligne","habilitation","groupe","electricite"],
+    kw: ["electrique","electrocution","cable","installation","tableau","tension","ligne","habilitation","groupe","electricite","haute tension","arc","consignat","loto","sous tension","transformateur","poste electrique"],
     cat: "electrique", g: 4, p: 3,
     title: "Risque électrique",
     ref: "OIT C155 · Codes électriques locaux · NF C 15-100",
-    source: "Installations provisoires, câbles endommagés, interventions sans consignation",
+    source: "Interventions sur installations sous tension ou à proximité : consignation incomplète, outillage non isolé, câbles provisoires endommagés ou tableaux non verrouillés ; électriciens et mainteneurs exposés à l’électrisation, à l’arc électrique ou aux brûlures ; conséquences possibles : lésions graves, arrêt d’exploitation — nécessite validation terrain des habilitations et procédures LOTO.",
     exist: "Vérification annuelle. DDR 30mA. EPI isolants disponibles.",
     mesure: "Habilitation électrique obligatoire. Procédure CONSIGNATION 5 étapes (LOTO). Câbles aériens ou protégés mécaniquement. DDR 30mA locaux humides. Registre habilitations. Vérification trimestrielle installations provisoires. Éclairage secours.",
     principes: [1,3,5,8,9]
   },
   {
-    kw: ["incendie","explosion","feu","inflammable","gaz","carburant","gazole","fioul","stockage","citerne","atex"],
+    kw: ["incendie","explosion","feu","inflammable","gaz","carburant","gazole","fioul","stockage","citerne","atex","torchere","torchère","pipeline","hydrocarbure","raffinage","vapeur","pression"],
     cat: "incendie", g: 5, p: 3,
     title: "Incendie / Explosion",
     ref: "OIT C155 · NFPA · Codes sécurité incendie locaux",
-    source: "Stockage carburants, gaz, matières inflammables, ateliers soudure, dépôts explosifs (mines)",
+    source: "Zones ATEX ou stockage d’hydrocarbures : fuites sous pression, torchères, pipelines ou joints vétustes, sources d’ignition (soudure, véhicules non conformes) ; opérateurs exposés à déflagration, projection de flamme ou fumées toxiques ; conséquences possibles : blessures graves, arrêt d’installation, enjeu bailleur — à confirmer par analyse terrain et permis feu.",
     exist: "Extincteurs vérifiés. Plan évacuation affiché. Exercice annuel.",
     mesure: "Zones stockage carburant balisées (30m des habitations). Cuves double paroi. Extincteurs adaptés (ABC poudre). Détecteurs fumée/gaz dans locaux. Exercice évacuation semestriel. Équipiers intervention formés. Système alarme audible sur tout le site. Séparation matières incompatibles.",
     principes: [1,3,6,7,8,9]
@@ -1830,7 +1932,8 @@ var DELAIS = { immediat: "< 1 mois", court: "1-3 mois", moyen: "3-12 mois", long
 
 var SECTOR_RISK_MAP = {
   mines:    ["bruit","chute","chaleur","poussiere","chimique","circulation","explosif","biologique","electrique","incendie","noyade","communaute"],
-  petrole:  ["incendie","chimique","electrique","circulation","chaleur","bruit","biologique","chute"],
+  petrole:  ["incendie","chimique","electrique","circulation","chaleur","bruit","biologique","chute","atex"],
+  energie:  ["electrique","incendie","chute","chaleur","circulation","bruit","chimique","rps"],
   btp:      ["chute","bruit","chaleur","manutention","circulation","electrique","vibration","chimique"],
   agro:     ["chimique","manutention","biologique","bruit","chaleur","tms","incendie"],
   port:     ["manutention","circulation","chute","noyade","bruit","tms","chimique"],
@@ -2035,7 +2138,10 @@ function trackEvent(name) {
   try {
     if (typeof getQhseApiBase === "function") base = getQhseApiBase();
   } catch (e) {}
-  if (!base) base = String(window.QHSE_API_BASE_URL || "https://api.qhsecontrol.com").replace(/\/$/, "");
+  if (!base) {
+    try { base = String(window.QHSE_API_BASE_URL || window.location.origin || "").replace(/\/$/, ""); }
+    catch (e2) { base = ""; }
+  }
   var payload = {
     event: ev,
     date: new Date().toISOString(),
@@ -2704,27 +2810,30 @@ function askAI(inputId, respId, typingId) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// PROMPT PHASE 1 (structure de la situation) — consultant QHSE
+// CHARTE CONSULTANT — secteurs à risques élevés + terrain Afrique (réf. phase 1 & moteur risques)
 // ══════════════════════════════════════════════════════════════════════
-var PROMPT_PHASE_1 = `Tu es un consultant senior QHSE spécialisé en évaluation des risques professionnels et en structuration de situations de travail.
+var PROMPT_PHASE_1 = `Tu es un consultant senior QHSE intervenant sur sites réels (mines, pétrole & gaz, énergie, BTP), y compris en Afrique : tu raisonnes comme un expert terrain.
 
-Ta mission est de reformuler les informations brutes fournies par l’utilisateur en une description professionnelle, claire et exploitable pour une analyse de risques.
+MISSION : analyser les informations fournies et produire une évaluation des risques professionnels crédible, contextualisée et exploitable.
 
-Règles :
-- Ne pas inventer d’informations critiques non fournies.
-- Améliorer la qualité rédactionnelle.
-- Structurer les idées.
-- Supprimer les formulations vagues.
-- Ajouter uniquement du contexte métier raisonnable si cela découle clairement des informations données.
-- Utiliser un langage terrain crédible.
-- Garder un style professionnel et compréhensible.
+PRINCIPES :
+1) CONTEXTUALISATION MÉTIER — Adapter chaque risque à l’activité, l’unité, les tâches, les équipements et les contraintes terrain. Intégrer si pertinent : mines (dynamitage, engins lourds, instabilité des sols, poussières minérales, cyanuration) ; oil & gas (ATEX, gaz inflammables, pression, pipelines, torchères) ; énergie (haute tension, consignation, arc électrique, maintenance critique) ; BTP (hauteur, chutes d’objets, effondrement fouilles, coactivité, engins/piétons, électricité provisoire, manutention, climat chaud/pluie).
 
-Format de sortie obligatoire :
-Description structurée de la situation de travail :
-[texte structuré]
+2) LOGIQUE EXPERTE — Pour chaque risque : situation → cause → exposition → conséquence (phrase factuelle, précise).
 
-Points à préciser si nécessaire :
-[liste courte de points manquants ou incertains]
+3) TERRAIN AFRIQUE — Si pertinent : maintenance irrégulière, matériel vieillissant, EPI variables, formation incomplète, pression de production, coactivité mal organisée, climat difficile.
+
+4) ANTI-DOUBLONS — Ne pas répéter un risque identique ; différencier par unité, tâche, contexte.
+
+5) PRIORISATION — Au-delà de G×P : gravité humaine, fréquence terrain, impact activité / business, criticité réglementaire ou bailleur.
+
+6) LANGAGE — Phrases claires, vocabulaire pro ; éviter « risque de chute », « risque d’accident », « danger potentiel » (décrire le mécanisme et l’exposition).
+
+7) ESPRIT CRITIQUE — Utiliser « à confirmer sur site » / « nécessite validation terrain » lorsque c’est pertinent.
+
+STRUCTURE D’ANALYSE COMPLÈTE : 1. Synthèse globale — 2. Risques critiques — 3. Risques majeurs — 4. Risques modérés — 5. Analyse consultant — 6. Plan d’action (partiel) — 7. Conclusion (accompagnement pour preuves et mise en œuvre).
+
+RÈGLES : ne pas prétendre remplacer une visite terrain ; toujours laisser une marge pour validation humaine.
 `;
 
 function phase1StructureSituation(brut) {
@@ -2750,7 +2859,7 @@ function phase1StructureSituation(brut) {
   }
 
   var activity = pickByKeywordsOrFallback(
-    ['mine', 'minee', 'carriere', 'chantier', 'btp', 'atelier', 'industrie', 'agro', 'transport', 'logistique', 'bureau', 'administr', 'hopital', 'clini', 'petrole', 'energie', 'telecom', 'sante'],
+    ['mine', 'minee', 'minier', 'carriere', 'chantier', 'btp', 'atelier', 'industrie', 'agro', 'transport', 'logistique', 'bureau', 'administr', 'hopital', 'clini', 'petrole', 'raffin', 'gaz', 'energie', 'hydro', 'solaire', 'haute tension', 'telecom', 'sante'],
     lines[0]
   );
   var poste = pickByKeywordsOrFallback(
@@ -2805,6 +2914,14 @@ function phase1StructureSituation(brut) {
 
   res += "\n\nPoints à préciser si nécessaire :\n" +
     (missing.length ? missing.map(function(m) { return "- " + m; }).join("\n") : "- Aucune information manquante identifiée (à confirmer terrain)");
+
+  res += "\n\nFil rouge consultant (génération / relecture des fiches risques) :\n" +
+    "- Pour chaque fiche : situation de travail → cause / mécanisme → personnes exposées → conséquences plausibles (formulation factuelle).\n" +
+    "- Contextualiser par unité, tâche, équipement ; intégrer si pertinent contraintes terrain Afrique (maintenance, matériel, EPI, formation, cadence, coactivité, climat).\n" +
+    "- Prioriser au-delà du seul G×P : sévéité pour les personnes, réalisme de la fréquence terrain, impact activité, exigences légales ou bailleur.\n" +
+    "- Éviter les formulations floues du type « risque de chute », « risque d’accident », « danger potentiel » ; décrire le scénario et l’exposition.\n" +
+    "- Pas de doublon sans nuance : différencier selon l’unité ou le poste de travail.\n" +
+    "- Mentionner explicitement ce qui doit être « confirmé sur site » ou soumis à « validation terrain » lorsque les données sont indirectes.";
 
   return res;
 }
@@ -2959,7 +3076,8 @@ function getSectorSeeds(secteur) {
 function inferUnitNames(text, secteur) {
   var byS = {
     mines:    ["Forage et abattage", "Traitement et cyanuration", "Conduite engins lourds", "Maintenance mécanique", "Bureau HSE et technique"],
-    petrole:  ["Production / Exploitation", "Maintenance industrielle", "Laboratoire / Qualité", "Bureau et administration"],
+    petrole:  ["Tête de puits / production", "Raffinage ou traitement", "Maintenance mécanique & instrumentation", "Sécurité process / ATEX", "Bureau et administration"],
+    energie:  ["Production (centrale, champs)", "Transport / lignes HT ou pipelines", "Distribution / postes", "Maintenance et consignation", "Bureau technique"],
     btp:      ["Travaux gros-oeuvre", "Finitions et second-oeuvre", "Conduite engins TP", "Bureau de chantier"],
     agro:     ["Production / Champs", "Usine / Transformation", "Maintenance", "Logistique"],
     port:     ["Opérations portuaires", "Manutention / Magasinage", "Sécurité / Gardiennage", "Administration"],
@@ -3052,12 +3170,85 @@ function addFreeTextTemplates(ctx, type, out) {
   }
   return out.filter(Boolean);
 }
+
+/** Gabarits sectoriels haute criticité (mines, hydrocarbures, énergie, BTP) — logique situation → cause → exposition → conséquence. */
+function addHighRiskSectorTemplates(ctx, type, out) {
+  var sect = (document.getElementById("e_secteur") || {}).value || "";
+  var t = unitContextText(ctx);
+  function hasTitle(title) { return out.some(function(x) { return x && x.title === title; }); }
+  function push(tpl) {
+    if (!tpl || !tpl.title || hasTitle(tpl.title)) return;
+    tpl.principes = tpl.principes || [1, 3, 7, 8, 9];
+    tpl.confidence = tpl.confidence || "Élevée";
+    tpl._ctx = ctx;
+    tpl._unitType = type;
+    out.push(tpl);
+  }
+  if (sect === "mines") {
+    push({
+      title: "Instabilité de talus, fouille ou masse rocheuse (enfouissement, perte d’équilibre)",
+      cat: "physique", g: 5, p: 3,
+      ref: "OIT C155 · Exploitation à ciel ouvert · ICMM",
+      source: "Travail en pied ou sur bord de hauteur, sols désarticulés après abattage ou intempéries : glissement ou effondrement de paroi ; opérateurs et engins exposés à l’enfouissement ou à la chute de blocs ; conséquences possibles : traumatismes graves, arrêt d’exploitation — à confirmer sur site (géotechnique, registres de tir).",
+      exist: "Balisage ponctuel, consignes de non-approche.",
+      mesure: "Relevés géotechniques, benching et drainage, périmètres d’exclusion, contrôle après pluie, briefing avant accès, inspection quotidienne talus, coordination tirs / accès.",
+      question: "Les zones actives sont-elles stabilisées et balisées selon l’avis géotechnique et les registres de tir ?"
+    });
+  }
+  if (sect === "petrole") {
+    push({
+      title: "Déflagration / incendie en zone hydrocarbures (ATEX, pression, torchère, pipeline)",
+      cat: "incendie", g: 5, p: 3,
+      ref: "OIT C155 · IFC PS3 · bonnes pratiques raffinage / production",
+      source: "Opérations sur équipements contenant gaz ou liquides inflammables sous pression ; fuites, purge inadéquate ou source d’ignition en zone classée ; opérateurs exposés à flux de flamme, surpression ou fumées ; conséquences possibles : brûlures graves, arrêt d’installation — nécessite validation terrain des permis feu et mesures atmosphériques.",
+      exist: "Permis de travail et consignes générales zone.",
+      mesure: "Cartographie ATEX, mesures LEL/O2 avant travaux, inertage si besoin, isolation et dépressurisation, permis feu/chaud, EPI ignifugés, maintenance joints et vannes priorisée, équipe intervention incendie.",
+      question: "Les entrées en zone classée sont-elles systématiquement couvertes par analyse atmosphérique et permis validés ?"
+    });
+  }
+  if (sect === "energie" || sect === "telecom") {
+    push({
+      title: "Arc électrique ou contact indirect lors d’interventions HT / BT (consignation)",
+      cat: "electrique", g: 5, p: 2,
+      ref: "OIT C155 · Habilitation · procédures consignation (LOTO)",
+      source: "Travail sur ou à proximité de parties sous tension : consignation incomplète, erreur d’identification de circuit, outillage non adapté ; électriciens et compagnons exposés à arc ou électrisation ; conséquences possibles : brûlures graves, arrêt cardio-respiratoire — à confirmer par audit des habilitations et registres LOTO.",
+      exist: "Procédure interne et EPI isolants disponibles.",
+      mesure: "Vérification absence de tension systématique, consignation matérialisée, consignes de travail sous tension si exception, outillage isolé 1000 V, barrières et signalisation, binôme sur postes critiques, revue des habilitations.",
+      question: "Chaque intervention est-elle tracée avec schéma unifilaire, consignation et personne habilitée présente ?"
+    });
+  }
+  if (sect === "btp") {
+    push({
+      title: "Coactivité chantier — heurts et écrasements entre engins de chantier et piétons",
+      cat: "physique", g: 5, p: 4,
+      ref: "OIT C155 · Coactivité · circulation chantier",
+      source: "Circulation simultanée d’engins TP et piétons sur voies non séparées, visibilité réduite (poussière, pluie), signalisation insuffisante ; opérateurs et compagnons exposés à collision ou écrasement ; conséquences possibles : traumatismes graves, arrêt de chantier — à confirmer sur levé de circulation réel.",
+      exist: "Consignes orales et gilets visibilité.",
+      mesure: "Plan de circulation, séparation physique engins/piétons, piétons formés, signaleurs aux carrefours, limitation vitesse, gyrophares/recul, interdiction de stationnement sous charge, briefing coactivité par corps d’état.",
+      question: "Le plan de circulation est-il appliqué et contrôlé aux heures de pointe livraison ?"
+    });
+    if (t.includes("pluie") || t.includes("saison") || t.includes("boue") || t.includes("gliss")) {
+      push({
+        title: "Glissades et affaissement d’assises en saison des pluies (BTP)",
+        cat: "physique", g: 4, p: 3,
+        ref: "OIT C155 · Conditions climatiques · stabilité des sols",
+        source: "Pluies intenses : sols saturés, bâches glissantes, fouilles non drainées ; travailleurs exposés à glissades et affaissement de plates-formes ; conséquences possibles : blessures, arrêt partiel des travaux — nécessite validation terrain après épisode pluvieux.",
+        exist: "Évacuation d’eau ponctuelle.",
+        mesure: "Drainage fouilles, revêtements antidérapants, révision accès et rampes, réduction travaux en hauteur par temps de pluie, contrôle quotidien des talus et blindages.",
+        question: "Les accès et blindages sont-ils réinspectionnés après chaque épisode de pluie significatif ?"
+      });
+    }
+  }
+  return out.filter(Boolean);
+}
+
 function generateContextualTemplatesForUnit(uid) {
   var ctx=getUnitContext(uid), type=detectUnitType(ctx), text=unitContextText(ctx);
   var out=BUSINESS_RISK_TEMPLATES.filter(function(tpl){ return templateMatchesContext(tpl,text,type); });
   out=addScheduleTemplates(ctx,type,out);
   out=addFreeTextTemplates(ctx,type,out);
   out=addConsultantExpertTemplates(ctx,type,out);
+  out=addHighRiskSectorTemplates(ctx,type,out);
   if(ctx.workers>=30) out.push({unitTypes:[type],keys:["effectif"],title:"Risque organisationnel lié à un effectif élevé",cat:"psychosocial",g:3,p:3,ref:"OIT C155 · Organisation prévention",source:"Effectif important sur une même unité : coordination, supervision, consignes et coactivité.",exist:"Encadrement opérationnel présent.",mesure:"Brief sécurité quotidien, ratio supervision adapté, affichage consignes, remontée presque-accidents, contrôle port EPI, plan circulation interne.",principes:[2,7,8,9],confidence:"Moyenne", evidence:"Briefs sécurité, ratio encadrement, registre remontées terrain", question:"L'encadrement permet-il de contrôler réellement les consignes pour tout l'effectif exposé ?"});
   out=out.filter(function(tpl){
     if(!tpl) return false;
@@ -3180,7 +3371,7 @@ function deduplicateAndContextualizeRisks(risks, context) {
     var task = short(unitCtx && unitCtx.description, 140);
     var envTxt = short((unitCtx && unitCtx.schedule ? scheduleLabel(unitCtx.schedule) : "") + " " + (unitCtx && unitCtx.description ? unitCtx.description : unitCtx && unitCtx.name), 160);
     var exposure = (task || envTxt) ? ("travailleurs présents et réalisant les tâches sur la zone décrite") : "travailleurs exposés sur la zone décrite";
-    return "Risque : " + (risk.intitule || risk.freeText || "Risque non nommé") + "\n" +
+    return "Scénario documenté : " + (risk.intitule || risk.freeText || "À nommer") + "\n" +
       "Cause probable : " + causeForKind(kind, unitCtx) + "\n" +
       "Contexte (tâche + environnement) : " + (task || "activité à préciser") + " | " + envTxt + "\n" +
       "Exposition : " + exposure + "\n" +
@@ -3352,9 +3543,10 @@ var CONSULTANT_EXPERT_TEMPLATES = [
   { keys:["pas suivi incident","incidents non suivis","presque accident","non declare","registre absent","pas de reporting"], title:"Absence de suivi formalisé des incidents et presque-accidents", cat:"psychosocial", g:4, p:3, ref:"OIT C155 · Enquête et déclaration incidents", source:"Le texte évoque une absence de registre, de déclaration ou de traitement structuré des incidents.", exist:"Remontées orales ou gestion au cas par cas.", mesure:"Créer un registre incidents/presque-accidents, définir une procédure déclaration sous 24h, analyser les causes, suivre les actions correctives et produire un reporting mensuel.", principes:[2,7,9], confidence:"Élevée", evidence:"Registre incidents, fiches d’enquête, plan d’actions, KPI mensuels", question:"Les incidents et presque-accidents sont-ils enregistrés, analysés et suivis jusqu’à clôture ?" },
   { keys:["maintenance irreguliere","pas maintenance","maintenance corrective","panne repetee","equipement ancien","equipements anciens","machine ancienne","materiel vieux"], title:"Maintenance préventive insuffisante / équipements vieillissants", cat:"physique", g:4, p:3, ref:"OIT C155 · Maintenance sûre des équipements", source:"Le contexte mentionne des équipements anciens, pannes répétées ou maintenance irrégulière, augmentant la probabilité d’accident et d’arrêt activité.", exist:"Maintenance corrective ou dépannage en cas de panne.", mesure:"Mettre en place planning maintenance préventive, check-list avant utilisation, registre pannes, consignation des équipements non conformes et budget remplacement prioritaire.", principes:[1,3,5,7,8,9], confidence:"Élevée", evidence:"Planning maintenance, check-lists, registre pannes, fiches consignation", question:"Quels équipements critiques n’ont pas de maintenance préventive tracée ?" },
   { keys:["sans ventilation","mauvaise ventilation","pas climatisation","air confine","local ferme","poussiere visible"], title:"Ventilation insuffisante / accumulation de polluants", cat:"chimique", g:3, p:4, ref:"OIT C155 · Ventilation et atmosphères de travail", source:"Le texte signale une ventilation limitée, un local fermé ou une accumulation de poussières/chaleur.", exist:"Ventilation naturelle ou ouverture ponctuelle.", mesure:"Évaluer la ventilation, installer extraction ou renouvellement d’air, réduire poussières à la source, organiser nettoyage adapté, surveiller symptômes respiratoires et chaleur.", principes:[2,3,7,8,9], confidence:"Moyenne", evidence:"Plan ventilation, observations, mesures poussières/température, registre nettoyage", question:"L’air est-il renouvelé suffisamment pendant les pics de production et de chaleur ?" },
-  { keys:["sous traitant","sous-traitant","prestataire","interimaire","journalier","contractuel"], title:"Maîtrise HSE des sous-traitants insuffisante", cat:"psychosocial", g:4, p:3, ref:"OIT C155 · Coordination coactivité · IFC PS2", source:"La présence de sous-traitants/prestataires crée un risque de coactivité, de consignes non partagées et de responsabilités mal définies.", exist:"Consignes générales communiquées à l’arrivée.", mesure:"Intégrer clauses HSE aux contrats, accueil sécurité obligatoire, permis de travail si nécessaire, supervision terrain, partage des plans de prévention et remontée incidents sous-traitants.", principes:[2,7,8,9], confidence:"Élevée", evidence:"Contrats avec clauses HSE, induction prestataires, permis de travail, plan prévention", question:"Les prestataires suivent-ils les mêmes exigences HSE que les salariés internes ?" },
+  { keys:["sous traitant","sous-traitant","prestataire","interimaire","journalier","contractuel","coactivite","coactivité","plusieurs corps","corps de metier"], title:"Maîtrise HSE des sous-traitants insuffisante", cat:"psychosocial", g:4, p:3, ref:"OIT C155 · Coordination coactivité · IFC PS2", source:"Coactivité : sous-traitants et équipes internes sur les mêmes zones — consignes non partagées, permis incomplets ou interfaces mal cadrées ; travailleurs exposés à des événements liés à des activités d’autres corps d’état.", exist:"Consignes générales communiquées à l’arrivée.", mesure:"Intégrer clauses HSE aux contrats, accueil sécurité obligatoire, permis de travail si nécessaire, supervision terrain, partage des plans de prévention et remontée incidents sous-traitants.", principes:[2,7,8,9], confidence:"Élevée", evidence:"Contrats avec clauses HSE, induction prestataires, permis de travail, plan prévention", question:"Les prestataires suivent-ils les mêmes exigences HSE que les salariés internes ?" },
+  { keys:["pression production","cadence","delai serre","delai serré","objectif tonne","tonnage","rentabilite"], title:"Pression de production et compromis sur les consignes de sécurité", cat:"psychosocial", g:4, p:4, ref:"OIT C155 · Organisation du travail · IFC PS2", source:"Objectifs de cadence ou délais serrés : raccourcissement des contrôles, contournement ponctuel des consignes ou EPI ; équipes exposées à des erreurs et à des contacts avec des énergies ou engins.", exist:"Management rappelle ponctuellement la sécurité.", mesure:"Fixer des temps sécurité non compressibles, mesurer la charge réelle, impliquer les opérateurs dans l’ordonnancement, autoriser le droit d’arrêt, suivre les presque-accidents liés à la cadence.", principes:[2,4,7,9], confidence:"Moyenne", evidence:"Plannings, registre presque-accidents, entretiens équipes", question:"La cadence actuelle laisse-t-elle appliquer les consignes sans raccourci ?" },
   { keys:["travail seul","isolement","site isole","zone isolee","chauffeur seul","gardien seul"], title:"Travail isolé / secours tardifs", cat:"psychosocial", g:4, p:3, ref:"OIT C155 · Organisation des secours", source:"Le contexte indique des postes ou trajets isolés pouvant retarder l’alerte et la prise en charge en cas d’accident.", exist:"Téléphone disponible ou contact informel.", mesure:"Mettre une procédure travail isolé, pointage départ/retour, moyen d’alerte fonctionnel, binôme pour tâches critiques, premiers secours et protocole évacuation.", principes:[1,2,7,9], confidence:"Moyenne", evidence:"Procédure travail isolé, registre pointage, moyens d’alerte, plan secours", question:"Combien de temps faut-il pour détecter et secourir un travailleur isolé ?" },
-  { keys:["route degradee","routes degradees","mauvais etat route","nuit","livraison nuit","trajet long","pression delais"], title:"Risque routier aggravé par conditions de trajet", cat:"physique", g:5, p:4, ref:"OIT C155 · Gestion du risque routier", source:"Routes dégradées, conduite nocturne, longs trajets ou pression délais augmentent fortement la probabilité d’accident grave.", exist:"Permis vérifiés et véhicule disponible.", mesure:"Planifier trajets de jour, contrôler fatigue, check-list véhicule, maintenance préventive, limitation vitesse, suivi départ/arrivée, interdiction départ si véhicule non conforme.", principes:[1,3,7,8,9], confidence:"Élevée", evidence:"Planning trajets, check-lists véhicule, carnet entretien, registre conduite/repos", question:"Les trajets nocturnes ou sur routes dégradées sont-ils réellement nécessaires et encadrés ?" }
+  { keys:["route degradee","routes degradees","mauvais etat route","nuit","livraison nuit","trajet long","pression delais"], title:"Risque routier aggravé par conditions de trajet", cat:"physique", g:5, p:4, ref:"OIT C155 · Gestion du risque routier", source:"Routes dégradées, conduite nocturne, longs trajets ou pression de délais : perte de maîtrise du véhicule, heurts ou sorties de route ; conducteurs et passagers exposés à traumatismes graves et arrêt de la mission.", exist:"Permis vérifiés et véhicule disponible.", mesure:"Planifier trajets de jour, contrôler fatigue, check-list véhicule, maintenance préventive, limitation vitesse, suivi départ/arrivée, interdiction départ si véhicule non conforme.", principes:[1,3,7,8,9], confidence:"Élevée", evidence:"Planning trajets, check-lists véhicule, carnet entretien, registre conduite/repos", question:"Les trajets nocturnes ou sur routes dégradées sont-ils réellement nécessaires et encadrés ?" }
 ];
 
 function addConsultantExpertTemplates(ctx, type, out) {
@@ -3404,16 +3596,24 @@ function buildRiskConsultantAdvice(risk, ctx, type) {
 
 function buildConsultantSummary(allR) {
   var rows = allR || getAllRisksFlat();
+  var n = rows.length;
   var critical = rows.filter(function(x){ return x.crit >= 16; }).length;
+  var major = rows.filter(function(x){ return x.crit >= 7 && x.crit < 16; }).length;
+  var moderate = rows.filter(function(x){ return x.crit < 7; }).length;
   var missingActions = rows.filter(function(x){ return !x.risk.mesuresNew || !x.risk.mesuresNew.trim(); }).length;
   var weakConfidence = rows.filter(function(x){ return (x.risk.confidence || "").indexOf("Moyenne") >= 0 || (x.risk.confidence || "").indexOf("vérifier") >= 0; }).length;
   var unitsWithNight = units.filter(function(u){ var ctx = getUnitContext(u.id); return ["2x8","3x8","nuit","variable"].indexOf(ctx.schedule) >= 0; }).length;
   var advice = [];
-  if (critical) advice.push("Prioriser " + critical + " risque(s) critique(s) avant toute diffusion externe du document.");
-  if (missingActions) advice.push("Compléter les mesures nouvelles : " + missingActions + " risque(s) n’ont pas un plan d’action suffisamment formalisé.");
-  if (unitsWithNight) advice.push("Analyser spécifiquement fatigue et vigilance : " + unitsWithNight + " unité(s) avec horaires atypiques.");
-  if (weakConfidence) advice.push("Prévoir une validation terrain : " + weakConfidence + " risque(s) avec pertinence moyenne ou à vérifier.");
-  if (!advice.length) advice.push("Base structurée : organiser une revue HSE terrain pour confirmer cotations et preuves.");
+  advice.push("1. Synthèse globale : " + n + " risque(s) inventorié(s) — répartition indicative : " + critical + " critique(s), " + major + " majeur(s) (G×P 7–15), " + moderate + " modéré(s) à faible(s) (G×P < 7). Croiser avec historique incidents, exigences bailleur et réalité terrain.");
+  advice.push("2. Risques critiques (G×P ≥ 16) : " + critical + " fiche(s) — traiter avant audit, inspection ou engagement contractuel ; valider gravité humaine, fréquence observée et impact activité au-delà du seul score.");
+  advice.push("3. Risques majeurs (G×P 7–15) : " + major + " fiche(s) — plan d’action et preuves à caler avec le terrain (typ. 3 à 12 mois selon criticité opérationnelle).");
+  advice.push("4. Risques modérés (G×P < 7) : " + moderate + " fiche(s) — surveillance, briefs et revues périodiques.");
+  if (unitsWithNight) advice.push("5. Analyse consultant : " + unitsWithNight + " unité(s) en horaires atypiques — croiser fatigue, EPI et consignes avec les opérateurs ; compléter par entretiens et observations.");
+  else advice.push("5. Analyse consultant : confirmer sur site chaque scénario (situation → cause → exposition → conséquence) et l’adéquation EPI / formations.");
+  if (weakConfidence) advice.push("   — À noter : " + weakConfidence + " fiche(s) en pertinence moyenne ou « à vérifier » : validation terrain prioritaire.");
+  if (missingActions) advice.push("6. Plan d’action (partiel) : " + missingActions + " fiche(s) sans mesures nouvelles suffisamment détaillées — compléter responsables, délais, budget ; prioriser postes exposés et coactivité.");
+  else advice.push("6. Plan d’action (partiel) : esquisse présente — affiner par unité, preuves terrain et priorisation avec l’encadrement.");
+  advice.push("7. Conclusion : document utile pour cadrer un accompagnement HSE ; il ne remplace pas une validation par un responsable qualifié ni les obligations locales (inspection du travail, codes sectoriels).");
   return advice;
 }
 
@@ -3429,6 +3629,334 @@ function getConsultantQuestions(limit) {
     "Les cotations G×P reflètent-elles les accidents réels et presque-accidents du site ?"
   ];
   return q.slice(0, limit || 5);
+}
+
+// ══════════════════════════════════════════════════════════════
+// SUGGESTIONS IA RISQUES — validation humaine obligatoire (aucun ajout auto)
+// ══════════════════════════════════════════════════════════════
+var qhseAiPendingSuggestions = [];
+
+function collectRiskSuggestionContext() {
+  var actStructured = document.getElementById("quick-activity-structured");
+  var actQuick = document.getElementById("quick-activity");
+  var activité = (actStructured && actStructured.value.trim()) || (actQuick && actQuick.value.trim()) || "";
+  var secteur = (document.getElementById("e_secteur") || {}).value || "";
+  var pays = (document.getElementById("e_pays") || {}).value || "";
+  var contraintes = (document.getElementById("e_obs") || {}).value || "";
+  var unitList = units.map(function(u) {
+    var ctx = getUnitContext(u.id);
+    return {
+      id: u.id,
+      name: (ctx.name || "").trim() || uname(u.id),
+      workers: ctx.workers,
+      schedule: ctx.schedule,
+      description: (ctx.description || "").trim()
+    };
+  });
+  var tachesExtract = "";
+  try {
+    if (activité && typeof phase1StructureSituation === "function") {
+      tachesExtract = phase1StructureSituation(activité).split("\n").slice(0, 18).join("\n");
+    }
+  } catch (_e) {}
+  return {
+    activité: activité,
+    secteur: secteur,
+    pays: pays,
+    unités: unitList,
+    tâches: tachesExtract,
+    équipements: "",
+    contraintes: contraintes,
+    incidents: ""
+  };
+}
+
+async function generateRiskSuggestions(context) {
+  var base = getQhseApiBase();
+  if (!base) return { risks: [], message: "Aucune suggestion automatique disponible" };
+  var headers = { "Content-Type": "application/json" };
+  if (typeof API_PUBLIC_KEY !== "undefined" && API_PUBLIC_KEY) headers["X-QHSE-Public-Key"] = API_PUBLIC_KEY;
+  var body = {
+    context: context || {},
+    consultantCharter: typeof PROMPT_PHASE_1 !== "undefined" ? PROMPT_PHASE_1 : ""
+  };
+  var res;
+  try {
+    res = await fetch(base + "/api/public/risk-suggestions", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body)
+    });
+  } catch (_err) {
+    return { risks: [], message: "Aucune suggestion automatique disponible" };
+  }
+  var data = await res.json().catch(function() { return {}; });
+  if (!data || !data.ok) return { risks: [], message: "Aucune suggestion automatique disponible" };
+  return {
+    risks: Array.isArray(data.risks) ? data.risks : [],
+    message: data.message || ""
+  };
+}
+
+async function createSuggestedRisks(context) {
+  try {
+    return await generateRiskSuggestions(context);
+  } catch (e) {
+    console.warn("createSuggestedRisks", e);
+    return { risks: [], message: "Aucune suggestion automatique disponible" };
+  }
+}
+
+function resolveUnitIdBySuggestionName(unitName) {
+  var raw = (unitName || "").trim();
+  if (!units.length) return null;
+  if (!raw) return units[0].id;
+  var nr = nrm(raw);
+  var i;
+  for (i = 0; i < units.length; i++) {
+    var uid = units[i].id;
+    var el = document.getElementById("un-" + uid);
+    var nm = el ? el.value.trim() : "";
+    if (!nm) continue;
+    if (nrm(nm) === nr || nm === raw) return uid;
+  }
+  for (i = 0; i < units.length; i++) {
+    var uid2 = units[i].id;
+    var el2 = document.getElementById("un-" + uid2);
+    var nm2 = el2 ? el2.value.trim() : "";
+    if (nm2 && (nr.indexOf(nrm(nm2)) >= 0 || nrm(nm2).indexOf(nr) >= 0)) return uid2;
+  }
+  return units[0].id;
+}
+
+function clampAiGp(v, lo, hi) {
+  var n = parseInt(v, 10);
+  if (isNaN(n)) return 2;
+  return Math.min(hi, Math.max(lo, n));
+}
+
+function applyAiSuggestionToRisk(risk, sug) {
+  risk.intitule = sug.title;
+  risk.freeText = sug.description;
+  risk.categorie = normalizeCategory(sug.category, sug.title, sug.description);
+  risk.gravite = clampAiGp(sug.severity, 1, 5);
+  risk.probabilite = clampAiGp(sug.probability, 1, 5);
+  risk.criticite = risk.gravite * risk.probabilite;
+  risk.c2p = risk.criticite >= 16;
+  risk.ref = "Suggestion IA · validation terrain obligatoire · OIT C155";
+  risk.source = (sug.description || "").slice(0, 520);
+  risk.mesuresExist = "À confirmer sur site (observations, registres, entretiens opérateurs).";
+  risk.mesuresNew = "Définir avec le terrain : responsable, délai, budget et indicateurs de suivi.";
+  var c = sug.confidence;
+  risk.confidence = typeof c === "number" && c >= 0.85 ? "Élevée" : typeof c === "number" && c >= 0.65 ? "Moyenne" : "À vérifier";
+  risk.consultantQuestion = "Ce scénario est-il confirmé par les travailleurs exposés et les preuves sur site ?";
+  risk.consultantAdvice = "Valider la cotation G×P et les mesures avec un responsable HSE qualifié.";
+  risk.evidenceNeeded = "Visite terrain, photos, registres, preuves de formation et d’entretien des équipements.";
+  risk.analyzed = true;
+  risk.open = true;
+  if (!risk.principes) risk.principes = [];
+}
+
+function escHtmlAi(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+function escAttrAi(s) {
+  return escHtmlAi(s).replace(/'/g, "&#39;");
+}
+function escTextareaAi(s) {
+  return String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function setAiSuggestionStatus(text, isWarn) {
+  var el = document.getElementById("ai-sug-status");
+  if (!el) return;
+  if (!text) {
+    el.textContent = "";
+    el.classList.add("hidden");
+    el.classList.remove("warn");
+    return;
+  }
+  el.textContent = text;
+  el.classList.remove("hidden");
+  el.classList.toggle("warn", !!isWarn);
+}
+
+function renderAiSuggestionsPanel() {
+  var list = document.getElementById("ai-sug-list");
+  if (!list) return;
+  if (!qhseAiPendingSuggestions.length) {
+    list.innerHTML = "";
+    return;
+  }
+  list.innerHTML = qhseAiPendingSuggestions.map(function(s, idx) {
+    var lvl = s.level || "moderate";
+    var lbl = lvl === "critical" ? "Critique" : lvl === "major" ? "Majeur" : "Modéré";
+    var srcBadge = s.source === "user_pending" ? "Manuel" : "IA";
+    var ch = s.isSelected ? " checked" : "";
+    var gpShow = s.gp != null ? s.gp : (s.severity * s.probability);
+    return (
+      '<div class="ai-sug-card" data-ai-idx="' + idx + '">' +
+        '<input type="checkbox" class="ai-sug-check"' + ch + ' aria-label="Sélectionner cette proposition" onchange="toggleAiSuggestionSelected(' + idx + ', this.checked)">' +
+        '<div>' +
+          '<div class="ai-sug-head">' +
+            '<div class="ai-sug-titles">' +
+              "<strong>" + escHtmlAi(s.title || "(Sans titre)") + "</strong>" +
+              '<p class="ai-sug-desc">' + escHtmlAi(s.description || "") + "</p>" +
+            "</div>" +
+            '<div class="ai-sug-actions">' +
+              '<button type="button" class="btn btn-g" onclick="toggleAiSuggestionEdit(' + idx + ')">Modifier</button>' +
+              '<button type="button" class="btn btn-del" onclick="removeAiSuggestion(' + idx + ')">Supprimer</button>' +
+            "</div>" +
+          "</div>" +
+          '<div class="ai-sug-meta">' +
+            '<span class="ai-sug-lvl ' + lvl + '">' + lbl + "</span>" +
+            "<span>G×P : " + gpShow + " (G" + s.severity + "×P" + s.probability + ")</span>" +
+            "<span>Unité : " + escHtmlAi(s.unit || "—") + "</span>" +
+            '<span class="ai-sug-badge-ia" style="font-size:9px">' + srcBadge + "</span>" +
+          "</div>" +
+          '<div class="ai-sug-edit' + (s._editOpen ? " open" : "") + '" id="ai-sug-edit-' + idx + '">' +
+            '<div class="fg"><label class="lbl">Unité (nom exact)</label><input id="ai-sug-inp-unit-' + idx + '" value="' + escAttrAi(s.unit || "") + '" onblur="patchAiSuggestion(' + idx + ')"></div>' +
+            '<div class="fg"><label class="lbl">Titre</label><input id="ai-sug-inp-title-' + idx + '" value="' + escAttrAi(s.title || "") + '" onblur="patchAiSuggestion(' + idx + ')"></div>' +
+            '<div class="fg fgfull"><label class="lbl">Description</label><textarea id="ai-sug-inp-desc-' + idx + '" rows="3" onblur="patchAiSuggestion(' + idx + ')">' + escTextareaAi(s.description || "") + "</textarea></div>" +
+            '<div class="g2">' +
+              '<div class="fg"><label class="lbl">Gravité (1–5)</label><input type="number" min="1" max="5" id="ai-sug-inp-g-' + idx + '" value="' + s.severity + '" onblur="patchAiSuggestion(' + idx + ')"></div>' +
+              '<div class="fg"><label class="lbl">Probabilité (1–5)</label><input type="number" min="1" max="5" id="ai-sug-inp-p-' + idx + '" value="' + s.probability + '" onblur="patchAiSuggestion(' + idx + ')"></div>' +
+            "</div>" +
+          "</div>" +
+        "</div>" +
+      "</div>"
+    );
+  }).join("");
+}
+
+function toggleAiSuggestionSelected(idx, on) {
+  var s = qhseAiPendingSuggestions[idx];
+  if (!s) return;
+  s.isSelected = !!on;
+}
+
+function toggleAiSuggestionEdit(idx) {
+  var s = qhseAiPendingSuggestions[idx];
+  if (!s) return;
+  s._editOpen = !s._editOpen;
+  renderAiSuggestionsPanel();
+}
+
+function patchAiSuggestion(idx) {
+  var s = qhseAiPendingSuggestions[idx];
+  if (!s) return;
+  var u = document.getElementById("ai-sug-inp-unit-" + idx);
+  var t = document.getElementById("ai-sug-inp-title-" + idx);
+  var d = document.getElementById("ai-sug-inp-desc-" + idx);
+  var g = document.getElementById("ai-sug-inp-g-" + idx);
+  var p = document.getElementById("ai-sug-inp-p-" + idx);
+  if (u) s.unit = u.value.trim();
+  if (t) s.title = t.value.trim();
+  if (d) s.description = d.value.trim();
+  if (g) s.severity = clampAiGp(g.value, 1, 5);
+  if (p) s.probability = clampAiGp(p.value, 1, 5);
+  s.gp = s.severity * s.probability;
+  s.level = s.gp >= 16 ? "critical" : s.gp >= 7 ? "major" : "moderate";
+  s.isEdited = true;
+  renderAiSuggestionsPanel();
+}
+
+function removeAiSuggestion(idx) {
+  qhseAiPendingSuggestions.splice(idx, 1);
+  if (!qhseAiPendingSuggestions.length) setAiSuggestionStatus("");
+  renderAiSuggestionsPanel();
+}
+
+function addManualAiSuggestion() {
+  if (!units.length) {
+    alert("Ajoutez d’abord au moins une unité de travail (étape précédente).");
+    return;
+  }
+  var uid = units[0].id;
+  var el = document.getElementById("un-" + uid);
+  var uname0 = el && el.value.trim() ? el.value.trim() : uname(uid);
+  qhseAiPendingSuggestions.push({
+    id: generateUniqueId("manual"),
+    unit: uname0,
+    title: "",
+    description: "",
+    category: "physique",
+    severity: 3,
+    probability: 3,
+    gp: 9,
+    level: "major",
+    source: "user_pending",
+    confidence: 0.65,
+    isSelected: true,
+    isEdited: true,
+    _editOpen: true
+  });
+  renderAiSuggestionsPanel();
+}
+
+async function runAiRiskSuggestions(ev) {
+  if (ev && ev.preventDefault) ev.preventDefault();
+  if (!units.length) {
+    alert("Ajoutez d’abord au moins une unité de travail.");
+    return;
+  }
+  var btn = document.getElementById("btn-ai-suggest-risks");
+  if (btn) btn.disabled = true;
+  setAiSuggestionStatus("Analyse en cours…", false);
+  var ctx = collectRiskSuggestionContext();
+  var out = await createSuggestedRisks(ctx);
+  if (btn) btn.disabled = false;
+  var risks = out.risks || [];
+  if (!risks.length) {
+    qhseAiPendingSuggestions = [];
+    renderAiSuggestionsPanel();
+    setAiSuggestionStatus(out.message || "Aucune suggestion automatique disponible", true);
+    return;
+  }
+  qhseAiPendingSuggestions = risks.map(function(r) {
+    r._editOpen = false;
+    return r;
+  });
+  setAiSuggestionStatus(risks.length + " proposition(s) — sélectionnez et validez pour les intégrer au DUERP.", false);
+  renderAiSuggestionsPanel();
+}
+
+function validateSelectedAiRisks() {
+  if (!qhseAiPendingSuggestions.length) {
+    alert("Aucune proposition à valider. Obtenez des suggestions IA ou ajoutez une ligne manuelle.");
+    return;
+  }
+  var merged = 0;
+  var i;
+  for (i = 0; i < qhseAiPendingSuggestions.length; i++) {
+    var sug = qhseAiPendingSuggestions[i];
+    if (!sug.isSelected) continue;
+    if (!(sug.title && sug.title.trim())) continue;
+    var uid = resolveUnitIdBySuggestionName(sug.unit);
+    if (!uid) continue;
+    addRisk(uid);
+    var u = null;
+    for (var j = 0; j < units.length; j++) {
+      if (units[j].id === uid) { u = units[j]; break; }
+    }
+    if (!u || !u.risks.length) continue;
+    var risk = u.risks[u.risks.length - 1];
+    applyAiSuggestionToRisk(risk, sug);
+    merged++;
+  }
+  qhseAiPendingSuggestions = [];
+  renderAiSuggestionsPanel();
+  setAiSuggestionStatus(merged ? merged + " risque(s) ajouté(s) à la base. Complétez les fiches puis validez au terrain." : "", false);
+  buildRisks();
+  autosv();
+  if (!merged) alert("Aucun risque intégré : cochez au moins une proposition avec un titre renseigné.");
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -3568,7 +4096,7 @@ function autoGenerateDUERP() {
   bumpTotalDuerpGenerations();
   if (!isProUser()) bumpFreeDuerpUsed();
   syncFreeTierUi();
-  alert("Base DUERP V6 générée : risques contextualisés par unité, horaires, effectifs et texte libre. Vérifiez les cotations terrain avant signature.");
+  alert("Base générée : risques contextualisés (unité, horaires, effectifs, secteur à haut risque si applicable). Vérifiez chaque fiche sur site : situation → cause → exposition → conséquence, et ajustez G×P avec le terrain avant signature.");
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -3959,11 +4487,12 @@ function buildDuerpPayload() { var pays=document.getElementById("e_pays")?docume
 // Mode actuel : API si disponible, fallback localStorage si non configuré.
 // À remplacer au déploiement : API_BASE_URL = "https://api.qhsecontrol.com"
 // ══════════════════════════════════════════════════════════════
-var API_BASE_URL = window.QHSE_API_BASE_URL || window.location.origin;
-var API_PUBLIC_KEY = "sb_publishable_gHpdNLyBa2SydITAMa-Q7Q_EIN_jBIj";
+var API_BASE_URL = (window.QHSE_API_BASE_URL != null ? String(window.QHSE_API_BASE_URL) : "").trim();
+// Pas de clé en dur : récupérée via /api/public/config (PUBLIC_API_KEY côté backend)
+var API_PUBLIC_KEY = "";
 (async function loadConfig() {
   try {
-    var res = await fetch(API_BASE_URL.replace(/\/$/, "") + "/api/public/config");
+    var res = await fetch(getQhseApiBase() + "/api/public/config");
     if (res.ok) { var data = await res.json(); API_PUBLIC_KEY = data.publicKey || ""; }
   } catch (e) { console.warn("Config backend non disponible, mode offline."); }
 })();
@@ -3972,7 +4501,8 @@ function getQhseApiBase() {
   try {
     if (typeof API_BASE_URL !== "undefined" && API_BASE_URL) return String(API_BASE_URL).replace(/\/$/, "");
   } catch (e) {}
-  return String(window.QHSE_API_BASE_URL || "https://api.qhsecontrol.com").replace(/\/$/, "");
+  // Par défaut : même origine (frontend servi par le backend). Override possible via window.QHSE_API_BASE_URL.
+  try { return String(window.QHSE_API_BASE_URL || window.location.origin || "").replace(/\/$/, ""); } catch (e2) { return ""; }
 }
 
 function updateAuthTopbar() {
@@ -4163,9 +4693,9 @@ var LEGAL_SOURCES = [];
 var RISK_MAP = [];
 async function loadLegalSources() {
   try {
-    var r1 = await fetch(API_BASE_URL.replace(/\/$/, "") + "/api/public/legal-sources");
+    var r1 = await fetch(getQhseApiBase() + "/api/public/legal-sources");
     if (r1.ok) { var d1 = await r1.json(); LEGAL_SOURCES = d1.sources || []; }
-    var r2 = await fetch(API_BASE_URL.replace(/\/$/, "") + "/api/public/risk-map");
+    var r2 = await fetch(getQhseApiBase() + "/api/public/risk-map");
     if (r2.ok) { var d2 = await r2.json(); RISK_MAP = d2.map || []; }
     console.log("Base legale chargee:", LEGAL_SOURCES.length, "sources");
   } catch (e) { console.warn("Base legale non disponible."); }
@@ -4173,7 +4703,13 @@ async function loadLegalSources() {
 loadLegalSources();
 
 function isBackendEnabled() {
-  return !!API_BASE_URL && API_BASE_URL.indexOf("http") === 0;
+  // Si API_BASE_URL vide, on utilise la même origine (fullstack Railway).
+  try {
+    var base = getQhseApiBase();
+    return !!base && base.indexOf("http") === 0;
+  } catch (e) {
+    return false;
+  }
 }
 
 async function sendLeadToBackend(lead, duerpPayload) {
@@ -4186,7 +4722,7 @@ async function sendLeadToBackend(lead, duerpPayload) {
   }
 
   try {
-    var res = await fetch(API_BASE_URL.replace(/\/$/, "") + "/api/public/duerp-leads", {
+    var res = await fetch(getQhseApiBase() + "/api/public/duerp-leads", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -4420,6 +4956,17 @@ function genPDF() {
   }
   function formatFcfaRange(low, high) {
     return formatFcfaNumber(low) + " à " + formatFcfaNumber(high) + " FCFA";
+  }
+  /** Chiffres avec séparateurs insécables (PDF : pas de coupure au milieu d’un montant). */
+  function formatFcfaPdfNumeric(n) {
+    var num = Number(n) || 0;
+    var s = num.toLocaleString("fr-FR", { maximumFractionDigits: 0 });
+    s = s.replace(/\u00A0|\u202F/g, "\u202F");
+    s = s.replace(/ /g, "\u202F");
+    return s;
+  }
+  function formatFcfaRangePdf(low, high) {
+    return formatFcfaPdfNumeric(low) + "\u202Fà\u202F" + formatFcfaPdfNumeric(high) + "\u202FFCFA";
   }
   function toUtf8Base64(str) {
     // Encode string as UTF-8 before btoa.
@@ -4792,89 +5339,123 @@ function genPDF() {
     body: topRows.length ? topRows : [["—","Aucun risque prioritaire","—","—","—","—","—"]],
     columnStyles:{ 0:{cellWidth:7,halign:"center"}, 1:{cellWidth:38,fontStyle:"bold"}, 2:{cellWidth:28}, 3:{cellWidth:18,halign:"center",fontStyle:"bold"}, 4:{cellWidth:22}, 5:{cellWidth:48}, 6:{cellWidth:CW-161} }
   });
-  // ── PREMIUM CARD — IMPACT BUSINESS (PDF) ──
+  // ── PREMIUM CARD — IMPACT BUSINESS (PDF) — 3 zones (KPI / coût / impacts) ──
   var impact = buildBusinessImpact(highCount, medCount);
   var criticalCount = impact.highCount;
   var priorityCount = impact.medCount;
-  var elevCount = allR.filter(function(x){ return x.crit >= 12 && x.crit < 16; }).length;
-  var modCount = allR.filter(function(x){ return x.crit >= 7 && x.crit < 12; }).length;
-  var lowCount = allR.filter(function(x){ return x.crit < 7; }).length;
+  var fixedImpacts = [
+    "arrêt d’activité",
+    "accident grave",
+    "coûts correctifs",
+    "pertes d’exploitation",
+    "responsabilité employeur"
+  ];
 
+  checkPage(90);
   y = doc.lastAutoTable.finalY + 6;
-  var cardH = 62;
+  var cardH = 86;
   doc.setFillColor.apply(doc, C.lgray);
-  doc.roundedRect(M, y, CW, cardH, 1.5, 1.5, "F");
+  doc.roundedRect(M, y, CW, cardH, 2, 2, "F");
+  doc.setDrawColor.apply(doc, C.border);
+  doc.setLineWidth(0.2);
+  doc.roundedRect(M, y, CW, cardH, 2, 2, "D");
   doc.setFillColor.apply(doc, C.rouge);
   doc.rect(M, y, 3, cardH, "F");
 
-  // Title
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(10);
+  var cx = M + 6;
+  var cy = y + 6;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10.5);
   doc.setTextColor.apply(doc, C.coal);
-  doc.text(npt("Impact business estimatif"), M + 6, y + 7, { maxWidth: CW - 12 });
+  doc.text(npt("Impact business estimatif"), cx, cy);
 
-  // Mini KPI row
-  var kpiY = y + 15;
-  var kpiW = (CW - 8) / 3;
-  var kpiGap = 2;
-
-  function drawKpi(x, fill, label, value) {
+  function drawZoneBadge(x, y0, w, h, fill, code) {
     doc.setFillColor.apply(doc, fill);
-    doc.roundedRect(x, kpiY, kpiW, 9, 1.2, 1.2, "F");
+    doc.roundedRect(x, y0, w, h, 0.8, 0.8, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(6.2);
     doc.setTextColor.apply(doc, C.white);
+    doc.text(npt(code), x + w / 2, y0 + h - 1.6, { align: "center" });
+  }
+
+  // ZONE 1 — KPI
+  var z1Top = y + 11;
+  drawZoneBadge(cx, z1Top, 10, 4.2, C.coal, "KPI");
+
+  var kpiY = z1Top + 7;
+  var kpiW = (CW - 14) / 2;
+  var kpiGap = 3;
+  var kpiH = 16;
+  function drawKpiZone(x0, accent, label, value) {
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(x0, kpiY, kpiW, kpiH, 1.2, 1.2, "F");
+    doc.setDrawColor.apply(doc, C.border);
+    doc.setLineWidth(0.15);
+    doc.roundedRect(x0, kpiY, kpiW, kpiH, 1.2, 1.2, "D");
+    doc.setFillColor.apply(doc, accent);
+    doc.rect(x0, kpiY, 2.2, kpiH, "F");
+    doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
-    doc.setFont("helvetica","bold");
-    doc.text(npt(label), x + 2, kpiY + 4.0, { maxWidth: kpiW - 4 });
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(8);
-    doc.text(npt(String(value)), x + kpiW - 6, kpiY + 6.8, { align: "right" });
+    doc.setTextColor.apply(doc, C.gray);
+    doc.text(npt(label), x0 + 4, kpiY + 5.5, { maxWidth: kpiW - 7 });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor.apply(doc, C.coal);
+    doc.text(npt(String(value)), x0 + kpiW - 4, kpiY + 12, { align: "right" });
   }
+  drawKpiZone(cx, C.rouge, "Risques critiques", criticalCount);
+  drawKpiZone(cx + kpiW + kpiGap, C.gold, "Risques prioritaires", priorityCount);
 
-  drawKpi(M + 4, C.rouge, "Critique", criticalCount);
-  drawKpi(M + 4 + kpiW + kpiGap, C.gold, "Prioritaire", priorityCount);
-  drawKpi(M + 4 + (kpiW + kpiGap) * 2, C.teal, "Coûts (FCFA)", formatFcfaNumber(impact.impactHigh));
+  // ZONE 2 — coût (montants sur lignes dédiées, séparateurs insécables)
+  var z2Top = kpiY + kpiH + 5;
+  var z2H = 22;
+  doc.setFillColor(255, 252, 248);
+  doc.roundedRect(cx - 1, z2Top, CW - 10, z2H, 1.2, 1.2, "F");
+  doc.setDrawColor.apply(doc, C.border);
+  doc.setLineWidth(0.15);
+  doc.roundedRect(cx - 1, z2Top, CW - 10, z2H, 1.2, 1.2, "D");
+  drawZoneBadge(cx, z2Top + 1.5, 12, 4.2, C.teal, "COÛT");
 
-  // Estimation + disclaimer
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  doc.setTextColor.apply(doc, C.coal);
+  doc.text(npt("Estimation des impacts financiers"), cx + 14, z2Top + 5);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor.apply(doc, C.teal);
+  var rangeLine = formatFcfaRangePdf(impact.impactLow, impact.impactHigh);
+  doc.text(rangeLine, cx + (CW - 10) / 2, z2Top + 13, { align: "center" });
+
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(7);
   doc.setTextColor.apply(doc, C.gray);
+  var discLines = doc.splitTextToSize(
+    npt("Cette estimation est indicative et doit être confirmée par une analyse terrain."),
+    CW - 22
+  );
+  doc.text(discLines, cx + 2, z2Top + 18);
+
+  // ZONE 3 — impacts (liste fixe, puces compactes)
+  var z3Top = z2Top + z2H + 4;
+  drawZoneBadge(cx, z3Top, 14, 4.2, C.terre, "IMPACTS");
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(8);
-  var costRange = formatFcfaRange(impact.impactLow, impact.impactHigh);
-  var lines1 = doc.splitTextToSize(npt("Estimation indicative des coûts potentiels : " + costRange + "."), CW - 12);
-  doc.text(lines1, M + 6, y + 27);
-  var lines2 = doc.splitTextToSize(npt("Cette estimation est indicative et doit être confirmée par une analyse terrain."), CW - 12);
-  doc.text(lines2, M + 6, y + 31.5);
-
-  // Badges niveau (4)
-  var badgeY = y + 33;
-  var badgeH = 5.2;
-  var badgeW = 42;
-  var badgeGap = 1;
-  function drawLevelBadge(x, fill, title, count) {
-    doc.setFillColor.apply(doc, fill);
-    doc.roundedRect(x, badgeY, badgeW, badgeH, 1.0, 1.0, "F");
-    doc.setTextColor.apply(doc, C.white);
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(6.7);
-    doc.text(npt(title), x + 2, badgeY + 3.2, { maxWidth: 36 });
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(6.5);
-    doc.text(npt(String(count)), x + badgeW - 2, badgeY + 4.6, { align: "right" });
-  }
-  var startX = M + 4;
-  var step = badgeW + badgeGap;
-  drawLevelBadge(startX + step * 0, C.rouge, "Critique", criticalCount);
-  drawLevelBadge(startX + step * 1, C.gold, "Élevé", elevCount);
-  drawLevelBadge(startX + step * 2, C.teal, "Modéré", modCount);
-  drawLevelBadge(startX + step * 3, C.vert, "Faible", lowCount);
-
-  // Impacts possibles
   doc.setTextColor.apply(doc, C.gray);
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(7.8);
-  doc.text(npt("Impacts possibles :"), M + 6, badgeY + 8, { maxWidth: CW - 12 });
-  var impactsStart = badgeY + 11;
-  var impactsStep = 2.7;
-  impact.impacts.slice(0, 5).forEach(function(it, i) {
-    doc.text("• " + npt(it), M + 8, impactsStart + i * impactsStep, { maxWidth: CW - 14 });
+  doc.text(npt("Principaux impacts à anticiper"), cx + 16, z3Top + 3.2);
+
+  var impY = z3Top + 8;
+  var impStep = 3.0;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  fixedImpacts.forEach(function(it, i) {
+    var iy = impY + i * impStep;
+    doc.setTextColor.apply(doc, C.teal);
+    doc.setFont("helvetica", "bold");
+    doc.text("\u25B8", cx + 1, iy);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor.apply(doc, C.ink);
+    doc.text(npt(it), cx + 5.5, iy, { maxWidth: CW - 22 });
   });
 
   y += cardH + 4;
