@@ -1,0 +1,10 @@
+{
+  "name": "QHSE Control",
+  "short_name": "QHSE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9FAFB",
+  "theme_color": "#0FA0A0",
+  "icons": []
+}
+

@@ -43,7 +43,7 @@ app.use('/api/duerp', leadLimiter, duerpRoutes);
 app.use('/api/public', legalRoutes);
 
 // Servir le frontend statique
-const frontendPath = path.join(__dirname, '..', 'frontend');
+const frontendPath = path.join(__dirname, 'public');
 app.use(express.static(frontendPath));
 app.get('*', (_req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
