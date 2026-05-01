@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>—</title>
+<style>
+  :root {
+    --bg: #f4f4f5;
+    --card: #fff;
+    --border: #e4e4e7;
+    --ink: #18181b;
+    --muted: #71717a;
+    --teal: #0FA0A0;
+    --teal-d: #0C8080;
+    --danger: #dc2626;
+    --r8: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.45;
+    padding: 16px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+  h1 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r8);
+    padding: 14px;
+    margin-bottom: 16px;
+    max-width: 1200px;
+  }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+  input[type="password"], input[type="text"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--r8);
+    font-size: 16px;
+  }
+  .row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  button {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: var(--r8);
+    border: 1px solid var(--border);
+    background: var(--card);
+    cursor: pointer;
+    min-height: 40px;
+  }
+  button.primary { background: var(--teal); color: #fff; border-color: var(--teal-d); }
+  button.danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
+  button.small { font-size: 11px; padding: 6px 10px; min-height: 36px; }
+  .err { color: var(--danger); font-size: 13px; margin-top: 8px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 720px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); background: #fafafa; }
+  tr:hover td { background: #fafafa; }
+  .badge-pro {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #e6f8f8;
+    color: var(--teal-d);
+    border: 1px solid #7ed4d4;
+  }
+  .badge-free {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .cell-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .muted { color: var(--muted); font-size: 11px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+  <h1>Console</h1>
+  <p class="sub">Accès restreint.</p>
+
+  <div class="panel" id="gate">
+    <label for="admin-key">Clé d’accès</label>
+    <input id="admin-key" type="password" autocomplete="current-password" placeholder="Saisir la clé">
+    <div class="row-actions">
+      <button type="button" class="primary" id="btn-save-key">Enregistrer et charger</button>
+    </div>
+    <p class="err hidden" id="gate-err"></p>
+  </div>
+
+  <div class="panel hidden" id="main">
+    <div class="row-actions">
+      <button type="button" id="btn-reload">Actualiser la liste</button>
+      <button type="button" class="danger" id="btn-forget">Oublier la clé (session)</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Plan</th>
+            <th>Pro jusqu’au</th>
+            <th>DUERP utilisés</th>
+            <th>Dernière activité</th>
+            <th>Intérêt Pro</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="muted" id="status"></p>
+  </div>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'qhse_admin_secret';
+  var gate = document.getElementById('gate');
+  var main = document.getElementById('main');
+  var tbody = document.getElementById('tbody');
+  var statusEl = document.getElementById('status');
+  var gateErr = document.getElementById('gate-err');
+
+  function apiBase() {
+    return String(window.location.origin || '').replace(/\/$/, '');
+  }
+
+  function getSecret() {
+    try {
+      return sessionStorage.getItem(STORAGE_KEY) || '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function setSecret(s) {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, s);
+    } catch (e) {}
+  }
+
+  function clearSecret() {
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+  }
+
+  function showGateError(msg) {
+    gateErr.textContent = msg || '';
+    gateErr.classList.toggle('hidden', !msg);
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    try {
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return '—';
+      return d.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+    } catch (e) {
+      return '—';
+    }
+  }
+
+  function adminFetch(path, opts) {
+    opts = opts || {};
+    var secret = getSecret();
+    var headers = Object.assign({}, opts.headers || {}, {
+      'x-admin-secret': secret,
+      'Content-Type': 'application/json'
+    });
+    return fetch(apiBase() + path, Object.assign({}, opts, { headers: headers }));
+  }
+
+  function loadUsers() {
+    statusEl.textContent = 'Chargement…';
+    return adminFetch('/api/admin/users', { method: 'GET' })
+      .then(function (r) {
+        if (r.status === 403) throw new Error('Clé refusée');
+        if (!r.ok) throw new Error('Erreur ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var users = data.users || [];
+        tbody.innerHTML = users.map(function (u) {
+          var planCell = u.plan === 'pro'
+            ? '<span class="badge-pro">Pro</span>'
+            : '<span class="badge-free">free</span>';
+          var id = encodeURIComponent(u.id);
+          return (
+            '<tr>' +
+            '<td>' + (u.email || '<span class="muted">—</span>') + '<div class="muted">' + (u.id || '').slice(0, 28) + (String(u.id || '').length > 28 ? '…' : '') + '</div></td>' +
+            '<td>' + planCell + '</td>' +
+            '<td>' + fmtDate(u.proUntil) + '</td>' +
+            '<td>' + (u.freeDuerpUsed != null ? u.freeDuerpUsed : '0') + ' <span class="muted">(total ' + (u.duerpCount != null ? u.duerpCount : '0') + ')</span></td>' +
+            '<td>' + fmtDate(u.lastActiveAt) + '</td>' +
+            '<td>' + (u.interestPro ? 'oui' : '—') + '</td>' +
+            '<td class="cell-actions">' +
+            '<button type="button" class="small" data-act="pro30" data-id="' + id + '">Pro 30j</button>' +
+            '<button type="button" class="small" data-act="pro365" data-id="' + id + '">Pro 365j</button>' +
+            '<button type="button" class="small" data-act="off" data-id="' + id + '">Désactiver Pro</button>' +
+            '<button type="button" class="small" data-act="reset" data-id="' + id + '">Reset quota</button>' +
+            '<button type="button" class="small" data-act="interest" data-id="' + id + '">Intérêt Pro</button>' +
+            '</td></tr>'
+          );
+        }).join('');
+        statusEl.textContent = users.length + ' utilisateur(s)';
+      })
+      .catch(function (e) {
+        statusEl.textContent = '';
+        alert(e.message || 'Erreur');
+      });
+  }
+
+  document.getElementById('btn-save-key').addEventListener('click', function () {
+    var inp = document.getElementById('admin-key');
+    var v = (inp && inp.value) ? inp.value.trim() : '';
+    showGateError('');
+    if (!v) {
+      showGateError('Saisissez la clé.');
+      return;
+    }
+    setSecret(v);
+    adminFetch('/api/admin/users', { method: 'GET' })
+      .then(function (r) {
+        if (r.status === 403) {
+          clearSecret();
+          throw new Error('Clé invalide');
+        }
+        if (!r.ok) throw new Error('Erreur ' + r.status);
+        return r.json();
+      })
+      .then(function () {
+        gate.classList.add('hidden');
+        main.classList.remove('hidden');
+        return loadUsers();
+      })
+      .catch(function (e) {
+        showGateError(e.message || 'Erreur');
+      });
+  });
+
+  document.getElementById('btn-reload').addEventListener('click', function () {
+    loadUsers();
+  });
+
+  document.getElementById('btn-forget').addEventListener('click', function () {
+    clearSecret();
+    main.classList.add('hidden');
+    gate.classList.remove('hidden');
+    tbody.innerHTML = '';
+    showGateError('');
+  });
+
+  tbody.addEventListener('click', function (ev) {
+    var t = ev.target;
+    if (!t || !t.getAttribute || !t.getAttribute('data-act')) return;
+    var act = t.getAttribute('data-act');
+    var id = decodeURIComponent(t.getAttribute('data-id') || '');
+    if (!id) return;
+    var path = '/api/admin/users/' + encodeURIComponent(id) + '/';
+    var body = null;
+    if (act === 'pro30') {
+      path += 'activate-pro';
+      body = JSON.stringify({ durationDays: 30 });
+    } else if (act === 'pro365') {
+      path += 'activate-pro';
+      body = JSON.stringify({ durationDays: 365 });
+    } else if (act === 'off') path += 'deactivate-pro';
+    else if (act === 'reset') path += 'reset-free';
+    else if (act === 'interest') path += 'mark-interest';
+    else return;
+    adminFetch(path, { method: 'POST', body: body })
+      .then(function (r) {
+        if (r.status === 403) throw new Error('Clé refusée');
+        if (!r.ok) throw new Error('Erreur ' + r.status);
+        return loadUsers();
+      })
+      .catch(function (e) {
+        alert(e.message || 'Erreur');
+      });
+  });
+
+  if (getSecret()) {
+    document.getElementById('admin-key').value = '••••••••';
+    gate.classList.add('hidden');
+    main.classList.remove('hidden');
+    loadUsers();
+  }
+})();
+</script>
+</body>
+</html>

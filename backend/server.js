@@ -11,6 +11,8 @@ const authRoutes = require('./routes/auth.routes');
 const waitlistRoutes = require('./routes/waitlist.routes');
 const trackRoutes = require('./routes/track.routes');
 const riskSuggestionsRoutes = require('./routes/riskSuggestions.routes');
+const entitlementsRoutes = require('./routes/entitlements.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,8 +42,8 @@ app.use(cors({
     if (isAllowedOrigin(origin, allowedOrigins)) return cb(null, true);
     return cb(new Error('CORS blocked for origin: ' + origin));
   },
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'X-QHSE-Public-Key', 'Authorization']
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'X-QHSE-Public-Key', 'Authorization', 'x-admin-secret']
 }));
 app.use(express.json({ limit: '15mb' }));
 
@@ -50,7 +52,11 @@ const leadLimiter = rateLimit({
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { ok: false, error: 'Trop de requetes.' }
+  message: { ok: false, error: 'Trop de requetes.' },
+  skip: (req) => {
+    const u = req.originalUrl || '';
+    return u.includes('/api/public/config') || u.includes('/api/public/entitlements') || u.includes('/api/admin/');
+  }
 });
 
 app.get('/health', (_req, res) =>
@@ -59,7 +65,9 @@ app.get('/health', (_req, res) =>
 
 app.use('/api', leadLimiter, waitlistRoutes);
 app.use('/api', leadLimiter, trackRoutes);
+app.use('/api', leadLimiter, adminRoutes);
 app.use('/api/public', leadLimiter, authRoutes);
+app.use('/api/public', leadLimiter, entitlementsRoutes);
 app.use('/api/public', leadLimiter, duerpRoutes);
 app.use('/api/public', leadLimiter, riskSuggestionsRoutes);
 app.use('/api/duerp', leadLimiter, duerpRoutes);
@@ -70,6 +78,12 @@ const FRONTEND_DIR = fs.existsSync(path.join(__dirname, '..', 'frontend', 'index
   ? path.join(__dirname, '..', 'frontend')
   : path.join(__dirname, 'public');
 app.use(express.static(FRONTEND_DIR));
+app.get('/admin-qhse-control', (req, res, next) => {
+  const adminFile = path.join(FRONTEND_DIR, 'admin-qhse-control.html');
+  res.sendFile(adminFile, (err) => {
+    if (err) next(err);
+  });
+});
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ ok: false, error: 'Introuvable' });

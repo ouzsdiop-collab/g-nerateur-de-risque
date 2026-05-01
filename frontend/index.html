@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="shortcut icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" href="/favicon.png" />
-<meta name="theme-color" content="#1e293b" />
-<meta name="application-name" content="QHSE Control - Générateur DUERP" />
-<meta name="description" content="Générateur DUERP gratuit pour évaluer les risques professionnels en Afrique. QHSE Control." />
-<title>Générateur DUERP Gratuit — Afrique de l'Ouest — QHSE Control</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%237c3aed'/><text x='50' y='54' text-anchor='middle' dominant-baseline='middle' fill='white' font-family='Arial,sans-serif' font-size='38' font-weight='900' letter-spacing='-2'>RI</text></svg>">
+<meta name="theme-color" content="#7c3aed" />
+<meta name="application-name" content="QHSE Control - Générateur de risques" />
+<meta name="description" content="Générateur de risques gratuit en Afrique : identifiez, évaluez et priorisez vos risques professionnels en quelques minutes, sans inscription. Rapide, adapté terrain, pensé pour les entreprises africaines. QHSE Control." />
+<title>Générateur de risques gratuit — Afrique de l'Ouest — QHSE Control</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -469,6 +467,39 @@ body {
   padding: 7px 14px; border-radius: 6px;
   text-align: center;
 }
+.hero h1.hero-title { margin: 0 0 8px; }
+.landing-perks {
+  list-style: none; margin: 14px 0 0; padding: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; max-width: 420px;
+}
+.landing-perks li {
+  font-size: 12px; color: rgba(255,255,255,.78); line-height: 1.35;
+  padding-left: 16px; position: relative;
+}
+.landing-perks li::before {
+  content: ""; position: absolute; left: 0; top: 0.42em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+}
+.landing-cta { margin-top: 16px; width: 100%; max-width: 300px; min-height: 44px; }
+.landing-seo-wrap {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r12);
+  padding: 16px 18px; margin-bottom: 16px;
+}
+.landing-seo-p { font-size: 13px; color: var(--ink2); line-height: 1.65; margin: 0; }
+.landing-h2 {
+  font-size: 12px; font-weight: 700; color: var(--ink); text-transform: uppercase;
+  letter-spacing: .04em; margin: 18px 0 10px;
+}
+.landing-sectors { display: flex; flex-wrap: wrap; gap: 8px; }
+.landing-sector {
+  font-size: 12px; font-weight: 600; color: var(--teal-d);
+  background: var(--teal-l); border: 1px solid var(--teal-b);
+  padding: 6px 12px; border-radius: 999px;
+}
+.landing-seo-kws {
+  margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--border2);
+  font-size: 11px; color: var(--ink3); line-height: 1.5;
+}
 
 /* ─── VAL BANNER — same as QHSE Control alert style ─── */
 .val-banner {
@@ -881,6 +912,9 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   .hero-stat-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
   .hero-stat { padding: 10px 8px; }
   .hero-stat-v { font-size: 18px; }
+  .landing-perks { grid-template-columns: 1fr; max-width: none; }
+  .landing-cta { max-width: none; }
+  .landing-seo-wrap { padding: 14px 14px; }
   .val-banner { font-size: 11px; padding: 10px 12px; }
   .ai-inp { font-size: 16px; padding: 10px 12px; min-height: 44px; }
   .qg-top { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -1274,8 +1308,15 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-eyebrow">Outil pensé pour les réalités HSE d'Afrique de l'Ouest</div>
-        <div class="hero-title">Évaluation des risques<br>professionnels — Afrique de l'Ouest</div>
-        <div class="hero-sub">Générez une base d'évaluation des risques professionnels inspirée DUERP, alignée sur les bonnes pratiques OIT/IFC et adaptée aux réalités terrain d'Afrique de l'Ouest.</div>
+        <h1 class="hero-title">Générateur DUERP gratuit en Afrique</h1>
+        <div class="hero-sub">Créez votre document unique d'évaluation des risques en quelques minutes. Adapté aux entreprises en Afrique. Sans inscription.</div>
+        <ul class="landing-perks" aria-label="Avantages">
+          <li>rapide</li>
+          <li>gratuit</li>
+          <li>adapté terrain</li>
+          <li>conforme</li>
+        </ul>
+        <button type="button" class="btn btn-p landing-cta" onclick="var q=document.getElementById('duerp-quickgen');if(q)q.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){var t=document.getElementById('quick-activity');if(t)t.focus();},380);">Créer mon DUERP gratuitement</button>
         <div class="hero-tags">
           <span class="hero-tag">🇨🇮 Code travail CI</span>
           <span class="hero-tag">🇸🇳 OHSAS Sénégal</span>
@@ -1295,6 +1336,18 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
       </div>
     </div>
   </div>
+
+  <section class="landing-seo-wrap" aria-label="Document unique d'évaluation des risques">
+    <p class="landing-seo-p">Le document unique d'évaluation des risques permet d'identifier les dangers et de mettre en place des actions de prévention dans l'entreprise.</p>
+    <h2 class="landing-h2">Secteurs</h2>
+    <div class="landing-sectors">
+      <span class="landing-sector">BTP</span>
+      <span class="landing-sector">Mines</span>
+      <span class="landing-sector">Industrie</span>
+      <span class="landing-sector">Énergie</span>
+    </div>
+    <p class="landing-seo-kws">Sécurité au travail · risques professionnels · prévention</p>
+  </section>
 
   <div class="val-banner">
     <div class="val-icon">⚠️</div>
@@ -1407,7 +1460,7 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   </div>
 
   <!-- QUICK GEN -->
-  <div class="quickgen">
+  <div class="quickgen" id="duerp-quickgen">
     <div class="qg-top">
       <div>
         <div class="qg-title">Décrivez votre situation de travail</div>
@@ -1985,6 +2038,8 @@ var step = 1, units = [], uc = 0, rc = 0, uiMode = "essential", leadCaptured = f
 var userPlan = { type: "free", isPremium: false };
 var qhseAuthenticated = false;
 var qhseServerPlan = "free";
+/** Droits Pro accordés côté serveur (visitorId) — sans exposer de secret. */
+var qhseEntitlements = null;
 var QHSE_AUTH_STORAGE_KEY = "qhse_auth_v1";
 /** Déblocage Pro par code saisi (persistant sur l’appareil). */
 var QHSE_PREMIUM_CODE_STORAGE_KEY = "qhse_premium_code_unlock";
@@ -2012,11 +2067,13 @@ function qhseHasPremiumCodeUnlock() {
   }
 }
 function refreshUserPlan() {
+  var entPro = qhseEntitlements && qhseEntitlements.isPro;
   var devPlan = (window.QHSE_USER_PLAN || "").toString().toLowerCase().trim();
   var fromCode = qhseHasPremiumCodeUnlock();
   if (qhseAuthenticated) {
     var sp = (qhseServerPlan || "free").toString().toLowerCase().trim();
-    if (sp === "pro" || sp === "premium") {
+    var supPro = sp === "pro" || sp === "premium";
+    if (entPro || supPro) {
       userPlan.type = "pro";
       userPlan.isPremium = true;
     } else if (fromCode) {
@@ -2028,7 +2085,7 @@ function refreshUserPlan() {
     }
     return;
   }
-  if (fromCode) {
+  if (entPro || fromCode) {
     userPlan.type = "pro";
     userPlan.isPremium = true;
     return;
@@ -2149,6 +2206,13 @@ function trackEvent(name) {
     sessionId: getOrCreateTabSessionId(),
     duerpGeneratedCount: getTotalDuerpGenerations()
   };
+  try {
+    var rawAuth = localStorage.getItem(QHSE_AUTH_STORAGE_KEY);
+    if (rawAuth) {
+      var sess = JSON.parse(rawAuth);
+      if (sess && sess.email) payload.email = sess.email;
+    }
+  } catch (e) {}
   try {
     fetch(base + "/api/track", {
       method: "POST",
@@ -4096,6 +4160,7 @@ function autoGenerateDUERP() {
   bumpTotalDuerpGenerations();
   if (!isProUser()) bumpFreeDuerpUsed();
   syncFreeTierUi();
+  if (typeof fetchEntitlements === "function") fetchEntitlements();
   alert("Base générée : risques contextualisés (unité, horaires, effectifs, secteur à haut risque si applicable). Vérifiez chaque fiche sur site : situation → cause → exposition → conséquence, et ajustez G×P avec le terrain avant signature.");
 }
 
@@ -4505,6 +4570,45 @@ function getQhseApiBase() {
   try { return String(window.QHSE_API_BASE_URL || window.location.origin || "").replace(/\/$/, ""); } catch (e2) { return ""; }
 }
 
+function fetchEntitlements() {
+  var base = getQhseApiBase();
+  if (!base) {
+    qhseEntitlements = null;
+    return Promise.resolve();
+  }
+  var payload = {
+    visitorId: getOrCreateVisitorId(),
+    duerpGeneratedCount: getTotalDuerpGenerations()
+  };
+  try {
+    var raw = localStorage.getItem(QHSE_AUTH_STORAGE_KEY);
+    if (raw) {
+      var s = JSON.parse(raw);
+      if (s && s.email) payload.email = s.email;
+    }
+  } catch (e) {}
+  return fetch(base + "/api/public/entitlements", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+    .then(function (r) {
+      return r.ok ? r.json() : null;
+    })
+    .then(function (data) {
+      if (data && data.ok) {
+        qhseEntitlements = data;
+        if (!data.isPro && typeof data.freeDuerpUsed === "number") {
+          saveFreeDuerpUsed(data.freeDuerpUsed);
+        }
+      }
+      refreshUserPlan();
+      syncFreeTierUi();
+      updatePlanChrome();
+    })
+    .catch(function () {});
+}
+
 function updateAuthTopbar() {
   var openBtn = document.getElementById("btn-auth-open");
   var userEl = document.getElementById("topbar-auth-user");
@@ -4675,6 +4779,9 @@ function submitQhseLogin(ev) {
       updatePlanChrome();
       syncFreeTierUi();
       updateAuthTopbar();
+      if (typeof fetchEntitlements === "function") {
+        fetchEntitlements();
+      }
       closeModal("auth-modal");
       if (passEl) passEl.value = "";
     })
@@ -6286,11 +6393,16 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
   if (typeof fetchAuthMe === "function") {
-    fetchAuthMe().then(finishInit).catch(finishInit);
+    fetchAuthMe()
+      .then(function () {
+        return typeof fetchEntitlements === "function" ? fetchEntitlements() : Promise.resolve();
+      })
+      .then(finishInit)
+      .catch(finishInit);
   } else {
-    refreshUserPlan();
-    updatePlanChrome();
-    finishInit();
+    (typeof fetchEntitlements === "function" ? fetchEntitlements() : Promise.resolve())
+      .then(finishInit)
+      .catch(finishInit);
   }
 });
 </script>
