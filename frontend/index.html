@@ -82,10 +82,12 @@ body {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 0 24px;
-  height: 52px;
+  min-height: 56px;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-logo {
@@ -103,7 +105,92 @@ body {
   padding: 2px 8px; border-radius: 999px;
   border: 1px solid var(--teal-b);
 }
-.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.topbar-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.topbar-cluster--nav {
+  padding-right: 18px;
+  margin-right: 18px;
+  border-right: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.topbar-cluster--plan {
+  gap: 14px;
+  flex-shrink: 0;
+  align-items: center;
+}
+.topbar-plan-stack {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.topbar-limited-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 20px;
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border2);
+}
+.topbar-limited-hint:has(.plan-badge.limited-tag.hidden) {
+  display: none;
+}
+.topbar-limited-hint .plan-badge.limited-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink3);
+  max-width: 42rem;
+  text-align: center;
+  line-height: 1.35;
+}
+.topbar-limited-hint .plan-badge.limited-tag::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--amber);
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+@media (max-width: 900px) {
+  .topbar-cluster--nav {
+    border-right: none;
+    margin-right: 0;
+    padding-right: 0;
+  }
+}
+@media (max-width: 1024px) {
+  .topbar-right {
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+  .topbar-cluster--plan {
+    flex-basis: 100%;
+    justify-content: flex-end;
+  }
+}
 .topbar-menu-btn {
   display: none;
   margin-left: auto;
@@ -126,6 +213,16 @@ body {
   border-radius: 6px;
   overflow: hidden;
 }
+.mode-toggle.mode-toggle--premium {
+  border: none;
+  border-radius: 10px;
+  overflow: visible;
+  padding: 4px;
+  gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
 .mode-btn {
   border: none; background: transparent;
   color: var(--ink3);
@@ -135,11 +232,48 @@ body {
   cursor: pointer; transition: all .15s;
   border-right: 1px solid var(--border);
 }
+.mode-toggle--premium .mode-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink3);
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .mode-btn:last-child { border-right: none; }
+.mode-toggle--premium .mode-btn:last-child { border-right: none; }
 .mode-btn.active { background: var(--teal); color: #fff; font-weight: 600; }
+.mode-toggle--premium .mode-btn.active {
+  background: var(--surface);
+  color: var(--teal-d);
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px var(--teal-b);
+}
 .mode-btn:hover:not(.active) { background: var(--bg); color: var(--ink); }
-.save-badge { font-size: 11px; color: var(--ink4); }
-.plan-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--ink3); white-space: nowrap; }
+.mode-toggle--premium .mode-btn:hover:not(.active) {
+  background: rgba(255,255,255,.75);
+  color: var(--ink2);
+}
+.save-badge { font-size: 11px; color: var(--ink4); flex-shrink: 0; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+.topbar-cluster--plan .save-badge { margin-left: 4px; }
+.plan-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink2);
+  white-space: nowrap;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04);
+}
 .plan-badge.pro { background: linear-gradient(135deg, var(--teal-l), #fff); border-color: var(--teal-b); color: var(--coal); }
 
 /* ─── PROGRESS ─── */
@@ -411,7 +545,6 @@ body {
 .auth-error { font-size: 12px; color: #b42318; margin: 0 0 10px; line-height: 1.45; }
 .auth-error.hidden { display: none; }
 
-.plan-badge-row { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
 .plan-badge.limited-tag {
   font-size: 9px;
   font-weight: 600;
@@ -423,7 +556,7 @@ body {
   color: var(--teal-d);
   background: rgba(15, 160, 160, 0.06);
 }
-.plan-badge-row .plan-badge.limited-tag.hidden { display: none; }
+.topbar-limited-hint .plan-badge.limited-tag.hidden { display: none; }
 @keyframes fadein { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
 
 /* ─── HERO — QHSE Control header style ─── */
@@ -902,17 +1035,53 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     width: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 14px;
     padding: 10px 0 4px;
   }
   .topbar-right.open { display: flex; }
+  .topbar-cluster {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .topbar-cluster--nav {
+    border-right: none;
+    margin-right: 0;
+    padding-right: 0;
+    flex-wrap: wrap;
+  }
+  .topbar-cluster--plan {
+    justify-content: flex-start;
+    flex-basis: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .topbar-plan-stack {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+  .topbar-cluster--plan .save-badge {
+    margin-left: 0;
+    max-width: none;
+    width: 100%;
+    text-align: left;
+  }
   .topbar-auth { justify-content: flex-start; }
   .mode-toggle { width: 100%; }
+  .mode-toggle.mode-toggle--premium { width: 100%; }
   .mode-btn { flex: 1; }
-  .plan-badge-row { align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 6px; }
   .topbar-link-btn { min-height: 40px; padding: 8px 10px; }
-  .mode-btn { padding: 8px 12px; font-size: 11px; min-height: 40px; }
-  .save-badge { font-size: 10px; flex-basis: 100%; }
+  .mode-toggle--premium .mode-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 11px;
+    min-height: 44px;
+  }
   .steps { padding: 0 6px; -webkit-overflow-scrolling: touch; }
   .stab { padding: 10px 8px; font-size: 10px; gap: 4px; }
   .stab .snum { width: 16px; height: 16px; font-size: 9px; }
@@ -1306,23 +1475,30 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   </div>
   <button type="button" class="topbar-menu-btn" id="topbar-menu-btn" aria-expanded="false" aria-controls="topbar-menu" onclick="toggleTopbarMenu()">Menu</button>
   <div class="topbar-right" id="topbar-menu">
-    <button type="button" class="topbar-link-btn" onclick="openModal('pricing-modal')">Tarifs</button>
-    <div class="topbar-auth" id="topbar-auth">
-      <button type="button" class="topbar-link-btn" id="btn-auth-open" onclick="openModal('auth-modal')">Connexion</button>
-      <span class="topbar-auth-user hidden" id="topbar-auth-user" title=""></span>
-      <button type="button" class="topbar-link-btn hidden" id="btn-auth-logout" onclick="logoutQhseAuth()">Déconnexion</button>
+    <div class="topbar-cluster topbar-cluster--nav">
+      <button type="button" class="topbar-link-btn" onclick="openModal('pricing-modal')">Tarifs</button>
+      <div class="topbar-auth" id="topbar-auth">
+        <button type="button" class="topbar-link-btn" id="btn-auth-open" onclick="openModal('auth-modal')">Connexion</button>
+        <span class="topbar-auth-user hidden" id="topbar-auth-user" title=""></span>
+        <button type="button" class="topbar-link-btn hidden" id="btn-auth-logout" onclick="logoutQhseAuth()">Déconnexion</button>
+      </div>
     </div>
-    <div class="plan-badge-row">
-      <span class="plan-badge" id="plan-badge" title="Version gratuite : fonctionnalités limitées.">Gratuit</span>
-      <span class="plan-badge limited-tag hidden" id="plan-badge-limited" title="Certaines vues et exports sont en aperçu.">Version limitée</span>
+    <div class="topbar-cluster topbar-cluster--plan">
+      <div class="topbar-plan-stack">
+        <span class="plan-badge" id="plan-badge" title="Version gratuite : fonctionnalités limitées.">Gratuit</span>
+        <div class="mode-toggle mode-toggle--premium" role="group" aria-label="Niveau de détail de l'interface">
+          <button type="button" class="mode-btn active" id="mode-essential-btn" onclick="setMode('essential')">Essentiel</button>
+          <button type="button" class="mode-btn" id="mode-expert-btn" onclick="setMode('expert')">Expert</button>
+        </div>
+      </div>
+      <span class="save-badge" id="sv"></span>
     </div>
-    <div class="mode-toggle">
-      <button class="mode-btn active" id="mode-essential-btn" onclick="setMode('essential')">Essentiel</button>
-      <button class="mode-btn" id="mode-expert-btn" onclick="setMode('expert')">Expert</button>
-    </div>
-    <span class="save-badge" id="sv"></span>
   </div>
 </header>
+
+<div class="topbar-limited-hint" aria-live="polite">
+  <span class="plan-badge limited-tag hidden" id="plan-badge-limited" title="Certaines vues et exports sont en aperçu.">Version limitée · aperçu gratuit</span>
+</div>
 
 <div class="pbar-wrap"><div class="pbar" id="main-pbar" style="width:20%"></div></div>
 
