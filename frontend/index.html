@@ -5,9 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%237c3aed'/><text x='50' y='54' text-anchor='middle' dominant-baseline='middle' fill='white' font-family='Arial,sans-serif' font-size='38' font-weight='900' letter-spacing='-2'>RI</text></svg>">
 <meta name="theme-color" content="#7c3aed" />
-<meta name="application-name" content="QHSE Control - Générateur de risques" />
-<meta name="description" content="Générateur de risques gratuit en Afrique : identifiez, évaluez et priorisez vos risques professionnels en quelques minutes, sans inscription. Rapide, adapté terrain, pensé pour les entreprises africaines. QHSE Control." />
-<title>Générateur de risques gratuit — Afrique de l'Ouest — QHSE Control</title>
+<meta name="application-name" content="QHSE Control - Générateur de risques professionnels" />
+<meta name="description" content="Identifiez rapidement vos risques professionnels avec QHSE Control. Analyse des risques, priorisation, actions de prévention et approche HSE adaptée aux entreprises africaines." />
+<title>Générateur gratuit de risques professionnels | QHSE Control Afrique</title>
+<link rel="canonical" href="https://www.qhsecontrol.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.qhsecontrol.com/" />
+<meta property="og:site_name" content="QHSE Control" />
+<meta property="og:title" content="Générateur gratuit de risques professionnels | QHSE Control Afrique" />
+<meta property="og:description" content="Analyse des risques, priorisation et actions de prévention avec une approche HSE adaptée aux entreprises africaines." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Générateur gratuit de risques professionnels | QHSE Control Afrique" />
+<meta name="twitter:description" content="Analyse des risques, priorisation et actions de prévention avec une approche HSE adaptée aux entreprises africaines." />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -632,6 +642,25 @@ body {
 .landing-seo-kws {
   margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--border2);
   font-size: 11px; color: var(--ink3); line-height: 1.5;
+}
+.landing-seo-note {
+  font-size: 12px; color: var(--ink3); line-height: 1.6; margin: 14px 0 0;
+  padding: 12px 14px; background: var(--bg2); border-radius: var(--r8);
+  border-left: 3px solid var(--teal-b);
+}
+.landing-outcomes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px; margin-top: 8px;
+}
+.landing-outcome {
+  font-size: 12px; color: var(--ink2); line-height: 1.5;
+  padding: 12px 14px; background: var(--bg); border: 1px solid var(--border2);
+  border-radius: var(--r8);
+}
+.landing-outcome strong {
+  display: block; font-size: 12px; font-weight: 700; color: var(--ink);
+  margin-bottom: 4px;
 }
 
 /* ─── VAL BANNER — same as QHSE Control alert style ─── */
@@ -1522,16 +1551,16 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
   <div class="hero">
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-eyebrow">Outil pensé pour les réalités HSE d'Afrique de l'Ouest</div>
-        <h1 class="hero-title">Générateur DUERP gratuit en Afrique</h1>
-        <div class="hero-sub">Créez votre document unique d'évaluation des risques en quelques minutes. Adapté aux entreprises en Afrique. Sans inscription.</div>
+        <div class="hero-eyebrow">Outil HSE et QHSE pour l'Afrique de l'Ouest</div>
+        <h1 class="hero-title">Générateur gratuit de risques professionnels pour entreprises africaines</h1>
+        <div class="hero-sub">Structurez une première analyse des risques, priorisez les dangers et obtenez des actions de prévention en quelques minutes.</div>
         <ul class="landing-perks" aria-label="Avantages">
           <li>rapide</li>
           <li>gratuit</li>
           <li>adapté terrain</li>
           <li>conforme</li>
         </ul>
-        <button type="button" class="btn btn-p landing-cta" onclick="var q=document.getElementById('duerp-quickgen');if(q)q.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){var t=document.getElementById('quick-activity');if(t)t.focus();},380);">Créer mon DUERP gratuitement</button>
+        <button type="button" class="btn btn-p landing-cta" onclick="var q=document.getElementById('duerp-quickgen');if(q)q.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){var t=document.getElementById('quick-activity');if(t)t.focus();},380);">Commencer l'évaluation gratuitement</button>
         <div class="hero-tags">
           <span class="hero-tag">🇨🇮 Code travail CI</span>
           <span class="hero-tag">🇸🇳 OHSAS Sénégal</span>
@@ -1552,16 +1581,36 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     </div>
   </div>
 
-  <section class="landing-seo-wrap" aria-label="Document unique d'évaluation des risques">
-    <p class="landing-seo-p">Le document unique d'évaluation des risques permet d'identifier les dangers et de mettre en place des actions de prévention dans l'entreprise.</p>
-    <h2 class="landing-h2">Secteurs</h2>
-    <div class="landing-sectors">
-      <span class="landing-sector">BTP</span>
-      <span class="landing-sector">Mines</span>
-      <span class="landing-sector">Industrie</span>
-      <span class="landing-sector">Énergie</span>
+  <section class="landing-seo-wrap" aria-label="Présentation du générateur de risques professionnels">
+    <p class="landing-seo-p">Ce générateur gratuit aide à identifier les risques professionnels et à structurer une première base de prévention. Il peut aussi servir de support pour challenger une analyse des risques déjà en place. Vous obtenez des situations dangereuses, les risques associés, une priorisation et des premières actions de prévention, dans une logique HSE et QHSE adaptée aux réalités terrain des entreprises africaines. Les livrables peuvent nourrir un registre de risques, un document unique ou toute base de prévention interne.</p>
+    <p class="landing-seo-note" role="note">Le générateur s'appuie sur une logique de prévention alignée avec les obligations de santé et sécurité au travail. Les résultats doivent être adaptés au contexte réglementaire, au secteur d'activité et aux pratiques internes de chaque pays.</p>
+    <h2 class="landing-h2">Pourquoi utiliser ce générateur de risques professionnels ?</h2>
+    <p class="landing-seo-p">Pour gagner du temps sur une première structuration, disposer d'une base claire à compléter en interne, challenger une analyse existante, prioriser les risques et lancer des actions de prévention concrètes sans démarrer d'une page blanche.</p>
+    <h2 class="landing-h2">Ce que le générateur produit</h2>
+    <div class="landing-outcomes">
+      <div class="landing-outcome"><strong>Situations dangereuses</strong> Repérage structuré des contextes et expositions.</div>
+      <div class="landing-outcome"><strong>Risques associés</strong> Liens explicites entre situations et effets possibles.</div>
+      <div class="landing-outcome"><strong>Niveau de priorité</strong> Aide à classer les sujets les plus urgents.</div>
+      <div class="landing-outcome"><strong>Actions de prévention recommandées</strong> Pistes actionnables à valider avec votre équipe.</div>
+      <div class="landing-outcome"><strong>Base HSE / QHSE</strong> Fondation pour un registre de risques ou une démarche sécurité au travail.</div>
     </div>
-    <p class="landing-seo-kws">Sécurité au travail · risques professionnels · prévention</p>
+    <h2 class="landing-h2">Pour quelles structures ?</h2>
+    <div class="landing-sectors">
+      <span class="landing-sector">PME</span>
+      <span class="landing-sector">BTP</span>
+      <span class="landing-sector">Industrie</span>
+      <span class="landing-sector">Logistique</span>
+      <span class="landing-sector">Transport</span>
+      <span class="landing-sector">Commerce</span>
+      <span class="landing-sector">Bureaux</span>
+      <span class="landing-sector">Maintenance</span>
+      <span class="landing-sector">Agro-industrie</span>
+      <span class="landing-sector">Services</span>
+      <span class="landing-sector">Sites opérationnels</span>
+    </div>
+    <h2 class="landing-h2">Une approche adaptée à l'Afrique de l'Ouest</h2>
+    <p class="landing-seo-p">Interface pensée mobile-first, parcours simple pour les équipes sur le terrain, et logique progressive compatible avec une montée en maturité HSE ou QHSE au sein des entreprises africaines. L'objectif est un outil utilisable au quotidien, pas seulement pour un exercice ponctuel.</p>
+    <p class="landing-seo-kws">Générateur de risques professionnels · évaluation et analyse des risques professionnels · prévention et sécurité au travail · outil HSE Afrique · outil QHSE Afrique · Afrique de l'Ouest</p>
   </section>
 
   <div class="val-banner">
