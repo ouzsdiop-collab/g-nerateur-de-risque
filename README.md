@@ -82,4 +82,4 @@ Variables à définir dans Railway : recopier `backend/.env.example` (sans commi
 
 ## Email optionnel
 
-Remplis SMTP dans `backend/.env`. Chaque lead sera envoyé à `LEAD_RECEIVER_EMAIL`.
+Remplis SMTP dans `backend/.env`. Chaque lead DUERP est notifié à `LEADS_TO_EMAIL` (sinon `LEAD_RECEIVER_EMAIL`). Expéditeur : `MAIL_FROM`, Reply-To prospect si email connu.

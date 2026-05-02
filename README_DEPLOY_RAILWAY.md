@@ -30,7 +30,8 @@ Optionnel (si Supabase) :
 
 Optionnel (emails) :
 - **`SMTP_HOST`**, **`SMTP_PORT`**, **`SMTP_SECURE`**, **`SMTP_USER`**, **`SMTP_PASS`**
-- **`LEAD_RECEIVER_EMAIL`**
+- **`LEADS_TO_EMAIL`** (recommandé : `devis@qhsecontrol.com` pour les alertes lead DUERP), ou à défaut **`LEAD_RECEIVER_EMAIL`**
+- **`MAIL_FROM`** (ex. `contact@qhsecontrol.com`), **`MAIL_REPLY_TO`** (ex. `devis@qhsecontrol.com` si besoin)
 
 ---
 

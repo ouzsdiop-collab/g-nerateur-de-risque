@@ -837,6 +837,18 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
 .modal-cta:hover { background: var(--teal-d); }
 .modal-legal { font-size: 11px; color: var(--ink4); text-align: center; margin-top: 10px; line-height: 1.5; }
 .modal-legal a { color: var(--teal); text-decoration: none; }
+.app-public-footer {
+  max-width: 960px;
+  margin: 0 auto 20px;
+  padding: 14px 18px;
+  font-size: 11px;
+  color: var(--ink3);
+  text-align: center;
+  line-height: 1.55;
+  border-top: 1px solid var(--border);
+}
+.app-public-footer a { color: var(--teal-d); text-decoration: none; }
+.app-public-footer a:hover { text-decoration: underline; }
 
 /* ─── COUNTRY LEGAL BANNER ─── */
 .country-law-banner { background: var(--navy); border-radius: var(--r6); padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; border-left: 3px solid var(--teal); }
@@ -1117,8 +1129,8 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
         </select>
       </div>
     </div>
-    <button class="modal-cta" onclick="submitGate()">⬇ Télécharger mon document HSE gratuit</button>
-    <div class="modal-legal">En téléchargeant, vous acceptez notre <a href="#">politique de confidentialité</a>. Vous pouvez être contacté par QHSE Control pour découvrir la plateforme complète.</div>
+    <button class="modal-cta" onclick="submitGate()">Recevoir mon DUERP</button>
+    <div class="modal-legal">En téléchargeant, vous acceptez d'être recontacté au sujet de QHSE Control. Données personnelles : <a href="mailto:contact@qhsecontrol.com">contact@qhsecontrol.com</a>. Accompagnement ou devis : <a href="mailto:devis@qhsecontrol.com">devis@qhsecontrol.com</a>.</div>
   </div>
 </div>
 
@@ -1138,7 +1150,7 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
       <div class="fg"><label class="lbl">Secteur</label><input id="demo-sector" type="text" placeholder="Ex : Mines, BTP, Pétrole, Agro-industrie..."></div>
       <div class="fg"><label class="lbl">Message (optionnel)</label><textarea id="demo-msg" placeholder="Nombre de sites, effectif, besoins spécifiques..." style="min-height:70px"></textarea></div>
     </div>
-    <button class="modal-cta" onclick="submitDemo()">Envoyer ma demande</button>
+    <button class="modal-cta" onclick="submitDemo()">Demander un accompagnement</button>
     <button class="btn btn-g" style="width:100%;margin-top:8px" onclick="closeModal('demo-modal')">Fermer</button>
   </div>
 </div>
@@ -1157,8 +1169,9 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
       <li>analyse détaillée</li>
       <li>export professionnel</li>
     </ul>
+    <p class="conversion-modal-lead" style="font-size:12px;margin-top:8px">Une question : <a href="mailto:contact@qhsecontrol.com">contact@qhsecontrol.com</a> · Accompagnement : <a href="mailto:devis@qhsecontrol.com">devis@qhsecontrol.com</a></p>
     <div class="conversion-modal-actions">
-      <button type="button" class="btn btn-p conversion-modal-primary btn-pro-coming-primary" onclick="onProCtaClick()">Accéder à la version complète (bientôt disponible)</button>
+      <button type="button" class="btn btn-p conversion-modal-primary btn-pro-coming-primary" onclick="onProCtaClick()">Demander un accompagnement</button>
       <button type="button" class="btn btn-s conversion-modal-secondary" onclick="closeConversionModal()">Continuer en version gratuite</button>
     </div>
   </div>
@@ -1174,7 +1187,7 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     <div class="modal-title" id="duerp-limit-modal-title">Limite atteinte</div>
     <p class="conversion-modal-lead" style="margin-top:14px">Vous avez utilisé vos 4 DUERP gratuits.<br>Passez à la version complète pour continuer.</p>
     <div class="conversion-modal-actions" style="margin-top:20px">
-      <button type="button" class="btn btn-p conversion-modal-primary btn-pro-coming-primary" onclick="onProCtaClick()">Accéder à la version complète (bientôt disponible)</button>
+      <button type="button" class="btn btn-p conversion-modal-primary btn-pro-coming-primary" onclick="onProCtaClick()">Demander un accompagnement</button>
       <button type="button" class="btn btn-s conversion-modal-secondary" onclick="closeDuerpLimitModal()">Fermer</button>
     </div>
   </div>
@@ -1215,7 +1228,7 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
           <li>Multi-sites</li>
           <li>Multi-utilisateurs</li>
         </ul>
-        <p class="pricing-card-note">Idéal pour les groupes et directions HSE. Contact commercial pour cadrage.</p>
+        <p class="pricing-card-note">Idéal pour les groupes et directions HSE. <a href="mailto:devis@qhsecontrol.com?subject=Devis%20organisation%20QHSE%20Control">Demander un devis</a>.</p>
       </div>
     </div>
     <div class="pricing-code-box">
@@ -1226,7 +1239,33 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     </div>
     <div class="pricing-actions">
       <button type="button" class="btn btn-s" onclick="startFreeFromPricing()">Commencer gratuitement</button>
-      <button type="button" class="btn btn-p btn-pro-coming-primary" onclick="onProCtaClick()">Accéder à la version complète (bientôt disponible)</button>
+      <button type="button" class="btn btn-p btn-pro-coming-primary" onclick="onProCtaClick()">Demander un accompagnement</button>
+    </div>
+  </div>
+</div>
+
+<!-- Version complète : liste d’attente + liens mailto -->
+<div class="modal-overlay hidden" id="pro-coming-modal" aria-modal="true" role="dialog" aria-labelledby="pro-coming-title" onclick="if(event.target===this)closeProComingModal()">
+  <div class="modal-box pro-coming-modal-box" onclick="event.stopPropagation()">
+    <button type="button" class="btn btn-g pricing-modal-close" onclick="closeProComingModal()" aria-label="Fermer">✕</button>
+    <div class="modal-logo" style="margin-bottom:10px">
+      <div class="modal-logo-sq">Q</div>
+      <div class="modal-logo-name" style="font-size:14px">QHSE Control</div>
+    </div>
+    <div class="modal-title" id="pro-coming-title">Aller plus loin</div>
+    <p class="modal-sub" style="margin-bottom:14px">Être informé du lancement ou écrire pour un accompagnement DUERP.</p>
+    <form id="pro-waitlist-form" onsubmit="submitProWaitlist(event); return false;">
+      <div class="fg fgfull">
+        <label class="lbl" for="pro-waitlist-email">E-mail professionnel</label>
+        <input type="email" id="pro-waitlist-email" autocomplete="email" required placeholder="vous@entreprise.com" />
+      </div>
+      <div class="auth-error hidden" id="pro-waitlist-error" role="alert"></div>
+      <div class="pricing-code-msg hidden" id="pro-waitlist-success" role="status"></div>
+      <button type="submit" class="btn btn-p modal-cta" id="pro-waitlist-submit">Être rappelé</button>
+    </form>
+    <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+      <a class="btn btn-s" style="text-align:center;text-decoration:none;display:block;padding:10px 14px;border-radius:var(--r8);border:1px solid var(--border);font-weight:600;font-size:13px;color:var(--ink)" href="mailto:devis@qhsecontrol.com?subject=Accompagnement%20DUERP%20-%20QHSE%20Control">Demander un accompagnement</a>
+      <a class="btn btn-s conversion-modal-secondary" style="text-align:center;text-decoration:none;display:block;padding:10px 14px" href="mailto:contact@qhsecontrol.com?subject=Contact%20QHSE%20Control">Contacter QHSE Control</a>
     </div>
   </div>
 </div>
@@ -1697,14 +1736,14 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
     <div class="funnel-grid">
       <div class="funnel-kpi" id="fk-score" onclick="openRiskModal()"><div class="fk-value" id="fk-score-value">0%</div><div class="fk-label">Score maîtrise</div><div class="fk-sub" id="fk-score-sub">À compléter</div></div>
       <div class="funnel-kpi" id="fk-critical" onclick="openRiskModal('critical')"><div class="fk-value" id="fk-critical-value">0</div><div class="fk-label">Risques critiques</div><div class="fk-sub">Cliquez pour filtrer</div></div>
-      <div class="funnel-kpi" id="fk-lead" onclick="openRiskModal()"><div class="fk-value" id="fk-lead-value">—</div><div class="fk-label">Température lead</div><div class="fk-sub">Scoring automatique CRM</div></div>
+      <div class="funnel-kpi" id="fk-lead" onclick="openRiskModal()"><div class="fk-value" id="fk-lead-value">—</div><div class="fk-label">Température lead</div><div class="fk-sub">Scoring automatique</div></div>
       <div class="funnel-kpi" id="fk-action" onclick="bookCall()"><div class="fk-value">15'</div><div class="fk-label">Action conseillée</div><div class="fk-sub" id="fk-action-sub">Diagnostic expert</div></div>
     </div>
     <div class="funnel-pipeline">
       <div class="funnel-stage"><b>1. Diagnostic</b><span>Le client voit ses risques et son score.</span></div>
       <div class="funnel-stage"><b>2. Tension</b><span>Risques critiques + responsabilité + impact activité.</span></div>
       <div class="funnel-stage"><b>3. PDF limité</b><span>Synthèse utile, plan d’action complet verrouillé.</span></div>
-      <div class="funnel-stage"><b>4. RDV</b><span>CTA vers QHSE Control et CRM privé.</span></div>
+      <div class="funnel-stage"><b>4. RDV</b><span>Prise de contact QHSE Control.</span></div>
     </div>
   </div>
   <div class="v2-grid">
@@ -1732,6 +1771,10 @@ input[type=range] { padding: 0; height: 4px; accent-color: var(--teal); cursor: 
 </div>
 
 </main>
+
+<footer class="app-public-footer" role="contentinfo">
+  <p>Contact : <a href="mailto:contact@qhsecontrol.com">contact@qhsecontrol.com</a> · DUERP / devis : <a href="mailto:devis@qhsecontrol.com">devis@qhsecontrol.com</a> · Support : <a href="mailto:support@qhsecontrol.com">support@qhsecontrol.com</a></p>
+</footer>
 
 <button class="cta-float" onclick="bookCall()">📅 Corriger ces risques (15 min)</button>
 
@@ -2511,6 +2554,7 @@ function resetProWaitlistForm() {
   }
   if (ok) {
     ok.textContent = "";
+    ok.classList.remove("ok");
     ok.classList.add("hidden");
   }
   if (form) form.classList.remove("hidden");
@@ -2607,6 +2651,7 @@ function submitProWaitlist(ev) {
       }
       if (okEl) {
         okEl.textContent = "Vous serez informé dès le lancement.";
+        okEl.classList.add("ok");
         okEl.classList.remove("hidden");
       }
       if (inp) inp.value = "";
@@ -2614,7 +2659,7 @@ function submitProWaitlist(ev) {
     })
     .catch(function () {
       if (errEl) {
-        errEl.textContent = "Réseau indisponible. Réessayez plus tard.";
+        errEl.textContent = "Réseau indisponible. Réessayez plus tard. Support : support@qhsecontrol.com";
         errEl.classList.remove("hidden");
       }
     })
@@ -2719,10 +2764,12 @@ function submitDemo() {
   var name = document.getElementById("demo-name").value.trim();
   var email = document.getElementById("demo-email").value.trim();
   var company = document.getElementById("demo-company").value.trim();
+  var sector = document.getElementById("demo-sector") ? document.getElementById("demo-sector").value.trim() : "";
+  var msg = document.getElementById("demo-msg") ? document.getElementById("demo-msg").value.trim() : "";
   if (!name || !email || !company) { alert("Merci de remplir les champs obligatoires."); return; }
-  console.log("DEMO REQUEST", { name: name, email: email, company: company, sector: document.getElementById("demo-sector").value });
+  var body = "Nom : " + name + "\nEmail : " + email + "\nEntreprise : " + company + "\nSecteur : " + sector + "\nMessage : " + msg;
   closeModal("demo-modal");
-  alert("✅ Demande envoyée ! Notre équipe vous contacte sous 24h.");
+  window.location.href = "mailto:devis@qhsecontrol.com?subject=" + encodeURIComponent("Demande accompagnement / démo QHSE Control") + "&body=" + encodeURIComponent(body);
 }
 
 // ══════════════════════════════════════════════════════════════
